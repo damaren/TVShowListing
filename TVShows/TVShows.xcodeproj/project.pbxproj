@@ -13,6 +13,7 @@
 		14205DA72A462D2000E8E5A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14205DA52A462D2000E8E5A7 /* LaunchScreen.storyboard */; };
 		14205DB02A46415000E8E5A7 /* TVShowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14205DAF2A46415000E8E5A7 /* TVShowModel.swift */; };
 		149AA3142A470A0D00BD7059 /* TVMazeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AA3132A470A0D00BD7059 /* TVMazeProvider.swift */; };
+		149AA3172A47728800BD7059 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AA3162A47728800BD7059 /* SearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		14205DA82A462D2000E8E5A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14205DAF2A46415000E8E5A7 /* TVShowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowModel.swift; sourceTree = "<group>"; };
 		149AA3132A470A0D00BD7059 /* TVMazeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeProvider.swift; sourceTree = "<group>"; };
+		149AA3162A47728800BD7059 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,10 +58,10 @@
 		14205D992A462D2000E8E5A7 /* TVShows */ = {
 			isa = PBXGroup;
 			children = (
+				149AA3152A47722400BD7059 /* View */,
 				149AA3122A47083100BD7059 /* Networking */,
 				14205DAE2A46413F00E8E5A7 /* Model */,
 				14205D9A2A462D2000E8E5A7 /* AppDelegate.swift */,
-				14205D9E2A462D2000E8E5A7 /* ListViewController.swift */,
 				14205DA32A462D2000E8E5A7 /* Assets.xcassets */,
 				14205DA52A462D2000E8E5A7 /* LaunchScreen.storyboard */,
 				14205DA82A462D2000E8E5A7 /* Info.plist */,
@@ -81,6 +83,15 @@
 				149AA3132A470A0D00BD7059 /* TVMazeProvider.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		149AA3152A47722400BD7059 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				14205D9E2A462D2000E8E5A7 /* ListViewController.swift */,
+				149AA3162A47728800BD7059 /* SearchView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,6 +164,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				149AA3172A47728800BD7059 /* SearchView.swift in Sources */,
 				14205D9F2A462D2000E8E5A7 /* ListViewController.swift in Sources */,
 				149AA3142A470A0D00BD7059 /* TVMazeProvider.swift in Sources */,
 				14205DB02A46415000E8E5A7 /* TVShowModel.swift in Sources */,

@@ -13,10 +13,24 @@ class TVMazeProvider {
     
     static let shared: TVMazeProvider = TVMazeProvider()
     
+    // MARK: - PROPERTIES
+    
+    let baseURL: String = "https://api.tvmaze.com"
+    
     // MARK: - FUNCTIONS
     
-    func requestTVShows(searchTitle: String, completion: @escaping ([TVShowResponse]) -> ()) {
-        let url = URL(string: "https://api.tvmaze.com/search/shows?q=\(searchTitle)")!
+    func requestTVShows(searchString: String, completion: @escaping ([TVShowResponse]) -> ()) {
+        guard let urlQueryAllowedString = searchString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            print("Could not generate an URL query allowed string from: \(searchString)")
+            return
+        }
+        
+        let urlString = "\(baseURL)/search/shows?q=\(urlQueryAllowedString)"
+        
+        guard let url = URL(string: urlString) else {
+            print("Could not create an URL object from string: \(urlString)")
+            return
+        }
 
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             guard let data = data else { return }
@@ -26,5 +40,4 @@ class TVMazeProvider {
 
         task.resume()
     }
-    
 }

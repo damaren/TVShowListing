@@ -11,11 +11,8 @@ class ListViewController: UIViewController {
     
     // MARK: - PROPERTIES
     
-    var label: UILabel = UILabel()
-    var textField: UITextField = UITextField()
-    var button: UIButton = UIButton()
     var listLabel: UILabel = UILabel()
-    var searchView: UIView = UIView()
+    var searchView: SearchView = SearchView()
     
     // MARK: - LIFECYCLE
 
@@ -28,21 +25,6 @@ class ListViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
-        // label
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Search Here!"
-        label.textColor = .label
-        
-        // textfield
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "Type here!"
-        textField.backgroundColor = .systemFill
-        
-        // button
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Search", for: .normal)
-        button.setTitleColor(.label, for: .normal)
-        button.addTarget(self, action: #selector(pressed), for: .touchUpInside)
         
         // listLabel
         listLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -52,31 +34,17 @@ class ListViewController: UIViewController {
         
         // searchView
         searchView.translatesAutoresizingMaskIntoConstraints = false
-        searchView.backgroundColor = .yellow
+        searchView.backgroundColor = .secondarySystemBackground
+        searchView.delegate = self
     }
     
     func layoutViews() {
-        view.addSubview(label)
-        view.addSubview(textField)
-        view.addSubview(button)
         view.addSubview(listLabel)
         view.addSubview(searchView)
         
-        // label
-        label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        label.bottomAnchor.constraint(equalTo: textField.topAnchor, constant: -20).isActive = true
-        
-        // textfield
-        textField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        textField.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        
-        // button
-        button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        button.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 20).isActive = true
-        
         // listlabel
         listLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        listLabel.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 20).isActive = true
+        listLabel.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 20).isActive = true
         
         // searchView
         searchView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -95,15 +63,16 @@ class ListViewController: UIViewController {
             }
         }
     }
-    
-    // MARK: - ACTIONS
+}
 
-    @objc func pressed() {
-        TVMazeProvider.shared.requestTVShows(searchTitle: textField.text ?? "", completion: { tvShowResponses in
+// MARK: - SearchViewDelegate
+
+extension ListViewController: SearchViewDelegate {
+    func searchViewSearchButtonPressed(withSearchText searchText: String) {
+        TVMazeProvider.shared.requestTVShows(searchString: searchText, completion: { tvShowResponses in
             DispatchQueue.main.async { // update UI
                 self.updateView(forTVShowResponses: tvShowResponses)
             }
         })
     }
 }
-
