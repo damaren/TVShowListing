@@ -20,7 +20,7 @@ class EpisodeTableViewCell: UITableViewCell {
     
     // MARK: - COMPONENTS
     
-    var seasonAndNumberLabel: UILabel = UILabel()
+    var numberLabel: UILabel = UILabel()
     var titleLabel: UILabel = UILabel()
     
     // MARK: - INIT
@@ -41,9 +41,9 @@ extension EpisodeTableViewCell {
     
     func setup() {
         
-        // seasonAndNumberLabel
-        seasonAndNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        seasonAndNumberLabel.text = generateSeasonAndNumberLabel()
+        // numberLabel
+        numberLabel.translatesAutoresizingMaskIntoConstraints = false
+        numberLabel.text = generateSeasonAndNumberLabel()
         
         // title
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -53,8 +53,16 @@ extension EpisodeTableViewCell {
     }
     
     func layout() {
-        contentView.addSubview(seasonAndNumberLabel)
+        contentView.addSubview(numberLabel)
         contentView.addSubview(titleLabel)
+        
+        // numberLabel
+        numberLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
+        numberLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+        // titleLabel
+        titleLabel.leadingAnchor.constraint(equalTo: numberLabel.trailingAnchor, constant: 16).isActive = true
+        titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
     
     func configure(forEpisode episode: Episode) {
@@ -65,6 +73,7 @@ extension EpisodeTableViewCell {
     }
     
     func generateSeasonAndNumberLabel() -> String {
-        return ""
+        guard let number = episode?.number else { return "" }
+        return "Ep. \(number):"
     }
 }

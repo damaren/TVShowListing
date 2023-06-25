@@ -12,7 +12,7 @@ class ShowDetailsViewController: UIViewController {
     // MARK: - PROPERTIES
     
     var show: TVShow?
-    var episodes: [Episode] = []
+    var episodes: [[Episode]] = [] // array of episodes separated by seasons (episodes[i] is the array of episodes in season i+1)
     
     // MARK: - COMPONENTS
     
@@ -56,14 +56,14 @@ class ShowDetailsViewController: UIViewController {
         // timeLabel
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.numberOfLines = 0
-        if let time = show?.schedule?.time {
+        if let time = show?.schedule?.time, !time.isEmpty {
             timeLabel.text = "Time: \(time)"
         }
         
         // daysLabel
         daysLabel.translatesAutoresizingMaskIntoConstraints = false
         daysLabel.numberOfLines = 0
-        if let days = show?.schedule?.days {
+        if let days = show?.schedule?.days, !days.isEmpty {
             let daysString = days[1..<days.count].reduce(days.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
             daysLabel.text = "Days: \(daysString)"
         }
@@ -80,7 +80,7 @@ class ShowDetailsViewController: UIViewController {
         episodesTableView.dataSource = self
         episodesTableView.delegate = self
         episodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: EpisodeTableViewCell.reuseIdentifier)
-        episodesTableView.backgroundColor = .red
+        episodesTableView.backgroundColor = .systemBackground
     }
     
     func layoutViews() {
@@ -134,6 +134,7 @@ class ShowDetailsViewController: UIViewController {
     
     func configure(show: TVShow) {
         self.show = show
+        requestEpisodes()
         setup()
         layoutViews()
     }
@@ -149,24 +150,39 @@ class ShowDetailsViewController: UIViewController {
     }
     
     func updateView(forEpisodes episodes: [Episode]) {
-        self.episodes = episodes
+        self.episodes = separateEpisodesBySeason(episodes: episodes)
         episodesTableView.reloadData()
+    }
+    
+    func separateEpisodesBySeason(episodes: [Episode]) -> [[Episode]] {
+        var season = 1
+        var seasonAndEpisodes: [[Episode]] = []
+        repeat {
+            let seasonEpisodes = episodes.filter({ episode in return episode.season == season })
+            seasonAndEpisodes.append(seasonEpisodes)
+            season += 1
+        } while episodes.contains(where: { episode in episode.season == season})
+        return seasonAndEpisodes
     }
 }
 
 // MARK: - UITableViewDataSource
 
 extension ShowDetailsViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return episodes.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return episodes[section].count
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TVShowTableViewCell.reuseIdentifier, for: indexPath) as? EpisodeTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: EpisodeTableViewCell.reuseIdentifier, for: indexPath) as? EpisodeTableViewCell else {
             return UITableViewCell()
         }
         
-        let episode = episodes[indexPath.row]
+        let episode = episodes[indexPath.section][indexPath.row]
         cell.configure(forEpisode: episode)
         
         return cell
