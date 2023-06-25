@@ -20,6 +20,7 @@ class SearchView: UIView {
     
     var searchTextField: UITextField = UITextField()
     var searchButton: UIButton = UIButton()
+    var underlineView: UIView = UIView()
     
     override var intrinsicContentSize: CGSize {
         return CGSize(width: 300, height: 200)
@@ -30,7 +31,7 @@ class SearchView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        style()
+        setup()
         layout()
     }
     
@@ -42,28 +43,36 @@ class SearchView: UIView {
 
 extension SearchView {
     
-    // MARK: - STYLE
+    // MARK: - FUNCTIONS
     
-    func style() {
+    func setup() {
         translatesAutoresizingMaskIntoConstraints = false
         
         // searchTextField
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
-        searchTextField.placeholder = "Search"
-        searchTextField.backgroundColor = .systemFill
+//        searchTextField.placeholder = "Title Search"
+        searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "Title Search",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText]
+        )
+
         
         // searchButton
         searchButton.translatesAutoresizingMaskIntoConstraints = false
-        searchButton.setTitle("Search", for: .normal)
+        searchButton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         searchButton.setTitleColor(.label, for: .normal)
+        searchButton.tintColor = .secondaryLabel
         searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+        
+        // underlineView
+        underlineView.translatesAutoresizingMaskIntoConstraints = false
+        underlineView.backgroundColor = .placeholderText
     }
-    
-    // MARK: - LAYOUT
     
     func layout() {
         addSubview(searchTextField)
         addSubview(searchButton)
+        addSubview(underlineView)
         
         // searchTextField
         searchTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
@@ -72,10 +81,20 @@ extension SearchView {
         searchTextField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor, constant: -16).isActive = true
         
         // searchButton
-        searchButton.widthAnchor.constraint(equalToConstant: 160).isActive = true
-        searchButton.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
-        searchButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
-        searchButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        searchButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        searchButton.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        searchButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        searchButton.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        // underlineView
+        underlineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        underlineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
+        underlineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        underlineView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 0).isActive = true
+    }
+    
+    func setupWithError() {
+        
     }
     
     // MARK: - ACTIONS
@@ -87,11 +106,5 @@ extension SearchView {
         }
         
         delegate?.searchViewSearchButtonPressed(withSearchText: text)
-    }
-    
-    // MARK: - FUNCTIONS
-    
-    func setupWithError() {
-        
     }
 }

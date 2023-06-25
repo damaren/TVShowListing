@@ -29,7 +29,7 @@ class ListViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
-        
+        self.title = "TV Show Listing"
         view.backgroundColor = .secondarySystemBackground
         
         // searchView
@@ -53,7 +53,7 @@ class ListViewController: UIViewController {
         searchView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        searchView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        searchView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
         // tableview
         showsTableView.topAnchor.constraint(equalTo: searchView.bottomAnchor).isActive = true
