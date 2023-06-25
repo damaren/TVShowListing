@@ -11,8 +11,12 @@ class ListViewController: UIViewController {
     
     // MARK: - PROPERTIES
     
-    var listLabel: UILabel = UILabel()
+    var shows: [TVShow] = []
+    
+    // MARK: - COMPONENTS
+    
     var searchView: SearchView = SearchView()
+    var showsTableView: UITableView = UITableView()
     
     // MARK: - LIFECYCLE
 
@@ -26,42 +30,41 @@ class ListViewController: UIViewController {
     
     func setup() {
         
-        // listLabel
-        listLabel.translatesAutoresizingMaskIntoConstraints = false
-        listLabel.text = ""
-        listLabel.textColor = .label
-        listLabel.numberOfLines = 0
+        view.backgroundColor = .secondarySystemBackground
         
         // searchView
         searchView.translatesAutoresizingMaskIntoConstraints = false
         searchView.backgroundColor = .secondarySystemBackground
         searchView.delegate = self
+        
+        // tableview
+        showsTableView.translatesAutoresizingMaskIntoConstraints = false
+        showsTableView.dataSource = self
+        showsTableView.delegate = self
+        showsTableView.register(TVShowTableViewCell.self, forCellReuseIdentifier: TVShowTableViewCell.reuseIdentifier)
+        showsTableView.backgroundColor = .secondarySystemBackground
     }
     
     func layoutViews() {
-        view.addSubview(listLabel)
         view.addSubview(searchView)
-        
-        // listlabel
-        listLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        listLabel.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 20).isActive = true
+        view.addSubview(showsTableView)
         
         // searchView
         searchView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        
+        // tableview
+        showsTableView.topAnchor.constraint(equalTo: searchView.bottomAnchor).isActive = true
+        showsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        showsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        showsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     func updateView(forTVShowResponses tvShowResponses: [TVShowResponse]) {
-        self.listLabel.text = ""
-        for tvShow in tvShowResponses {
-            if let id = tvShow.show.id, let name = tvShow.show.name, let listLabelText = self.listLabel.text {
-                print(id)
-                print(name)
-                self.listLabel.text = "\(listLabelText)\n\(id)   \(name)"
-            }
-        }
+        shows = tvShowResponses.map({ response in return response.show })
+        showsTableView.reloadData()
     }
 }
 
@@ -74,5 +77,38 @@ extension ListViewController: SearchViewDelegate {
                 self.updateView(forTVShowResponses: tvShowResponses)
             }
         })
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension ListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return shows.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TVShowTableViewCell.reuseIdentifier, for: indexPath) as? TVShowTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let show = shows[indexPath.row]
+        cell.configure(imageURL: show.image?.medium, titleText: show.name ?? "")
+        
+        return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension ListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = ShowDetailsViewController()
+        vc.configure(show: shows[indexPath.row])
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 327
     }
 }

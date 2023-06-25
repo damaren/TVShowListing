@@ -40,4 +40,21 @@ class TVMazeProvider {
 
         task.resume()
     }
+    
+    func requestEpisodes(showID: Int, completion: @escaping ([Episode]) -> ()) {
+        let urlString = "\(baseURL)/shows/\(showID)/episodes"
+        
+        guard let url = URL(string: urlString) else {
+            print("Could not create an URL object from string: \(urlString)")
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            guard let data = data else { return }
+            let episodes: [Episode] = try! JSONDecoder().decode([Episode].self, from: data)
+            completion(episodes)
+        }
+
+        task.resume()
+    }
 }
