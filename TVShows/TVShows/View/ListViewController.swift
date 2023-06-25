@@ -109,6 +109,6 @@ extension ListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 327
+        return TVShowTableViewCell.cellHeight
     }
 }
