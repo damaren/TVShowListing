@@ -79,7 +79,7 @@ class ShowDetailsViewController: UIViewController {
         episodesTableView.translatesAutoresizingMaskIntoConstraints = false
         episodesTableView.dataSource = self
         episodesTableView.delegate = self
-        episodesTableView.register(TVShowTableViewCell.self, forCellReuseIdentifier: TVShowTableViewCell.reuseIdentifier)
+        episodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: EpisodeTableViewCell.reuseIdentifier)
         episodesTableView.backgroundColor = .red
     }
     
@@ -162,12 +162,12 @@ extension ShowDetailsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TVShowTableViewCell.reuseIdentifier, for: indexPath) as? TVShowTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TVShowTableViewCell.reuseIdentifier, for: indexPath) as? EpisodeTableViewCell else {
             return UITableViewCell()
         }
         
-        let show = episodes[indexPath.row]
-        cell.configure(imageURL: show.image?.medium, titleText: show.name ?? "")
+        let episode = episodes[indexPath.row]
+        cell.configure(forEpisode: episode)
         
         return cell
     }

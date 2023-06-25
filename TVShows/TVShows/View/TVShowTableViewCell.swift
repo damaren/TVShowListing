@@ -16,13 +16,12 @@ class TVShowTableViewCell: UITableViewCell {
     
     // MARK: - PROPERTIES
     
-    var imageURL: String?
-    var titleText: String?
+    var show: TVShow?
     
     // MARK: - COMPONENTS
     
     var image: UIImageView = UIImageView()
-    var title: UILabel = UILabel()
+    var titleLabel: UILabel = UILabel()
     
     // MARK: - INIT
     
@@ -38,43 +37,40 @@ class TVShowTableViewCell: UITableViewCell {
 
 extension TVShowTableViewCell {
     
-    // MARK: - STYLE
+    // MARK: - FUNCTIONS
     
     func setup() {
         // image
         image.translatesAutoresizingMaskIntoConstraints = false
-        if let url = URL(string: imageURL ?? ""), let data = try? Data(contentsOf: url) {
+        if let imageURL = show?.image?.medium, let url = URL(string: imageURL ), let data = try? Data(contentsOf: url) {
             image.image = UIImage(data: data)
         }
         
-        // title
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.text = titleText
+        // titleLabel
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        if let text = show?.name {
+            titleLabel.text = text
+        }
     }
-    
-    // MARK: - LAYOUT
     
     func layout() {
         contentView.addSubview(image)
-        contentView.addSubview(title)
+        contentView.addSubview(titleLabel)
         
         // image
         image.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         image.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
-//        image.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 16).isActive = true
         image.widthAnchor.constraint(equalToConstant: 210).isActive = true
         image.heightAnchor.constraint(equalToConstant: 295).isActive = true
         
-        title.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 16).isActive = true
-        title.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16).isActive = true
+        // titleLabel
+        titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 16).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16).isActive = true
     }
     
-    // MARK: - FUNCTIONS
-    
-    func configure(imageURL: String?, titleText: String) {
-        self.imageURL = imageURL
-        self.titleText = titleText
+    func configure(forShow show: TVShow) {
+        self.show = show
         
         setup()
         layout()

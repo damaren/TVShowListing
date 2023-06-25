@@ -93,7 +93,7 @@ extension ListViewController: UITableViewDataSource {
         }
         
         let show = shows[indexPath.row]
-        cell.configure(imageURL: show.image?.medium, titleText: show.name ?? "")
+        cell.configure(forShow: show)
         
         return cell
     }
