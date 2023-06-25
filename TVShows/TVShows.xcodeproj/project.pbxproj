@@ -18,6 +18,7 @@
 		149AA31B2A479A4A00BD7059 /* ShowDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AA31A2A479A4A00BD7059 /* ShowDetailsViewController.swift */; };
 		14C2CF312A48718C007FA677 /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF302A48718C007FA677 /* EpisodeModel.swift */; };
 		14C2CF332A48765D007FA677 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */; };
+		14C2CF352A48832E007FA677 /* EpisodeInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		149AA31A2A479A4A00BD7059 /* ShowDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailsViewController.swift; sourceTree = "<group>"; };
 		14C2CF302A48718C007FA677 /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
+		14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeInformationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				149AA3182A4789F500BD7059 /* TVShowTableViewCell.swift */,
 				149AA31A2A479A4A00BD7059 /* ShowDetailsViewController.swift */,
 				14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */,
+				14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14C2CF332A48765D007FA677 /* EpisodeTableViewCell.swift in Sources */,
+				14C2CF352A48832E007FA677 /* EpisodeInformationViewController.swift in Sources */,
 				149AA3172A47728800BD7059 /* SearchView.swift in Sources */,
 				14205D9F2A462D2000E8E5A7 /* ListViewController.swift in Sources */,
 				149AA3142A470A0D00BD7059 /* TVMazeProvider.swift in Sources */,

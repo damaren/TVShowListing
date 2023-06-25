@@ -48,7 +48,7 @@ class ShowDetailsViewController: UIViewController {
         // genresLabel
         genresLabel.translatesAutoresizingMaskIntoConstraints = false
         genresLabel.numberOfLines = 0
-        if let genres = show?.genres {
+        if let genres = show?.genres, !genres.isEmpty {
             let genresString = genres[1..<genres.count].reduce(genres.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
             genresLabel.text = "Genres: \(genresString)"
         }
@@ -193,8 +193,8 @@ extension ShowDetailsViewController: UITableViewDataSource {
 
 extension ShowDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let vc = ShowDetailsViewController()
-//        vc.configure(show: episodes[indexPath.row])
-//        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = EpisodeInformationViewController()
+        vc.configure(forEpisode: episodes[indexPath.section][indexPath.row])
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
