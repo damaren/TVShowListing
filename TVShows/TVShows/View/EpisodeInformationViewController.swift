@@ -11,12 +11,10 @@ class EpisodeInformationViewController: UIViewController {
     
     // MARK: - PROPERTIES
     
-    var episode: Episode?
-    var showTitle: String?
     let horizontalMargin: CGFloat = 16
     let imageAspectRatio: Double = 250/140
     weak var delegate: EpisodeInformationViewControllerDelegate?
-    
+    var viewModel: EpisodeInformationViewModel = EpisodeInformationViewModel()
     
     // MARK: - COMPONENTS
     
@@ -34,46 +32,38 @@ class EpisodeInformationViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
-        self.title = showTitle ?? ""
+        self.title = viewModel.showTitle
         view.backgroundColor = .systemBackground
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonPressed))
         navigationItem.leftBarButtonItem?.tintColor = .label
+        
+        // update
+        viewModel.updateView = { [weak self] image in
+            self?.updateView(forImage: image)
+        }
         
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "photo.artframe")
         imageView.tintColor = .label
         imageView.contentMode = .scaleAspectFit
-        TVMazeProvider.shared.requestImage(forUrl: episode?.image?.medium, completion: { imageData in
-            DispatchQueue.main.async { // update UI
-                if let imageData = imageData {
-                    self.imageView.image = UIImage(data: imageData)
-                }
-            }
-        })
         imageView.roundCorners()
         
         // seasonAndNumberLabel
         seasonAndNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        if let season = episode?.season, let number = episode?.number {
-            seasonAndNumberLabel.text = "S\(season)E\(number):"
-        }
+        seasonAndNumberLabel.text = viewModel.getSeasonAndNumberText()
         
         // episodeNameLabel
         episodeNameLabel.translatesAutoresizingMaskIntoConstraints = false
         episodeNameLabel.textAlignment = .left
         episodeNameLabel.font = .systemFont(ofSize: 20, weight: .semibold)
         episodeNameLabel.numberOfLines = 0
-        if let name = episode?.name {
-            episodeNameLabel.text = name
-        }
+        episodeNameLabel.text = viewModel.getEpisodeNameText()
         
         // summaryLabel
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.numberOfLines = 0
-        if let summary = episode?.summary {
-            summaryLabel.text = summary.htmlToString
-        }
+        summaryLabel.text = viewModel.getSummaryText()
     }
     
     func layoutViews() {
@@ -110,10 +100,15 @@ class EpisodeInformationViewController: UIViewController {
     }
     
     func configure(forEpisode episode: Episode, andShowTitle showTitle: String) {
-        self.episode = episode
-        self.showTitle = showTitle
+        viewModel.configure(forEpisode: episode, andShowTitle: showTitle)
         setup()
         layoutViews()
+    }
+    
+    func updateView(forImage image: UIImage?) {
+        DispatchQueue.main.async { // update UI
+            self.imageView.image = image
+        }
     }
     
     // MARK: - ACTIONS
