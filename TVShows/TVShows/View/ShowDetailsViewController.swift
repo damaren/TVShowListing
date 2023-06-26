@@ -194,7 +194,7 @@ extension ShowDetailsViewController: UITableViewDataSource {
 extension ShowDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = EpisodeInformationViewController()
-        vc.configure(forEpisode: episodes[indexPath.section][indexPath.row])
+        vc.configure(forEpisode: episodes[indexPath.section][indexPath.row], andShowTitle: show?.name ?? "")
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

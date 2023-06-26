@@ -54,7 +54,6 @@ extension TVShowTableViewCell {
             image.image = UIImage(data: data)
         }
         image.roundCorners()
-        image.clipsToBounds = true
         
         // titleLabel
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +73,6 @@ extension TVShowTableViewCell {
         // containerView
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = .secondarySystemBackground
-        containerView.roundCorners()
         containerView.applyShadow()
     }
     
@@ -114,19 +112,5 @@ extension TVShowTableViewCell {
         
         setup()
         layout()
-    }
-}
-
-extension UIView {
-    func roundCorners() {
-        layer.cornerRadius = 8.0
-    }
-    
-    func applyShadow() {
-        layer.cornerRadius = 8.0
-        layer.shadowRadius = 4.0
-        layer.shadowOpacity = 0.4
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 1, height: 1)
     }
 }

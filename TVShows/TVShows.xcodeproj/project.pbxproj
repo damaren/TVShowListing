@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		141C6ED72A49BE0C00977986 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141C6ED62A49BE0C00977986 /* StringExtension.swift */; };
+		141C6ED92A49BE1A00977986 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141C6ED82A49BE1A00977986 /* UIViewExtension.swift */; };
 		14205D9B2A462D2000E8E5A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14205D9A2A462D2000E8E5A7 /* AppDelegate.swift */; };
 		14205D9F2A462D2000E8E5A7 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14205D9E2A462D2000E8E5A7 /* ListViewController.swift */; };
 		14205DA42A462D2000E8E5A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14205DA32A462D2000E8E5A7 /* Assets.xcassets */; };
@@ -22,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		141C6ED62A49BE0C00977986 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		141C6ED82A49BE1A00977986 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		14205D972A462D2000E8E5A7 /* TVShows.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TVShows.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14205D9A2A462D2000E8E5A7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		14205D9E2A462D2000E8E5A7 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +53,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		141C6ED52A49BDC300977986 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				141C6ED62A49BE0C00977986 /* StringExtension.swift */,
+				141C6ED82A49BE1A00977986 /* UIViewExtension.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		14205D8E2A462D2000E8E5A7 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +81,7 @@
 		14205D992A462D2000E8E5A7 /* TVShows */ = {
 			isa = PBXGroup;
 			children = (
+				141C6ED52A49BDC300977986 /* Util */,
 				149AA3152A47722400BD7059 /* View */,
 				149AA3122A47083100BD7059 /* Networking */,
 				14205DAE2A46413F00E8E5A7 /* Model */,
@@ -185,9 +199,11 @@
 				14205D9F2A462D2000E8E5A7 /* ListViewController.swift in Sources */,
 				149AA3142A470A0D00BD7059 /* TVMazeProvider.swift in Sources */,
 				14205DB02A46415000E8E5A7 /* TVShowModel.swift in Sources */,
+				141C6ED92A49BE1A00977986 /* UIViewExtension.swift in Sources */,
 				149AA3192A4789F500BD7059 /* TVShowTableViewCell.swift in Sources */,
 				149AA31B2A479A4A00BD7059 /* ShowDetailsViewController.swift in Sources */,
 				14205D9B2A462D2000E8E5A7 /* AppDelegate.swift in Sources */,
+				141C6ED72A49BE0C00977986 /* StringExtension.swift in Sources */,
 				14C2CF312A48718C007FA677 /* EpisodeModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

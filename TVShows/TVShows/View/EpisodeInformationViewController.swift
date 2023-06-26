@@ -12,12 +12,16 @@ class EpisodeInformationViewController: UIViewController {
     // MARK: - PROPERTIES
     
     var episode: Episode?
+    var showTitle: String?
+    let horizontalMargin: CGFloat = 16
+    let imageAspectRatio: Double = 250/140
+    
     
     // MARK: - COMPONENTS
     
     var imageView: UIImageView = UIImageView()
-    var seasonLabel: UILabel = UILabel()
-    var numberLabel: UILabel = UILabel()
+    var seasonAndNumberLabel: UILabel = UILabel()
+    var episodeNameLabel: UILabel = UILabel()
     var summaryLabel: UILabel = UILabel()
     
     // MARK: - LIFECYCLE
@@ -29,64 +33,77 @@ class EpisodeInformationViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
-        self.title = episode?.name ?? ""
+        self.title = showTitle ?? ""
         
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(systemName: "photo.artframe")
+        imageView.tintColor = .label
+        imageView.contentMode = .scaleAspectFit
         if let imageURL = episode?.image?.medium, let url = URL(string: imageURL ), let data = try? Data(contentsOf: url) {
             imageView.image = UIImage(data: data)
         }
+        imageView.roundCorners()
         
-        // seasonLabel:
-        seasonLabel.translatesAutoresizingMaskIntoConstraints = false
-        if let season = episode?.season {
-            seasonLabel.text = "Season \(season)"
+        // seasonAndNumberLabel
+        seasonAndNumberLabel.translatesAutoresizingMaskIntoConstraints = false
+        if let season = episode?.season, let number = episode?.number {
+            seasonAndNumberLabel.text = "S\(season)E\(number):"
         }
         
-        // numberLabel
-        numberLabel.translatesAutoresizingMaskIntoConstraints = false
-        if let number = episode?.number {
-            numberLabel.text = "Episode \(number)"
+        // episodeNameLabel
+        episodeNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        episodeNameLabel.textAlignment = .left
+        episodeNameLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        episodeNameLabel.numberOfLines = 0
+        if let name = episode?.name {
+            episodeNameLabel.text = name
         }
         
         // summaryLabel
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.numberOfLines = 0
         if let summary = episode?.summary {
-            summaryLabel.text = summary
+            summaryLabel.text = summary.htmlToString
         }
     }
     
     func layoutViews() {
         view.addSubview(imageView)
-        view.addSubview(seasonLabel)
-        view.addSubview(numberLabel)
+        view.addSubview(seasonAndNumberLabel)
+        view.addSubview(episodeNameLabel)
         view.addSubview(summaryLabel)
+        
+        let episodeNameTopAnchor = imageView.image == nil ? view.safeAreaLayoutGuide.topAnchor : imageView.bottomAnchor
         
         // imageView
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        let imagewidth = view.frame.width - 2 * horizontalMargin
+        let imageHeigh = imagewidth / imageAspectRatio
+        imageView.widthAnchor.constraint(equalToConstant: imagewidth).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: imageHeigh).isActive = true
         
-        // seasonLabel
-        seasonLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
-        seasonLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16).isActive = true
-        seasonLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        // seasonAndNumberLabel
+        seasonAndNumberLabel.lastBaselineAnchor.constraint(equalTo: episodeNameLabel.firstBaselineAnchor).isActive = true
+        seasonAndNumberLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: horizontalMargin).isActive = true
+        seasonAndNumberLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        // numberLabel
-        numberLabel.topAnchor.constraint(equalTo: seasonLabel.bottomAnchor, constant: 16).isActive = true
-        numberLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16).isActive = true
-        numberLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        // episodeNameLabel
+        episodeNameLabel.topAnchor.constraint(equalTo: episodeNameTopAnchor, constant: 16).isActive = true
+        episodeNameLabel.leadingAnchor.constraint(equalTo: seasonAndNumberLabel.trailingAnchor, constant: 16).isActive = true
+        episodeNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -horizontalMargin).isActive = true
+        episodeNameLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
         // summaryLabel
-        summaryLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16).isActive = true
-        summaryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-        summaryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        summaryLabel.topAnchor.constraint(equalTo: episodeNameLabel.bottomAnchor, constant: 16).isActive = true
+        summaryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: horizontalMargin).isActive = true
+        summaryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -horizontalMargin).isActive = true
     }
     
-    func configure(forEpisode episode: Episode) {
+    func configure(forEpisode episode: Episode, andShowTitle showTitle: String) {
         self.episode = episode
+        self.showTitle = showTitle
         setup()
         layoutViews()
     }

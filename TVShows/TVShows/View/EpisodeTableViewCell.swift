@@ -57,7 +57,6 @@ extension EpisodeTableViewCell {
         // containerView
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = .secondarySystemBackground
-        containerView.roundCorners()
         containerView.applyShadow()
     }
     
