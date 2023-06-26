@@ -38,6 +38,7 @@ class ShowDetailsViewController: UIViewController {
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.backgroundColor = .systemBackground
         summaryView.configure(forShow: show)
+        summaryView.delegate = self
         
         // episodesTableView
         episodesTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -162,4 +163,13 @@ extension ShowDetailsViewController: UITableViewDelegate {
 protocol ShowDetailsViewControllerDelegate: AnyObject {
     func selectedEpisode(episode: Episode, withShowTitle showTitle: String)
     func backButtonPressed(inViewcontroller: ShowDetailsViewController)
+}
+
+// MARK: -
+extension ShowDetailsViewController: ShowDetailsSummaryViewDelegate {
+    func seeMoreButtonPressed() {
+        let showDescriptionVC = ShowDescriptionViewController()
+        showDescriptionVC.configure(description: show?.summary ?? "")
+        present(showDescriptionVC, animated: true)
+    }
 }

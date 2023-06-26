@@ -11,10 +11,8 @@ class ShowDetailsSummaryView: UIView {
     
     // MARK: - PROPERTIES
     
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: 300, height: 200)
-    }
     var show: TVShow?
+    weak var delegate: ShowDetailsSummaryViewDelegate?
     
     // MARK: - COMPONENTS
     
@@ -23,6 +21,7 @@ class ShowDetailsSummaryView: UIView {
     var daysLabel: UILabel = UILabel()
     var genresLabel: UILabel = UILabel()
     var summaryLabel: UILabel = UILabel()
+    var seeMoreButton: UIButton = UIButton()
     
     // MARK: - INIT
     
@@ -84,6 +83,12 @@ extension ShowDetailsSummaryView {
         if let summary = show?.summary {
             summaryLabel.text = summary.htmlToString
         }
+        
+        // seeMoreButton
+        seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
+        seeMoreButton.setTitle("more", for: .normal)
+        seeMoreButton.setTitleColor(.secondaryLabel, for: .normal)
+        seeMoreButton.addTarget(self, action: #selector(seeMoreButtonPressed), for: .touchUpInside)
     }
     
     func layout() {
@@ -94,6 +99,7 @@ extension ShowDetailsSummaryView {
         addSubview(daysLabel)
         addSubview(genresLabel)
         addSubview(summaryLabel)
+        addSubview(seeMoreButton)
         
         // imageView
         imageView.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
@@ -119,8 +125,14 @@ extension ShowDetailsSummaryView {
         // summaryLabel
         summaryLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16).isActive = true
         summaryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        summaryLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        summaryLabel.trailingAnchor.constraint(equalTo: seeMoreButton.leadingAnchor, constant: -8).isActive = true
         summaryLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        summaryLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
+        // seeMoreButton
+        seeMoreButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        seeMoreButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     
     func configure(forShow show: TVShow?) {
@@ -129,4 +141,16 @@ extension ShowDetailsSummaryView {
         setup()
         layout()
     }
+    
+    // MARK: - ACTIONS
+    
+    @objc func seeMoreButtonPressed() {
+        delegate?.seeMoreButtonPressed()
+    }
+}
+
+// MARK: - ShowDetailsSummaryViewDelegate
+
+protocol ShowDetailsSummaryViewDelegate: AnyObject {
+    func seeMoreButtonPressed()
 }
