@@ -50,6 +50,8 @@ extension EpisodeTableViewCell {
         
         // title
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.8
         if let title = episode?.name {
             titleLabel.text = title
         }
@@ -68,10 +70,13 @@ extension EpisodeTableViewCell {
         // numberLabel
         numberLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16).isActive = true
         numberLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        numberLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         
         // titleLabel
         titleLabel.leadingAnchor.constraint(equalTo: numberLabel.trailingAnchor, constant: 16).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16).isActive = true
         titleLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         // containerView
         containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
