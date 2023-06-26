@@ -11,8 +11,8 @@ class ShowDetailsSummaryView: UIView {
     
     // MARK: - PROPERTIES
     
-    var show: TVShow?
     weak var delegate: ShowDetailsSummaryViewDelegate?
+    var viewModel: ShowDetailsSummaryViewModel = ShowDetailsSummaryViewModel()
     
     // MARK: - COMPONENTS
     
@@ -40,49 +40,37 @@ extension ShowDetailsSummaryView {
     // MARK: - FUNCTIONS
     
     func setup() {
+        // update
+        viewModel.updateView = { [weak self] image in
+            self?.updateView(forImage: image)
+        }
+        
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.roundCorners()
         imageView.image = UIImage(systemName: "photo.artframe")
         imageView.tintColor = .label
         imageView.contentMode = .scaleAspectFit
-        TVMazeProvider.shared.requestImage(forUrl: show?.image?.medium, completion: { imageData in
-            DispatchQueue.main.async { // update UI
-                if let imageData = imageData {
-                    self.imageView.image = UIImage(data: imageData)
-                }
-            }
-        })
         
         // genresLabel
         genresLabel.translatesAutoresizingMaskIntoConstraints = false
         genresLabel.numberOfLines = 0
-        if let genres = show?.genres, !genres.isEmpty {
-            let genresString = genres[1..<genres.count].reduce(genres.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
-            genresLabel.text = "Genres: \(genresString)"
-        }
+        genresLabel.text = viewModel.getGenresLabelText()
         
         // timeLabel
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.numberOfLines = 0
-        if let time = show?.schedule?.time, !time.isEmpty {
-            timeLabel.text = "Time: \(time)"
-        }
+        timeLabel.text = viewModel.getTimesLabelText()
         
         // daysLabel
         daysLabel.translatesAutoresizingMaskIntoConstraints = false
         daysLabel.numberOfLines = 0
-        if let days = show?.schedule?.days, !days.isEmpty {
-            let daysString = days[1..<days.count].reduce(days.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
-            daysLabel.text = "Days: \(daysString)"
-        }
+        daysLabel.text =  viewModel.getDaysLabelText()
         
         // summaryLabel
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.numberOfLines = 0
-        if let summary = show?.summary {
-            summaryLabel.text = summary.htmlToString
-        }
+        summaryLabel.text = viewModel.getSummaryText()
         
         // seeMoreButton
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
@@ -136,10 +124,16 @@ extension ShowDetailsSummaryView {
     }
     
     func configure(forShow show: TVShow?) {
-        self.show = show
+        viewModel.configure(forShow: show)
         
         setup()
         layout()
+    }
+    
+    func updateView(forImage image: UIImage?) {
+        DispatchQueue.main.async { // update UI
+            self.imageView.image = image
+        }
     }
     
     // MARK: - ACTIONS

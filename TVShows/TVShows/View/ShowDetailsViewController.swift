@@ -11,9 +11,8 @@ class ShowDetailsViewController: UIViewController {
     
     // MARK: - PROPERTIES
     
-    var show: TVShow?
-    var episodes: [[Episode]] = [] // array of episodes separated by seasons (episodes[i] is the array of episodes in season i+1)
     weak var delegate: ShowDetailsViewControllerDelegate?
+    var viewModel: ShowDetailsViewModel = ShowDetailsViewModel()
     
     // MARK: - COMPONENTS
     
@@ -29,15 +28,20 @@ class ShowDetailsViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
-        self.title = show?.name ?? ""
+        self.title = viewModel.showName
         view.backgroundColor = .systemBackground
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonPressed))
         navigationItem.leftBarButtonItem?.tintColor = .label
         
+        // update
+        viewModel.updateView = { [weak self] in
+            self?.updateView()
+        }
+        
         // summaryView
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.backgroundColor = .systemBackground
-        summaryView.configure(forShow: show)
+        summaryView.configure(forShow: viewModel.show)
         summaryView.delegate = self
         
         // episodesTableView
@@ -66,36 +70,15 @@ class ShowDetailsViewController: UIViewController {
     }
     
     func configure(show: TVShow) {
-        self.show = show
-        requestEpisodes()
+        viewModel.configure(forShow: show)
         setup()
         layoutViews()
     }
     
-    func requestEpisodes() {
-        if let id = show?.id {
-            TVMazeProvider.shared.requestEpisodes(showID: id, completion: { episodes in
-                DispatchQueue.main.async { // update UI
-                    self.updateView(forEpisodes: episodes)
-                }
-            })
+    func updateView() {
+        DispatchQueue.main.async { // update UI
+            self.episodesTableView.reloadData()
         }
-    }
-    
-    func updateView(forEpisodes episodes: [Episode]) {
-        self.episodes = separateEpisodesBySeason(episodes: episodes)
-        episodesTableView.reloadData()
-    }
-    
-    func separateEpisodesBySeason(episodes: [Episode]) -> [[Episode]] {
-        var season = 1
-        var seasonAndEpisodes: [[Episode]] = []
-        repeat {
-            let seasonEpisodes = episodes.filter({ episode in return episode.season == season })
-            seasonAndEpisodes.append(seasonEpisodes)
-            season += 1
-        } while episodes.contains(where: { episode in episode.season == season})
-        return seasonAndEpisodes
     }
     
     // MARK: - ACTIONS
@@ -109,11 +92,11 @@ class ShowDetailsViewController: UIViewController {
 
 extension ShowDetailsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return episodes.count
+        return viewModel.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return episodes[section].count
+        return viewModel.getNumberOfRows(inSection: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -121,7 +104,7 @@ extension ShowDetailsViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let episode = episodes[indexPath.section][indexPath.row]
+        let episode = viewModel.getEpisode(forIndexPath: indexPath)
         cell.configure(forEpisode: episode)
         
         return cell
@@ -132,7 +115,7 @@ extension ShowDetailsViewController: UITableViewDataSource {
 
 extension ShowDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.selectedEpisode(episode: episodes[indexPath.section][indexPath.row], withShowTitle: show?.name ?? "")
+        delegate?.selectedEpisode(episode: viewModel.getEpisode(forIndexPath: indexPath), withShowTitle: viewModel.showName)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -169,7 +152,7 @@ protocol ShowDetailsViewControllerDelegate: AnyObject {
 extension ShowDetailsViewController: ShowDetailsSummaryViewDelegate {
     func seeMoreButtonPressed() {
         let showDescriptionVC = ShowDescriptionViewController()
-        showDescriptionVC.configure(description: show?.summary ?? "")
+        showDescriptionVC.configure(description: viewModel.showSummary)
         present(showDescriptionVC, animated: true)
     }
 }
