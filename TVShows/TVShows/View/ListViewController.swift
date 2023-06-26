@@ -11,8 +11,8 @@ class ListViewController: UIViewController {
     
     // MARK: - PROPERTIES
     
-    var shows: [TVShow] = []
     weak var delegate: ListViewControllerDelegate?
+    var viewModel: ListViewModel = ListViewModel()
     
     // MARK: - COMPONENTS
     
@@ -32,6 +32,11 @@ class ListViewController: UIViewController {
     func setup() {
         self.title = "TV Show Listing"
         view.backgroundColor = .systemBackground
+        
+        // update
+        viewModel.updateView = { [weak self] in
+            self?.updateView()
+        }
         
         // searchView
         searchView.translatesAutoresizingMaskIntoConstraints = false
@@ -63,9 +68,10 @@ class ListViewController: UIViewController {
         showsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    func updateView(forTVShowResponses tvShowResponses: [TVShowResponse]) {
-        shows = tvShowResponses.map({ response in return response.show })
-        showsTableView.reloadData()
+    func updateView() {
+        DispatchQueue.main.async { // update UI
+            self.showsTableView.reloadData()
+        }
     }
 }
 
@@ -73,11 +79,7 @@ class ListViewController: UIViewController {
 
 extension ListViewController: SearchViewDelegate {
     func searchViewSearchButtonPressed(withSearchText searchText: String) {
-        TVMazeProvider.shared.requestTVShows(searchString: searchText, completion: { tvShowResponses in
-            DispatchQueue.main.async { // update UI
-                self.updateView(forTVShowResponses: tvShowResponses)
-            }
-        })
+        viewModel.searchButtonPressed(withSearchText: searchText)
     }
 }
 
@@ -85,7 +87,7 @@ extension ListViewController: SearchViewDelegate {
 
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return shows.count
+        return viewModel.numberOfRows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -93,7 +95,7 @@ extension ListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let show = shows[indexPath.row]
+        let show = viewModel.getShowFor(indexPath: indexPath)
         cell.configure(forShow: show)
         
         return cell
@@ -104,7 +106,7 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.selectedShow(show: shows[indexPath.row])
+        delegate?.selectedShow(show: viewModel.getShowFor(indexPath: indexPath))
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

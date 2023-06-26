@@ -18,13 +18,11 @@ class SearchView: UIView {
     
     weak var delegate: SearchViewDelegate?
     
+    // MARK: - COMPONENTS
+    
     var searchTextField: UITextField = UITextField()
     var searchButton: UIButton = UIButton()
     var underlineView: UIView = UIView()
-    
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: 300, height: 200)
-    }
     
     // MARK: - INIT
     
@@ -50,7 +48,6 @@ extension SearchView {
         
         // searchTextField
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
-//        searchTextField.placeholder = "Title Search"
         searchTextField.attributedPlaceholder = NSAttributedString(
             string: "Title Search",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText]
