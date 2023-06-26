@@ -72,7 +72,7 @@ class ShowDetailsViewController: UIViewController {
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.numberOfLines = 0
         if let summary = show?.summary {
-            summaryLabel.text = summary
+            summaryLabel.text = summary.htmlToString
         }
         
         // episodesTableView
