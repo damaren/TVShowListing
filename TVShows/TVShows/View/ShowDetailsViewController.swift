@@ -13,6 +13,7 @@ class ShowDetailsViewController: UIViewController {
     
     var show: TVShow?
     var episodes: [[Episode]] = [] // array of episodes separated by seasons (episodes[i] is the array of episodes in season i+1)
+    weak var delegate: ShowDetailsViewControllerDelegate?
     
     // MARK: - COMPONENTS
     
@@ -121,9 +122,7 @@ extension ShowDetailsViewController: UITableViewDataSource {
 
 extension ShowDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = EpisodeInformationViewController()
-        vc.configure(forEpisode: episodes[indexPath.section][indexPath.row], andShowTitle: show?.name ?? "")
-        self.navigationController?.pushViewController(vc, animated: true)
+        delegate?.selectedEpisode(episode: episodes[indexPath.section][indexPath.row], withShowTitle: show?.name ?? "")
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -147,4 +146,9 @@ extension ShowDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return EpisodeTableViewCell.cellHeight
     }
+}
+
+// MARK: - ShowDetailsViewControllerDelegate
+protocol ShowDetailsViewControllerDelegate: AnyObject {
+    func selectedEpisode(episode: Episode, withShowTitle showTitle: String)
 }

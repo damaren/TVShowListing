@@ -12,6 +12,7 @@ class ListViewController: UIViewController {
     // MARK: - PROPERTIES
     
     var shows: [TVShow] = []
+    weak var delegate: ListViewControllerDelegate?
     
     // MARK: - COMPONENTS
     
@@ -103,12 +104,16 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = ShowDetailsViewController()
-        vc.configure(show: shows[indexPath.row])
-        self.navigationController?.pushViewController(vc, animated: true)
+        delegate?.selectedShow(show: shows[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return TVShowTableViewCell.cellHeight
     }
 }
+
+// MARK: - ListViewControllerDelegate
+protocol ListViewControllerDelegate: AnyObject {
+    func selectedShow(show: TVShow)
+}
+
