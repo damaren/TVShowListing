@@ -17,7 +17,7 @@ class TVShowTableViewCell: UITableViewCell {
     
     // MARK: - PROPERTIES
     
-    var show: TVShow?
+    let viewModel: TVShowTableViewCellViewModel = TVShowTableViewCellViewModel()
     let verticalMargin: CGFloat = 8
     let imageAspectRatio: Double = 210/295
     
@@ -45,32 +45,27 @@ extension TVShowTableViewCell {
     // MARK: - FUNCTIONS
     
     func setup() {
+        // update
+        viewModel.updateView = { [weak self] image in
+            self?.updateView(forImage: image)
+        }
+        
         // image
         image.translatesAutoresizingMaskIntoConstraints = false
         image.image = UIImage(systemName: "photo.artframe")
         image.tintColor = .label
         image.contentMode = .scaleAspectFit
-        TVMazeProvider.shared.requestImage(forUrl: show?.image?.medium, completion: { image in
-            DispatchQueue.main.async { // update UI
-                self.image.image = image
-            }
-        })
         image.roundCorners()
         
         // titleLabel
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
-        if let text = show?.name {
-            titleLabel.text = text
-        }
+        titleLabel.text = viewModel.getShowName()
         
         // genresLabel
         genresLabel.translatesAutoresizingMaskIntoConstraints = false
         genresLabel.numberOfLines = 0
-        if let genres = show?.genres, !genres.isEmpty {
-            let genresString = genres[1..<genres.count].reduce(genres.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
-            genresLabel.text = "Genres: \(genresString)"
-        }
+        genresLabel.text = viewModel.getGenres()
         
         // containerView
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -110,9 +105,15 @@ extension TVShowTableViewCell {
     }
     
     func configure(forShow show: TVShow) {
-        self.show = show
+        viewModel.configure(forShow: show)
         
         setup()
         layout()
+    }
+    
+    func updateView(forImage image: UIImage?) {
+        DispatchQueue.main.async { // update UI
+            self.image.image = image
+        }
     }
 }
