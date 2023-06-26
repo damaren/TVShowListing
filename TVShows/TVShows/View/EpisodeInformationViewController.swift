@@ -34,6 +34,7 @@ class EpisodeInformationViewController: UIViewController {
     
     func setup() {
         self.title = showTitle ?? ""
+        view.backgroundColor = .systemBackground
         
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false

@@ -31,11 +31,11 @@ class ListViewController: UIViewController {
     
     func setup() {
         self.title = "TV Show Listing"
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = .systemBackground
         
         // searchView
         searchView.translatesAutoresizingMaskIntoConstraints = false
-        searchView.backgroundColor = .secondarySystemBackground
+        searchView.backgroundColor = .systemBackground
         searchView.delegate = self
         
         // tableview
@@ -43,7 +43,7 @@ class ListViewController: UIViewController {
         showsTableView.dataSource = self
         showsTableView.delegate = self
         showsTableView.register(TVShowTableViewCell.self, forCellReuseIdentifier: TVShowTableViewCell.reuseIdentifier)
-        showsTableView.backgroundColor = .secondarySystemBackground
+        showsTableView.backgroundColor = .systemBackground
     }
     
     func layoutViews() {

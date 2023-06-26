@@ -30,6 +30,7 @@ class ShowDetailsViewController: UIViewController {
     
     func setup() {
         self.title = show?.name ?? ""
+        view.backgroundColor = .systemBackground
         
         // summaryView
         summaryView.translatesAutoresizingMaskIntoConstraints = false
