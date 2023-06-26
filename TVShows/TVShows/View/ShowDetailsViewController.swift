@@ -31,6 +31,8 @@ class ShowDetailsViewController: UIViewController {
     func setup() {
         self.title = show?.name ?? ""
         view.backgroundColor = .systemBackground
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonPressed))
+        navigationItem.leftBarButtonItem?.tintColor = .label
         
         // summaryView
         summaryView.translatesAutoresizingMaskIntoConstraints = false
@@ -94,6 +96,12 @@ class ShowDetailsViewController: UIViewController {
         } while episodes.contains(where: { episode in episode.season == season})
         return seasonAndEpisodes
     }
+    
+    // MARK: - ACTIONS
+    
+    @objc func backButtonPressed() {
+        delegate?.backButtonPressed(inViewcontroller: self)
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -152,4 +160,5 @@ extension ShowDetailsViewController: UITableViewDelegate {
 // MARK: - ShowDetailsViewControllerDelegate
 protocol ShowDetailsViewControllerDelegate: AnyObject {
     func selectedEpisode(episode: Episode, withShowTitle showTitle: String)
+    func backButtonPressed(inViewcontroller: ShowDetailsViewController)
 }

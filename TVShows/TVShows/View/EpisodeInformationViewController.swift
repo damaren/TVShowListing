@@ -15,6 +15,7 @@ class EpisodeInformationViewController: UIViewController {
     var showTitle: String?
     let horizontalMargin: CGFloat = 16
     let imageAspectRatio: Double = 250/140
+    weak var delegate: EpisodeInformationViewControllerDelegate?
     
     
     // MARK: - COMPONENTS
@@ -35,6 +36,8 @@ class EpisodeInformationViewController: UIViewController {
     func setup() {
         self.title = showTitle ?? ""
         view.backgroundColor = .systemBackground
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonPressed))
+        navigationItem.leftBarButtonItem?.tintColor = .label
         
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,4 +115,15 @@ class EpisodeInformationViewController: UIViewController {
         setup()
         layoutViews()
     }
+    
+    // MARK: - ACTIONS
+    
+    @objc func backButtonPressed() {
+        delegate?.backButtonPressed(inViewcontroller: self)
+    }
+}
+
+// MARK: - ShowDetailsViewControllerDelegate
+protocol EpisodeInformationViewControllerDelegate: AnyObject {
+    func backButtonPressed(inViewcontroller: EpisodeInformationViewController)
 }

@@ -28,6 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+// MARK: - ListViewControllerDelegate
+
 extension AppDelegate: ListViewControllerDelegate {
     func selectedShow(show: TVShow) {
         showDetailsViewController.delegate = self
@@ -36,9 +38,24 @@ extension AppDelegate: ListViewControllerDelegate {
     }
 }
 
+// MARK: - ShowDetailsViewControllerDelegate
+
 extension AppDelegate: ShowDetailsViewControllerDelegate {
+    func backButtonPressed(inViewcontroller: ShowDetailsViewController) {
+        navigationController.popViewController(animated: true)
+    }
+    
     func selectedEpisode(episode: Episode, withShowTitle showTitle: String) {
+        episodeInfoViewController.delegate = self
         episodeInfoViewController.configure(forEpisode: episode, andShowTitle: showTitle)
         navigationController.pushViewController(episodeInfoViewController, animated: true)
+    }
+}
+
+// MARK: - EpisodeInformationViewControllerDelegate
+
+extension AppDelegate: EpisodeInformationViewControllerDelegate {
+    func backButtonPressed(inViewcontroller: EpisodeInformationViewController) {
+        navigationController.popViewController(animated: true)
     }
 }
