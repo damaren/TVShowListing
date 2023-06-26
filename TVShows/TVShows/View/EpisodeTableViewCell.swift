@@ -52,6 +52,7 @@ extension EpisodeTableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.8
+        titleLabel.textAlignment = .right
         if let title = episode?.name {
             titleLabel.text = title
         }
