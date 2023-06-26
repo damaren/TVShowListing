@@ -16,12 +16,7 @@ class ShowDetailsViewController: UIViewController {
     
     // MARK: - COMPONENTS
     
-    var summaryView: UIView = UIView()
-    var imageView: UIImageView = UIImageView()
-    var timeLabel: UILabel = UILabel()
-    var daysLabel: UILabel = UILabel()
-    var genresLabel: UILabel = UILabel()
-    var summaryLabel: UILabel = UILabel()
+    var summaryView: ShowDetailsSummaryView = ShowDetailsSummaryView()
     var episodesTableView: UITableView = UITableView()
     
     // MARK: - LIFECYCLE
@@ -38,42 +33,7 @@ class ShowDetailsViewController: UIViewController {
         // summaryView
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.backgroundColor = .systemBackground
-        
-        // imageView
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        if let url = URL(string: show?.image?.medium ?? ""), let data = try? Data(contentsOf: url) {
-            imageView.image = UIImage(data: data)
-        }
-        
-        // genresLabel
-        genresLabel.translatesAutoresizingMaskIntoConstraints = false
-        genresLabel.numberOfLines = 0
-        if let genres = show?.genres, !genres.isEmpty {
-            let genresString = genres[1..<genres.count].reduce(genres.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
-            genresLabel.text = "Genres: \(genresString)"
-        }
-        
-        // timeLabel
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.numberOfLines = 0
-        if let time = show?.schedule?.time, !time.isEmpty {
-            timeLabel.text = "Time: \(time)"
-        }
-        
-        // daysLabel
-        daysLabel.translatesAutoresizingMaskIntoConstraints = false
-        daysLabel.numberOfLines = 0
-        if let days = show?.schedule?.days, !days.isEmpty {
-            let daysString = days[1..<days.count].reduce(days.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
-            daysLabel.text = "Days: \(daysString)"
-        }
-        
-        // summaryLabel
-        summaryLabel.translatesAutoresizingMaskIntoConstraints = false
-        summaryLabel.numberOfLines = 0
-        if let summary = show?.summary {
-            summaryLabel.text = summary.htmlToString
-        }
+        summaryView.configure(forShow: show)
         
         // episodesTableView
         episodesTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -84,11 +44,6 @@ class ShowDetailsViewController: UIViewController {
     }
     
     func layoutViews() {
-        summaryView.addSubview(imageView)
-        summaryView.addSubview(timeLabel)
-        summaryView.addSubview(daysLabel)
-        summaryView.addSubview(genresLabel)
-        summaryView.addSubview(summaryLabel)
         view.addSubview(summaryView)
         view.addSubview(episodesTableView)
         
@@ -97,33 +52,6 @@ class ShowDetailsViewController: UIViewController {
         summaryView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         summaryView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         summaryView.heightAnchor.constraint(equalToConstant: 400).isActive = true
-        
-        // imageView
-        imageView.topAnchor.constraint(equalTo: summaryView.topAnchor, constant: 16).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: summaryView.leadingAnchor, constant: 16).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 210).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 295).isActive = true
-        
-        // genresLabel
-        genresLabel.topAnchor.constraint(equalTo: summaryView.topAnchor, constant: 16).isActive = true
-        genresLabel.trailingAnchor.constraint(equalTo: summaryView.trailingAnchor, constant: -16).isActive = true
-        genresLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16).isActive = true
-        
-        // timeLabel
-        timeLabel.topAnchor.constraint(equalTo: genresLabel.bottomAnchor, constant: 16).isActive = true
-        timeLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16).isActive = true
-        timeLabel.trailingAnchor.constraint(equalTo: summaryView.trailingAnchor, constant: -16).isActive = true
-        
-        // daysLabel
-        daysLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 16).isActive = true
-        daysLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16).isActive = true
-        daysLabel.trailingAnchor.constraint(equalTo: summaryView.trailingAnchor, constant: -16).isActive = true
-        
-        // summaryLabel
-        summaryLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16).isActive = true
-        summaryLabel.leadingAnchor.constraint(equalTo: summaryView.leadingAnchor, constant: 16).isActive = true
-        summaryLabel.trailingAnchor.constraint(equalTo: summaryView.trailingAnchor, constant: -16).isActive = true
-        summaryLabel.bottomAnchor.constraint(equalTo: summaryView.bottomAnchor, constant: -16).isActive = true
         
         // episodesTableView
         episodesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
