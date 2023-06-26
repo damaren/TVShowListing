@@ -40,9 +40,13 @@ class EpisodeInformationViewController: UIViewController {
         imageView.image = UIImage(systemName: "photo.artframe")
         imageView.tintColor = .label
         imageView.contentMode = .scaleAspectFit
-        if let imageURL = episode?.image?.medium, let url = URL(string: imageURL ), let data = try? Data(contentsOf: url) {
-            imageView.image = UIImage(data: data)
-        }
+        TVMazeProvider.shared.requestImage(forUrl: episode?.image?.medium, completion: { imageData in
+            DispatchQueue.main.async { // update UI
+                if let imageData = imageData {
+                    self.imageView.image = UIImage(data: imageData)
+                }
+            }
+        })
         imageView.roundCorners()
         
         // seasonAndNumberLabel

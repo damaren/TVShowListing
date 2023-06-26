@@ -44,9 +44,16 @@ extension ShowDetailsSummaryView {
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.roundCorners()
-        if let url = URL(string: show?.image?.medium ?? ""), let data = try? Data(contentsOf: url) {
-            imageView.image = UIImage(data: data)
-        }
+        imageView.image = UIImage(systemName: "photo.artframe")
+        imageView.tintColor = .label
+        imageView.contentMode = .scaleAspectFit
+        TVMazeProvider.shared.requestImage(forUrl: show?.image?.medium, completion: { imageData in
+            DispatchQueue.main.async { // update UI
+                if let imageData = imageData {
+                    self.imageView.image = UIImage(data: imageData)
+                }
+            }
+        })
         
         // genresLabel
         genresLabel.translatesAutoresizingMaskIntoConstraints = false

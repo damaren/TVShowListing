@@ -50,9 +50,13 @@ extension TVShowTableViewCell {
         image.image = UIImage(systemName: "photo.artframe")
         image.tintColor = .label
         image.contentMode = .scaleAspectFit
-        if let imageURL = show?.image?.medium, let url = URL(string: imageURL ), let data = try? Data(contentsOf: url) {
-            image.image = UIImage(data: data)
-        }
+        TVMazeProvider.shared.requestImage(forUrl: show?.image?.medium, completion: { imageData in
+            DispatchQueue.main.async { // update UI
+                if let imageData = imageData {
+                    self.image.image = UIImage(data: imageData)
+                }
+            }
+        })
         image.roundCorners()
         
         // titleLabel

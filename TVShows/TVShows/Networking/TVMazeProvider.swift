@@ -57,4 +57,15 @@ class TVMazeProvider {
 
         task.resume()
     }
+    
+    func requestImage(forUrl urlString: String?, completion: @escaping (Data?) -> ()) {
+        if let imageUrl = urlString, let url = URL(string: imageUrl) {
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                completion(data)
+            }
+            
+            task.resume()
+          }
+        
+    }
 }
