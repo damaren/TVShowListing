@@ -24,15 +24,15 @@ class ShowDetailsSummaryViewModel {
     
     // MARK: - FUNCTIONS
     
-    func requestImage() {
-        TVMazeProvider.shared.requestImage(forUrl: show?.image?.medium, completion: { image in
+    func requestImage(withProvider provider: Provider) {
+        provider.requestImage(forUrl: show?.image?.medium, completion: { image in
             self.image = image
         })
     }
     
     public func configure(forShow show: TVShow?) {
         self.show = show
-        requestImage()
+        requestImage(withProvider: TVMazeProvider.shared)
     }
     
     public func getGenresLabelText() -> String {

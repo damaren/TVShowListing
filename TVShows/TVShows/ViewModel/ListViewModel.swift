@@ -27,13 +27,17 @@ class ListViewModel {
     // MARK: - FUNCTIONS
     
     public func searchButtonPressed(withSearchText searchText: String) {
-        TVMazeProvider.shared.requestTVShows(searchString: searchText, completion: { tvShowResponses in
-            self.updateShows(forTVShowResponses: tvShowResponses)
-        })
+        requestTVShows(withSearchText: searchText, andProvider: TVMazeProvider.shared)
     }
     
     public func getShowFor(indexPath: IndexPath) -> TVShow {
         return shows[indexPath.row]
+    }
+    
+    func requestTVShows(withSearchText searchText: String, andProvider provider: Provider) {
+        provider.requestTVShows(searchString: searchText, completion: { tvShowResponses in
+            self.updateShows(forTVShowResponses: tvShowResponses)
+        })
     }
     
     func updateShows(forTVShowResponses tvShowResponses: [TVShowResponse]) {

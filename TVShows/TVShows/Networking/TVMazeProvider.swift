@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class TVMazeProvider {
+class TVMazeProvider: Provider {
     
     // MARK: - SINGLETON
     

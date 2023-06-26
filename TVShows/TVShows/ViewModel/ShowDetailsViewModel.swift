@@ -47,12 +47,12 @@ class ShowDetailsViewModel {
     
     public func configure(forShow show: TVShow) {
         self.show = show
-        requestEpisodes()
+        requestEpisodes(withProvider: TVMazeProvider.shared)
     }
     
-    func requestEpisodes() {
+    func requestEpisodes(withProvider provider: Provider) {
         if let id = show?.id {
-            TVMazeProvider.shared.requestEpisodes(showID: id, completion: { episodes in
+            provider.requestEpisodes(showID: id, completion: { episodes in
                 self.updateEpisodes(withEpisodes: episodes)
             })
         }

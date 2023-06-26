@@ -26,8 +26,8 @@ class EpisodeInformationViewModel {
     
     // MARK: - FUNCTIONS
     
-    func requestImage() {
-        TVMazeProvider.shared.requestImage(forUrl: episode?.image?.medium, completion: { image in
+    func requestImage(withProvider provider: Provider) {
+        provider.requestImage(forUrl: episode?.image?.medium, completion: { image in
             self.image = image
         })
     }
@@ -35,7 +35,7 @@ class EpisodeInformationViewModel {
     public func configure(forEpisode episode: Episode?, andShowTitle showTitle: String) {
         self.episode = episode
         self.showTitle = showTitle
-        requestImage()
+        requestImage(withProvider: TVMazeProvider.shared)
     }
     
     public func getSeasonAndNumberText() -> String {
