@@ -34,7 +34,7 @@ struct TVShow: Decodable {
     var externals: Externals?
     var image: Image?
     var summary: String?
-    var updated: Int
+    var updated: Int?
 }
 
 struct Schedule: Decodable {
