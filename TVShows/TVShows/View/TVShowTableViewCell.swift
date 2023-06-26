@@ -27,7 +27,6 @@ class TVShowTableViewCell: UITableViewCell {
     var titleLabel: UILabel = UILabel()
     var genresLabel: UILabel = UILabel()
     var containerView: UIView = UIView()
-    var shadowView: UIView = UIView()
     
     // MARK: - INIT
     
@@ -55,6 +54,7 @@ extension TVShowTableViewCell {
             image.image = UIImage(data: data)
         }
         image.roundCorners()
+        image.clipsToBounds = true
         
         // titleLabel
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -75,24 +75,19 @@ extension TVShowTableViewCell {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = .secondarySystemBackground
         containerView.roundCorners()
-        
-        // shadowView
-        shadowView.translatesAutoresizingMaskIntoConstraints = false
-        shadowView.backgroundColor = .secondarySystemBackground
-        shadowView.applyShadow()
+        containerView.applyShadow()
     }
     
     func layout() {
         containerView.addSubview(image)
         containerView.addSubview(titleLabel)
         containerView.addSubview(genresLabel)
-        contentView.addSubview(shadowView)
         contentView.addSubview(containerView)
         
         // image
-        image.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
-        image.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        let imageHeight = TVShowTableViewCell.cellHeight - 2 * verticalMargin
+        image.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8).isActive = true
+        image.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        let imageHeight = TVShowTableViewCell.cellHeight - 4 * verticalMargin // 4 = containerView top and bottom + image top and bottom
         let imageWidh = imageHeight*imageAspectRatio
         image.widthAnchor.constraint(equalToConstant: imageWidh).isActive = true
         image.heightAnchor.constraint(equalToConstant: imageHeight).isActive = true
@@ -106,12 +101,6 @@ extension TVShowTableViewCell {
         genresLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 16).isActive = true
         genresLabel.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16).isActive = true
         genresLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16).isActive = true
-        
-        // shadowView
-        shadowView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
-        shadowView.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin).isActive = true
-        shadowView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive = true
-        shadowView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -verticalMargin).isActive = true
         
         // containerView
         containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
@@ -131,7 +120,6 @@ extension TVShowTableViewCell {
 extension UIView {
     func roundCorners() {
         layer.cornerRadius = 8.0
-        layer.masksToBounds = true
     }
     
     func applyShadow() {
