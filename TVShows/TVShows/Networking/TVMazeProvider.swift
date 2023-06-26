@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class TVMazeProvider {
     
@@ -58,10 +59,14 @@ class TVMazeProvider {
         task.resume()
     }
     
-    func requestImage(forUrl urlString: String?, completion: @escaping (Data?) -> ()) {
+    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?) -> ()) {
         if let imageUrl = urlString, let url = URL(string: imageUrl) {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                completion(data)
+                if let imageData = data {
+                    completion(UIImage(data: imageData))
+                } else {
+                    completion(nil)
+                }
             }
             
             task.resume()

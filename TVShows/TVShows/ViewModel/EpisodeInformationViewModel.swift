@@ -27,10 +27,8 @@ class EpisodeInformationViewModel {
     // MARK: - FUNCTIONS
     
     func requestImage() {
-        TVMazeProvider.shared.requestImage(forUrl: episode?.image?.medium, completion: { imageData in
-            if let imageData = imageData {
-                self.image = UIImage(data: imageData)
-            }
+        TVMazeProvider.shared.requestImage(forUrl: episode?.image?.medium, completion: { image in
+            self.image = image
         })
     }
     
