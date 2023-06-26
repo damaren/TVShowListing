@@ -13,15 +13,18 @@ class EpisodeTableViewCell: UITableViewCell {
     // MARK: - STATIC PROPERTIES
     
     static let reuseIdentifier: String = "EpisodeTableViewCell"
+    static let cellHeight: CGFloat = 60
     
     // MARK: - PROPERTIES
     
     var episode: Episode?
+    let verticalMargin: CGFloat = 8
     
     // MARK: - COMPONENTS
     
     var numberLabel: UILabel = UILabel()
     var titleLabel: UILabel = UILabel()
+    var containerView: UIView = UIView()
     
     // MARK: - INIT
     
@@ -50,19 +53,32 @@ extension EpisodeTableViewCell {
         if let title = episode?.name {
             titleLabel.text = title
         }
+        
+        // containerView
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = .secondarySystemBackground
+        containerView.roundCorners()
+        containerView.applyShadow()
     }
     
     func layout() {
-        contentView.addSubview(numberLabel)
-        contentView.addSubview(titleLabel)
+        containerView.addSubview(numberLabel)
+        containerView.addSubview(titleLabel)
+        contentView.addSubview(containerView)
         
         // numberLabel
-        numberLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        numberLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        numberLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16).isActive = true
+        numberLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         
         // titleLabel
         titleLabel.leadingAnchor.constraint(equalTo: numberLabel.trailingAnchor, constant: 16).isActive = true
-        titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        titleLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        
+        // containerView
+        containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
+        containerView.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin).isActive = true
+        containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive = true
+        containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -verticalMargin).isActive = true
     }
     
     func configure(forEpisode episode: Episode) {

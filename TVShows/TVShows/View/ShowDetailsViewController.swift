@@ -197,4 +197,26 @@ extension ShowDetailsViewController: UITableViewDelegate {
         vc.configure(forEpisode: episodes[indexPath.section][indexPath.row])
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView: UIView = UIView()
+        let seasonLabel: UILabel = UILabel()
+        
+        // the view
+        headerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        headerView.backgroundColor = .systemGray4
+        
+        // seasonLabel
+        headerView.addSubview(seasonLabel)
+        seasonLabel.translatesAutoresizingMaskIntoConstraints = false
+        seasonLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        seasonLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 8).isActive = true
+        seasonLabel.text = "Season \(section + 1)"
+        
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return EpisodeTableViewCell.cellHeight
+    }
 }
