@@ -36,4 +36,15 @@ class ShowDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.getNumberOfRows(inSection: 2), 2)
         XCTAssertEqual(viewModel.getNumberOfRows(inSection: 3), 2)
     }
+    
+    func testRequestEpisodes() throws {
+        viewModel.requestEpisodes(forShowId: 1, withProvider: MockProvider(shouldCompleteWithValue: true))
+        XCTAssertEqual(viewModel.numberOfSections, 4)
+        XCTAssertEqual(viewModel.getNumberOfRows(inSection: 0), 2)
+        XCTAssertEqual(viewModel.getNumberOfRows(inSection: 1), 2)
+        XCTAssertEqual(viewModel.getNumberOfRows(inSection: 2), 2)
+        XCTAssertEqual(viewModel.getNumberOfRows(inSection: 3), 2)
+        viewModel.requestEpisodes(forShowId: 1, withProvider: MockProvider(shouldCompleteWithValue: false))
+        XCTAssertTrue(viewModel.episodes.isEmpty)
+    }
 }

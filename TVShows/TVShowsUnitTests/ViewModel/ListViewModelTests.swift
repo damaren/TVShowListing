@@ -31,4 +31,11 @@ class ListViewModelTests: XCTestCase {
         // the number of items in the shows array should be equal to the number of items received from the API
         XCTAssertEqual(viewModel.shows.count, tvShowResponses.count)
     }
+    
+    func testRequestTVShows() throws {
+        viewModel.requestTVShows(withSearchText: "", andProvider: MockProvider(shouldCompleteWithValue: true))
+        XCTAssertEqual(viewModel.shows.count, 6)
+        viewModel.requestTVShows(withSearchText: "", andProvider: MockProvider(shouldCompleteWithValue: false))
+        XCTAssertTrue(viewModel.shows.isEmpty)
+    }
 }

@@ -25,15 +25,15 @@ class TVShowTableViewCellViewModel {
     
     // MARK: - FUNCTIONS
     
-    func requestImage(withProvider provider: Provider) {
-        provider.requestImage(forUrl: show?.image?.medium, completion: { image in
+    func requestImage(forUrl url: String?, withProvider provider: Provider) {
+        provider.requestImage(forUrl: url, completion: { image in
             self.image = image
         })
     }
     
     public func configure(forShow show: TVShow?) {
         self.show = show
-        requestImage(withProvider: TVMazeProvider.shared)
+        requestImage(forUrl: show?.image?.medium, withProvider: TVMazeProvider.shared)
     }
     
     public func getShowName() -> String {
