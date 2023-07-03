@@ -1,2 +1,4 @@
 # TVShowListing
-Repository for an app that shows information about TV Shows.
+This app allows the user to search for tv shows by titles. It uses the [TVMaze API](https://www.tvmaze.com/api).
+
+To use it, clone the project with git clone. Then, open the project in XCode and build it in an iPhone simulator.
