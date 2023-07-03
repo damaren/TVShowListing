@@ -18,9 +18,20 @@ class EpisodeInformationViewModelTests: XCTestCase {
         viewModel = EpisodeInformationViewModel()
     }
     
+    override func tearDown() {
+        super.tearDown()
+        viewModel = nil
+    }
+    
     func testGetSeasonAndNumberText() throws {
+        // Given an episode
         let episode: Episode = Episode(id: 1, season: 1, number: 5)
         viewModel.episode = episode
-        XCTAssertEqual(viewModel.getSeasonAndNumberText(), "S1E5:")
+        
+        // When we call the season and number getter
+        let seasonAndNumberText = viewModel.getSeasonAndNumberText()
+        
+        // Then we get the correct value back
+        XCTAssertEqual(seasonAndNumberText, "S1E5:", "The season and number getter returned '\(seasonAndNumberText)' but should have returned 'S1E5:'")
     }
 }
