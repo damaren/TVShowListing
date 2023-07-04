@@ -53,7 +53,8 @@ class ShowDetailsViewModel {
     }
     
     func requestEpisodes(forShowId showId: Int, withProvider provider: Provider) {
-        provider.requestEpisodes(showID: showId, completion: { episodes in
+        provider.requestEpisodes(showID: showId, completion: { episodes, error in
+            guard let episodes = episodes else { return }
             self.updateEpisodes(withEpisodes: episodes)
         })
     }

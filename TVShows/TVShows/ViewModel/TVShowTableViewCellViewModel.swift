@@ -26,7 +26,7 @@ class TVShowTableViewCellViewModel {
     // MARK: - FUNCTIONS
     
     func requestImage(forUrl url: String?, withProvider provider: Provider) {
-        provider.requestImage(forUrl: url, completion: { image in
+        provider.requestImage(forUrl: url, completion: { image, error in
             self.image = image
         })
     }

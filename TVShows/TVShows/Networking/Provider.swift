@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 protocol Provider: AnyObject {
-    func requestTVShows(searchString: String, completion: @escaping ([TVShowResponse]) -> ())
+    func requestTVShows(searchString: String, completion: @escaping ([TVShowResponse]?, NetworkError?) -> ())
     
-    func requestEpisodes(showID: Int, completion: @escaping ([Episode]) -> ())
+    func requestEpisodes(showID: Int, completion: @escaping ([Episode]?, NetworkError?) -> ())
     
-    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?) -> ())
+    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, NetworkError?) -> ())
 }

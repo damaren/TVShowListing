@@ -25,7 +25,7 @@ class ShowDetailsSummaryViewModel {
     // MARK: - FUNCTIONS
     
     func requestImage(withProvider provider: Provider) {
-        provider.requestImage(forUrl: show?.image?.medium, completion: { image in
+        provider.requestImage(forUrl: show?.image?.medium, completion: { image, error in
             self.image = image
         })
     }

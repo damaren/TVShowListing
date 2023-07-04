@@ -88,4 +88,27 @@ class ShowDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.numberOfSections, episodes.count, "The number of sections in the view model (\(viewModel.numberOfSections)) should be equal to the number of seasons (\(episodes.count))")
         XCTAssertTrue(viewModel.episodes.isEmpty, "The 'episodes' array should be empty, but it contains \(viewModel.episodes.count) elements")
     }
+    
+    func testRequestEpisodes_RequestError() throws {
+        // Given a response with an error
+        let episodes: [Episode] = [
+            Episode(id: 0, season: 1),
+            Episode(id: 1, season: 1),
+            Episode(id: 2, season: 2),
+            Episode(id: 3, season: 2),
+            Episode(id: 4, season: 3),
+            Episode(id: 5, season: 3),
+            Episode(id: 6, season: 4),
+            Episode(id: 7, season: 4)
+        ]
+        let responseError: NetworkError = .responseError("Mock response error")
+        let provider = MockProvider(episodes: episodes, responseError: responseError)
+        
+        // When a request is made that gives a response with an error
+        viewModel.requestEpisodes(forShowId: 1, withProvider: provider)
+        
+        // Then the list of episodes in the view model should be empty
+        XCTAssertEqual(viewModel.numberOfSections, 0, "The number of sections in the view model (\(viewModel.numberOfSections)) should be equal to zero")
+        XCTAssertTrue(viewModel.episodes.isEmpty, "The 'episodes' array should be empty, but it contains \(viewModel.episodes.count) elements")
+    }
 }

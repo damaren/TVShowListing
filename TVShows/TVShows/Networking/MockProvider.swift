@@ -16,26 +16,32 @@ class MockProvider: Provider {
     var showResponses: [TVShowResponse]
     var episodes: [Episode]
     var image: UIImage?
+    var responseError: NetworkError?
     
     // MARK: - Init
     
-    init(showResponses: [TVShowResponse] = [], episodes: [Episode] = [], image: UIImage? = nil) {
+    init(showResponses: [TVShowResponse] = [], episodes: [Episode] = [], image: UIImage? = nil, responseError: NetworkError? = nil) {
         self.showResponses = showResponses
         self.episodes = episodes
         self.image = image
+        self.responseError = responseError
     }
     
     // MARK: - FUNCTIONS
     
-    func requestTVShows(searchString: String, completion: @escaping ([TVShowResponse]) -> ()) {
-        completion(showResponses)
+    func requestTVShows(searchString: String, completion: @escaping ([TVShowResponse]?, NetworkError?) -> ()) {
+        completion(showResponses, nil)
     }
     
-    func requestEpisodes(showID: Int, completion: @escaping ([Episode]) -> ()) {
-        completion(episodes)
+    func requestEpisodes(showID: Int, completion: @escaping ([Episode]?, NetworkError?) -> ()) {
+        if let responseError = responseError {
+            completion(nil, responseError)
+        } else {
+            completion(episodes, nil)
+        }
     }
     
-    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?) -> ()) {
-        completion(image)
+    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, NetworkError?) -> ()) {
+        completion(image, nil)
     }
 }

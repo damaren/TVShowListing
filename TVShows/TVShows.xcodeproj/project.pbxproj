@@ -32,6 +32,7 @@
 		149AA3172A47728800BD7059 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AA3162A47728800BD7059 /* SearchView.swift */; };
 		149AA3192A4789F500BD7059 /* TVShowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AA3182A4789F500BD7059 /* TVShowTableViewCell.swift */; };
 		149AA31B2A479A4A00BD7059 /* ShowDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AA31A2A479A4A00BD7059 /* ShowDetailsViewController.swift */; };
+		14A2FFED2A5482C300F47475 /* NetworkErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A2FFEC2A5482C300F47475 /* NetworkErrorModel.swift */; };
 		14C2CF312A48718C007FA677 /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF302A48718C007FA677 /* EpisodeModel.swift */; };
 		14C2CF332A48765D007FA677 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */; };
 		14C2CF352A48832E007FA677 /* EpisodeInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */; };
@@ -76,6 +77,7 @@
 		149AA3162A47728800BD7059 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		149AA3182A4789F500BD7059 /* TVShowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowTableViewCell.swift; sourceTree = "<group>"; };
 		149AA31A2A479A4A00BD7059 /* ShowDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailsViewController.swift; sourceTree = "<group>"; };
+		14A2FFEC2A5482C300F47475 /* NetworkErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorModel.swift; sourceTree = "<group>"; };
 		14C2CF302A48718C007FA677 /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeInformationViewController.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				149AA3132A470A0D00BD7059 /* TVMazeProvider.swift */,
 				141C6EFD2A4A581900977986 /* Provider.swift */,
 				141C6F012A4A5BEA00977986 /* MockProvider.swift */,
+				14A2FFEC2A5482C300F47475 /* NetworkErrorModel.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				14205DB02A46415000E8E5A7 /* TVShowModel.swift in Sources */,
 				141C6EFE2A4A581900977986 /* Provider.swift in Sources */,
 				141C6ED92A49BE1A00977986 /* UIViewExtension.swift in Sources */,
+				14A2FFED2A5482C300F47475 /* NetworkErrorModel.swift in Sources */,
 				149AA3192A4789F500BD7059 /* TVShowTableViewCell.swift in Sources */,
 				149AA31B2A479A4A00BD7059 /* ShowDetailsViewController.swift in Sources */,
 				14205D9B2A462D2000E8E5A7 /* AppDelegate.swift in Sources */,

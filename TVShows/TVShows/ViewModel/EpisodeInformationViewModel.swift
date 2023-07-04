@@ -27,7 +27,7 @@ class EpisodeInformationViewModel {
     // MARK: - FUNCTIONS
     
     func requestImage(withProvider provider: Provider) {
-        provider.requestImage(forUrl: episode?.image?.medium, completion: { image in
+        provider.requestImage(forUrl: episode?.image?.medium, completion: { image, error in
             self.image = image
         })
     }

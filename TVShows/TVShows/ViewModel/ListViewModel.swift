@@ -35,7 +35,8 @@ class ListViewModel {
     }
     
     func requestTVShows(withSearchText searchText: String, andProvider provider: Provider) {
-        provider.requestTVShows(searchString: searchText, completion: { tvShowResponses in
+        provider.requestTVShows(searchString: searchText, completion: { tvShowResponses, error in
+            guard let tvShowResponses = tvShowResponses else { return }
             self.updateShows(forTVShowResponses: tvShowResponses)
         })
     }
