@@ -25,10 +25,10 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
     
     func testRequestImage_NotNil() throws {
         // Given a not nil image in a URL
-        let shouldReturnResource = true
+        let image = UIImage()
         
         // When a request is made the locates and returns the image
-        viewModel.requestImage(forUrl: "", withProvider: MockProvider(shouldCompleteWithValue: shouldReturnResource))
+        viewModel.requestImage(forUrl: "", withProvider: MockProvider(image: image))
         
         // Then the image in the view model is not nil
         XCTAssertNotNil(viewModel.image, "The image in the view model was nil, but it should have a not nil value")
@@ -36,10 +36,10 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
     
     func testRequestImage_Nil() throws {
         // Given URL that has no image in it
-        let shouldReturnResource = false
+        let image: UIImage? = nil
         
         // When a request is made to that URL
-        viewModel.requestImage(forUrl: "", withProvider: MockProvider(shouldCompleteWithValue: shouldReturnResource))
+        viewModel.requestImage(forUrl: "", withProvider: MockProvider(image: image))
         
         // Then the image in the view model is nil
         XCTAssertNil(viewModel.image, "The image in the view model was not nil, but it should have have been nil")

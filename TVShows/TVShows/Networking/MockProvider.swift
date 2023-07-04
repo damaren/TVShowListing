@@ -13,53 +13,29 @@ class MockProvider: Provider {
     
     // MARK: - PROPERTIES
     
-    var shouldCompleteWithValue: Bool = true
+    var showResponses: [TVShowResponse]
+    var episodes: [Episode]
+    var image: UIImage?
     
     // MARK: - Init
     
-    init(shouldCompleteWithValue: Bool) {
-        self.shouldCompleteWithValue = shouldCompleteWithValue
+    init(showResponses: [TVShowResponse] = [], episodes: [Episode] = [], image: UIImage? = nil) {
+        self.showResponses = showResponses
+        self.episodes = episodes
+        self.image = image
     }
     
     // MARK: - FUNCTIONS
     
     func requestTVShows(searchString: String, completion: @escaping ([TVShowResponse]) -> ()) {
-        if shouldCompleteWithValue {
-            completion([
-                TVShowResponse(show: TVShow(id: 0)),
-                TVShowResponse(show: TVShow(id: 1)),
-                TVShowResponse(show: TVShow(id: 2)),
-                TVShowResponse(show: TVShow(id: 3)),
-                TVShowResponse(show: TVShow(id: 4)),
-                TVShowResponse(show: TVShow(id: 5))
-            ])
-        } else {
-            completion([])
-        }
+        completion(showResponses)
     }
     
     func requestEpisodes(showID: Int, completion: @escaping ([Episode]) -> ()) {
-        if shouldCompleteWithValue {
-            completion([
-                Episode(id: 0, season: 1),
-                Episode(id: 1, season: 1),
-                Episode(id: 0, season: 2),
-                Episode(id: 1, season: 2),
-                Episode(id: 0, season: 3),
-                Episode(id: 1, season: 3),
-                Episode(id: 0, season: 4),
-                Episode(id: 1, season: 4)
-            ])
-        } else {
-            completion([])
-        }
+        completion(episodes)
     }
     
     func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?) -> ()) {
-        if shouldCompleteWithValue {
-            completion(UIImage(systemName: "xmark"))
-        } else {
-            completion(nil)
-        }
+        completion(image)
     }
 }
