@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "F3E8C433-A7E7-4826-A64D-B56C73B541A4",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:TVShows.xcodeproj",
+      "identifier" : "14205D962A462D2000E8E5A7",
+      "name" : "TVShows"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:TVShows.xcodeproj",
+        "identifier" : "141C6EEA2A4A46CF00977986",
+        "name" : "TVShowsUnitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -14,6 +14,9 @@ class EpisodeInformationViewModel {
     
     var episode: Episode?
     var showTitle: String = ""
+    var error: NetworkError?
+    // the view will set this variable so that it will update itself when this function is called
+    var updateView: (UIImage?) -> () = {image in}
     
     var image: UIImage? {
         didSet {
@@ -21,13 +24,15 @@ class EpisodeInformationViewModel {
         }
     }
     
-    // the view will set this variable so that it will update itself when this function is called
-    var updateView: (UIImage?) -> () = {image in}
-    
     // MARK: - FUNCTIONS
     
     func requestImage(withProvider provider: Provider) {
         provider.requestImage(forUrl: episode?.image?.medium, completion: { image, error in
+            guard error == nil else {
+                self.error = error
+                self.image = nil
+                return
+            }
             self.image = image
         })
     }

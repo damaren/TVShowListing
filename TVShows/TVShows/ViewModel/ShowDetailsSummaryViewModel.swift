@@ -18,6 +18,7 @@ class ShowDetailsSummaryViewModel {
             updateView(image)
         }
     }
+    var error: NetworkError?
     
     // the view will set this variable so that it will update itself when this function is called
     var updateView: (UIImage?) -> () = {image in}
@@ -26,6 +27,11 @@ class ShowDetailsSummaryViewModel {
     
     func requestImage(withProvider provider: Provider) {
         provider.requestImage(forUrl: show?.image?.medium, completion: { image, error in
+            guard error == nil else {
+                self.error = error
+                self.image = nil
+                return
+            }
             self.image = image
         })
     }

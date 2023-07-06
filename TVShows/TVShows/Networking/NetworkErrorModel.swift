@@ -7,6 +7,9 @@
 
 import Foundation
 
-enum NetworkError: Error {
-    case responseError(String)
+enum NetworkError: Error, Equatable {
+    case responseError(String?)
+    case queryAllowedStringError(String?)
+    case urlCreationError(String?)
+    case JSONDecodeError
 }

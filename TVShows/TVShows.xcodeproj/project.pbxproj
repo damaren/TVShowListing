@@ -78,6 +78,7 @@
 		149AA3182A4789F500BD7059 /* TVShowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowTableViewCell.swift; sourceTree = "<group>"; };
 		149AA31A2A479A4A00BD7059 /* ShowDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailsViewController.swift; sourceTree = "<group>"; };
 		14A2FFEC2A5482C300F47475 /* NetworkErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorModel.swift; sourceTree = "<group>"; };
+		14BBE2282A55EC0F0069767F /* TVShows.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TVShows.xctestplan; sourceTree = "<group>"; };
 		14C2CF302A48718C007FA677 /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeInformationViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +146,7 @@
 		14205D8E2A462D2000E8E5A7 = {
 			isa = PBXGroup;
 			children = (
+				14BBE2282A55EC0F0069767F /* TVShows.xctestplan */,
 				14205D992A462D2000E8E5A7 /* TVShows */,
 				141C6EEC2A4A46CF00977986 /* TVShowsUnitTests */,
 				14205D982A462D2000E8E5A7 /* Products */,

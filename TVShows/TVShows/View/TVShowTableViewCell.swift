@@ -88,7 +88,7 @@ extension TVShowTableViewCell {
         image.heightAnchor.constraint(equalToConstant: imageHeight).isActive = true
         
         // titleLabel
-        titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 16).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16).isActive = true
         titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16).isActive = true
         

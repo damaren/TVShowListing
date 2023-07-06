@@ -20,6 +20,11 @@ class ShowDetailsViewModel {
         }
     }
     
+    var error: NetworkError?
+    
+    // the view will set this variable so that it will update itself when this function is called
+    var updateView: () -> () = {}
+    
     var showName: String {
         return show?.name ?? ""
     }
@@ -31,9 +36,6 @@ class ShowDetailsViewModel {
     var numberOfSections: Int {
         return episodes.count
     }
-    
-    // the view will set this variable so that it will update itself when this function is called
-    var updateView: () -> () = {}
     
     // MARK: - FUNCTIONS
     
@@ -54,7 +56,11 @@ class ShowDetailsViewModel {
     
     func requestEpisodes(forShowId showId: Int, withProvider provider: Provider) {
         provider.requestEpisodes(showID: showId, completion: { episodes, error in
-            guard let episodes = episodes else { return }
+            guard error == nil, let episodes = episodes else {
+                self.error = error
+                self.episodes = []
+                return
+            }
             self.updateEpisodes(withEpisodes: episodes)
         })
     }
