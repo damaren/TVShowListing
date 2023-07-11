@@ -61,7 +61,7 @@ class MockProvider: Provider {
         }
     }
     
-    func requestImage(forUrl urlString: String, completion: @escaping (UIImage?, NetworkError?) -> ()) {
+    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, NetworkError?) -> ()) {
         if let responseError = responseError {
             completion(nil, responseError)
         } else if let urlCreationError = urlCreationError {

@@ -77,9 +77,9 @@ class TVMazeProvider: Provider {
         task.resume()
     }
     
-    func requestImage(forUrl urlString: String, completion: @escaping (UIImage?, NetworkError?) -> ()) {
-        guard let url = URL(string: urlString) else {
-            completion(nil, .urlCreationError(description: urlString))
+    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, NetworkError?) -> ()) {
+        guard let urlString = urlString, let url = URL(string: urlString) else {
+            completion(nil, .urlCreationError(description: urlString ?? "The url string was nil"))
             return
         }
         

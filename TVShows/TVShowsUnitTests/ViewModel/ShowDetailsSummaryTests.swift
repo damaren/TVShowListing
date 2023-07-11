@@ -88,7 +88,7 @@ class ShowDetailsSummaryTests: XCTestCase {
         // Then the image in the view model is nil
         XCTAssertNil(viewModel.image, "The image in the view model was not nil, but it should have have been nil")
         // And the view model contains the error
-        XCTAssertEqual(viewModel.error, responseError, "The viewModel should contain the error '\(responseError)' but it contained '\(String(describing: viewModel.error))'")
+        XCTAssertEqual(viewModel.networkError, responseError, "The viewModel should contain the error '\(responseError)' but it contained '\(String(describing: viewModel.networkError))'")
     }
     
     func testRequestImage_UrlCreationError() throws {
@@ -102,6 +102,6 @@ class ShowDetailsSummaryTests: XCTestCase {
         // Then the image in the view model is nil
         XCTAssertNil(viewModel.image, "The image in the view model was not nil, but it should have have been nil")
         // And the view model contains the error
-        XCTAssertEqual(viewModel.error, urlCreationError, "The viewModel should contain the error '\(urlCreationError)' but it contained '\(String(describing: viewModel.error))'")
+        XCTAssertEqual(viewModel.networkError, urlCreationError, "The viewModel should contain the error '\(urlCreationError)' but it contained '\(String(describing: viewModel.networkError))'")
     }
 }

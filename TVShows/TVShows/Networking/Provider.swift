@@ -13,5 +13,5 @@ protocol Provider: AnyObject {
     
     func requestEpisodes(showID: Int, completion: @escaping ([Episode]?, NetworkError?) -> ())
     
-    func requestImage(forUrl urlString: String, completion: @escaping (UIImage?, NetworkError?) -> ())
+    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, NetworkError?) -> ())
 }

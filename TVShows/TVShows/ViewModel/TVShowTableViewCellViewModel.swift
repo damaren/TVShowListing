@@ -17,7 +17,15 @@ class TVShowTableViewCellViewModel {
     // the view will set this variable so that it will update itself when this function is called
     var updateView: (UIImage?) -> () = {image in}
     
-    var error: NetworkError?
+    // the view must set this variable so that it will update itself when this function is called
+    // TODO: set this in the view
+    var updateViewForError: () -> () = {}
+    
+    var networkError: NetworkError? {
+        didSet {
+            updateViewForError()
+        }
+    }
     
     var image: UIImage? {
         didSet {
@@ -28,15 +36,9 @@ class TVShowTableViewCellViewModel {
     // MARK: - FUNCTIONS
     
     func requestImage(forUrl url: String?, withProvider provider: Provider) {
-        guard let imageUrl = url else {
-            // TODO: deal with this
-            print("The image url was nil")
-            return
-        }
-        
-        provider.requestImage(forUrl: imageUrl, completion: { image, error in
+        provider.requestImage(forUrl: url, completion: { image, error in
             guard error == nil else {
-                self.error = error
+                self.networkError = error
                 self.image = nil
                 return
             }
