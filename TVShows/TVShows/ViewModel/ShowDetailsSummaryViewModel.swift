@@ -25,8 +25,14 @@ class ShowDetailsSummaryViewModel {
     
     // MARK: - FUNCTIONS
     
-    func requestImage(withProvider provider: Provider) {
-        provider.requestImage(forUrl: show?.image?.medium, completion: { image, error in
+    func requestImage(forUrl url: String?, withProvider provider: Provider) {
+        guard let imageUrl = url else {
+            // TODO: deal with this
+            print("The image url was nil")
+            return
+        }
+        
+        provider.requestImage(forUrl: imageUrl, completion: { image, error in
             guard error == nil else {
                 self.error = error
                 self.image = nil
@@ -38,7 +44,7 @@ class ShowDetailsSummaryViewModel {
     
     public func configure(forShow show: TVShow?) {
         self.show = show
-        requestImage(withProvider: TVMazeProvider.shared)
+        requestImage(forUrl: show?.image?.medium, withProvider: TVMazeProvider.shared)
     }
     
     public func getGenresLabelText() -> String {

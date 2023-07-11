@@ -42,6 +42,7 @@ class ListViewModelTests: XCTestCase {
     }
     
     func testRequestTVShows_NonEmptyResponse() throws {
+
         // Given a non empty response to the tv show search
         let tvShowResponses: [TVShowResponse] = [
             TVShowResponse(show: TVShow(id: 0)),
@@ -80,7 +81,7 @@ class ListViewModelTests: XCTestCase {
             TVShowResponse(show: TVShow(id: 4)),
             TVShowResponse(show: TVShow(id: 5))
         ]
-        let responseError: NetworkError = .responseError("Mock response error")
+        let responseError: NetworkError = .responseError(description: "Mock response error")
         let provider = MockProvider(showResponses: tvShowResponses, responseError: responseError)
         
         // When a request is made that gives response error
@@ -102,7 +103,7 @@ class ListViewModelTests: XCTestCase {
             TVShowResponse(show: TVShow(id: 4)),
             TVShowResponse(show: TVShow(id: 5))
         ]
-        let queryAllowedError: NetworkError = .queryAllowedStringError("test query allowed error")
+        let queryAllowedError: NetworkError = .queryAllowedStringError(description: "Mock query allowed error")
         let provider = MockProvider(showResponses: tvShowResponses, queryAllowedStringError: queryAllowedError)
         
         // When a request is made that gives a query allowed string error
@@ -124,7 +125,7 @@ class ListViewModelTests: XCTestCase {
             TVShowResponse(show: TVShow(id: 4)),
             TVShowResponse(show: TVShow(id: 5))
         ]
-        let urlCreationError: NetworkError = .urlCreationError("invalid url string")
+        let urlCreationError: NetworkError = .urlCreationError(description: "invalid url string")
         let provider = MockProvider(showResponses: tvShowResponses, urlCreationError: urlCreationError)
         
         // When a request is made that gives a url creation error

@@ -28,7 +28,13 @@ class TVShowTableViewCellViewModel {
     // MARK: - FUNCTIONS
     
     func requestImage(forUrl url: String?, withProvider provider: Provider) {
-        provider.requestImage(forUrl: url, completion: { image, error in
+        guard let imageUrl = url else {
+            // TODO: deal with this
+            print("The image url was nil")
+            return
+        }
+        
+        provider.requestImage(forUrl: imageUrl, completion: { image, error in
             guard error == nil else {
                 self.error = error
                 self.image = nil

@@ -36,18 +36,21 @@ class ListViewModel {
         return shows[indexPath.row]
     }
     
-    func requestTVShows(withSearchText searchText: String, andProvider provider: Provider) {
+    func requestTVShows(withSearchText searchText: String, andProvider provider: Provider, completion: (() -> ())? = nil) {
         provider.requestTVShows(searchString: searchText, completion: { tvShowResponses, error in
             guard error == nil, let tvShowResponses = tvShowResponses else {
                 self.shows = []
                 self.error = error
+                completion?()
                 return
             }
             self.updateShows(forTVShowResponses: tvShowResponses)
+            completion?()
         })
     }
     
     func updateShows(forTVShowResponses tvShowResponses: [TVShowResponse]) {
         shows = tvShowResponses.map({ response in return response.show })
+        print("debug")
     }
 }

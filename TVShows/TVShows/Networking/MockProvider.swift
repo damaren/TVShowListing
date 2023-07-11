@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-// class for unit testing with the requests via dependency injection
+// class for unit testing the functions that depend on requests (dependency injection)
 class MockProvider: Provider {
     
     // MARK: - PROPERTIES
@@ -61,7 +61,7 @@ class MockProvider: Provider {
         }
     }
     
-    func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, NetworkError?) -> ()) {
+    func requestImage(forUrl urlString: String, completion: @escaping (UIImage?, NetworkError?) -> ()) {
         if let responseError = responseError {
             completion(nil, responseError)
         } else if let urlCreationError = urlCreationError {

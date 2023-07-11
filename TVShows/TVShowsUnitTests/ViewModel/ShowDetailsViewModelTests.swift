@@ -103,7 +103,7 @@ class ShowDetailsViewModelTests: XCTestCase {
             Episode(id: 6, season: 4),
             Episode(id: 7, season: 4)
         ]
-        let responseError: NetworkError = .responseError("Mock response error")
+        let responseError: NetworkError = .responseError(description: "Mock response error")
         let provider = MockProvider(episodes: episodes, responseError: responseError)
         
         // When a request is made that gives a response error
@@ -128,7 +128,7 @@ class ShowDetailsViewModelTests: XCTestCase {
             Episode(id: 6, season: 4),
             Episode(id: 7, season: 4)
         ]
-        let urlCreationError: NetworkError = .urlCreationError("invalid url string")
+        let urlCreationError: NetworkError = .urlCreationError(description: "invalid url string")
         let provider = MockProvider(episodes: episodes, urlCreationError: urlCreationError)
         
         // When a request is made that gives a response with a url creation error

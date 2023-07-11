@@ -26,8 +26,14 @@ class EpisodeInformationViewModel {
     
     // MARK: - FUNCTIONS
     
-    func requestImage(withProvider provider: Provider) {
-        provider.requestImage(forUrl: episode?.image?.medium, completion: { image, error in
+    func requestImage(forUrl url: String?, withProvider provider: Provider) {
+        guard let imageUrl = url else {
+            // TODO: deal with this
+            print("The image url was nil")
+            return
+        }
+        
+        provider.requestImage(forUrl: imageUrl, completion: { image, error in
             guard error == nil else {
                 self.error = error
                 self.image = nil
@@ -40,7 +46,7 @@ class EpisodeInformationViewModel {
     public func configure(forEpisode episode: Episode?, andShowTitle showTitle: String) {
         self.episode = episode
         self.showTitle = showTitle
-        requestImage(withProvider: TVMazeProvider.shared)
+        requestImage(forUrl: episode?.image?.medium, withProvider: TVMazeProvider.shared)
     }
     
     public func getSeasonAndNumberText() -> String {
