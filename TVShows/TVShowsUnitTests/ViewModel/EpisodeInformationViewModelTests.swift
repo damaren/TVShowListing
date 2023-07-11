@@ -60,12 +60,11 @@ class EpisodeInformationViewModelTests: XCTestCase {
     }
     
     func testRequestImage_ResponseError() throws {
-        // Given a response with a request error
-        let image = UIImage()
+        // Given a response with a response error
         let responseError: NetworkError = .responseError(description: "Mock response error")
-        let provider = MockProvider(image: image, responseError: responseError)
+        let provider = MockProvider(responseError: responseError)
         
-        // When a request is made that returns a request error
+        // When the request returns a response error
         viewModel.requestImage(forUrl: "", withProvider: provider)
         
         // Then the image in the view model is nil
@@ -76,11 +75,10 @@ class EpisodeInformationViewModelTests: XCTestCase {
     
     func testRequestImage_UrlCreationError() throws {
         // Given a response with a url creation error
-        let image = UIImage()
         let urlCreationError: NetworkError = .urlCreationError(description: "invalid url string")
-        let provider = MockProvider(image: image, urlCreationError: urlCreationError)
+        let provider = MockProvider(urlCreationError: urlCreationError)
         
-        // When a request is made that gives a url creation error
+        // When the request gives a url creation error
         viewModel.requestImage(forUrl: "", withProvider: provider)
         
         // Then the image in the view model is nil

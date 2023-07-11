@@ -42,7 +42,6 @@ class ListViewModelTests: XCTestCase {
     }
     
     func testRequestTVShows_NonEmptyResponse() throws {
-
         // Given a non empty response to the tv show search
         let tvShowResponses: [TVShowResponse] = [
             TVShowResponse(show: TVShow(id: 0)),
@@ -63,9 +62,10 @@ class ListViewModelTests: XCTestCase {
     func testRequestTVShows_EmptyResponse() throws {
         // Given an empty response to the tv show search
         let tvShowResponses: [TVShowResponse] = []
+        let provider = MockProvider(showResponses: tvShowResponses)
         
         // When a request is made that gives an empty response
-        viewModel.requestTVShows(withSearchText: "", andProvider: MockProvider(showResponses: tvShowResponses))
+        viewModel.requestTVShows(withSearchText: "", andProvider: provider)
         
         // Then the number of shows in the view model should be zero
         XCTAssertTrue(viewModel.shows.isEmpty, "The number of shows in the view model (\(viewModel.shows.count)) should be equal to the number of items in the response from the API (\(0))")
@@ -73,18 +73,10 @@ class ListViewModelTests: XCTestCase {
     
     func testRequestTVShows_ResponseError() throws {
         // Given a response with a response error to the tv show search
-        let tvShowResponses: [TVShowResponse] = [
-            TVShowResponse(show: TVShow(id: 0)),
-            TVShowResponse(show: TVShow(id: 1)),
-            TVShowResponse(show: TVShow(id: 2)),
-            TVShowResponse(show: TVShow(id: 3)),
-            TVShowResponse(show: TVShow(id: 4)),
-            TVShowResponse(show: TVShow(id: 5))
-        ]
         let responseError: NetworkError = .responseError(description: "Mock response error")
-        let provider = MockProvider(showResponses: tvShowResponses, responseError: responseError)
+        let provider = MockProvider(responseError: responseError)
         
-        // When a request is made that gives response error
+        // When the request gives a response error
         viewModel.requestTVShows(withSearchText: "", andProvider: provider)
         
         // Then the number of shows in the view model should be zero
@@ -95,18 +87,10 @@ class ListViewModelTests: XCTestCase {
     
     func testRequestTVShows_QueryAllowedStringError() throws {
         // Given a response with a query allowed string error to the tv show search
-        let tvShowResponses: [TVShowResponse] = [
-            TVShowResponse(show: TVShow(id: 0)),
-            TVShowResponse(show: TVShow(id: 1)),
-            TVShowResponse(show: TVShow(id: 2)),
-            TVShowResponse(show: TVShow(id: 3)),
-            TVShowResponse(show: TVShow(id: 4)),
-            TVShowResponse(show: TVShow(id: 5))
-        ]
         let queryAllowedError: NetworkError = .queryAllowedStringError(description: "Mock query allowed error")
-        let provider = MockProvider(showResponses: tvShowResponses, queryAllowedStringError: queryAllowedError)
+        let provider = MockProvider(queryAllowedStringError: queryAllowedError)
         
-        // When a request is made that gives a query allowed string error
+        // When the request gives a query allowed string error
         viewModel.requestTVShows(withSearchText: "", andProvider: provider)
         
         // Then the number of shows in the view model should be zero
@@ -117,18 +101,10 @@ class ListViewModelTests: XCTestCase {
     
     func testRequestTVShows_UrlCreationError() throws {
         // Given a response with a url creation error to the tv show search
-        let tvShowResponses: [TVShowResponse] = [
-            TVShowResponse(show: TVShow(id: 0)),
-            TVShowResponse(show: TVShow(id: 1)),
-            TVShowResponse(show: TVShow(id: 2)),
-            TVShowResponse(show: TVShow(id: 3)),
-            TVShowResponse(show: TVShow(id: 4)),
-            TVShowResponse(show: TVShow(id: 5))
-        ]
         let urlCreationError: NetworkError = .urlCreationError(description: "invalid url string")
-        let provider = MockProvider(showResponses: tvShowResponses, urlCreationError: urlCreationError)
+        let provider = MockProvider(urlCreationError: urlCreationError)
         
-        // When a request is made that gives a url creation error
+        // When the request gives a url creation error
         viewModel.requestTVShows(withSearchText: "", andProvider: provider)
         
         // Then the number of shows in the view model should be zero
@@ -139,18 +115,10 @@ class ListViewModelTests: XCTestCase {
     
     func testRequestTVShows_JSONDecodeError() throws {
         // Given a response with a JSON decode error to the tv show search
-        let tvShowResponses: [TVShowResponse] = [
-            TVShowResponse(show: TVShow(id: 0)),
-            TVShowResponse(show: TVShow(id: 1)),
-            TVShowResponse(show: TVShow(id: 2)),
-            TVShowResponse(show: TVShow(id: 3)),
-            TVShowResponse(show: TVShow(id: 4)),
-            TVShowResponse(show: TVShow(id: 5))
-        ]
         let JSONDecodeError: NetworkError = .JSONDecodeError
-        let provider = MockProvider(showResponses: tvShowResponses, JSONDecodeError: JSONDecodeError)
+        let provider = MockProvider(JSONDecodeError: JSONDecodeError)
         
-        // When a request is made that gives a JSON decode error
+        // When the request gives a JSON decode error
         viewModel.requestTVShows(withSearchText: "", andProvider: provider)
         
         // Then the number of shows in the view model should be zero

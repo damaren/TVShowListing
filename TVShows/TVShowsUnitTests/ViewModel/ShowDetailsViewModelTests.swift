@@ -93,20 +93,10 @@ class ShowDetailsViewModelTests: XCTestCase {
     
     func testRequestEpisodes_ResponseError() throws {
         // Given a response with a response error
-        let episodes: [Episode] = [
-            Episode(id: 0, season: 1),
-            Episode(id: 1, season: 1),
-            Episode(id: 2, season: 2),
-            Episode(id: 3, season: 2),
-            Episode(id: 4, season: 3),
-            Episode(id: 5, season: 3),
-            Episode(id: 6, season: 4),
-            Episode(id: 7, season: 4)
-        ]
         let responseError: NetworkError = .responseError(description: "Mock response error")
-        let provider = MockProvider(episodes: episodes, responseError: responseError)
+        let provider = MockProvider(responseError: responseError)
         
-        // When a request is made that gives a response error
+        // When the request gives a response error
         viewModel.requestEpisodes(forShowId: 1, withProvider: provider)
         
         // Then the list of episodes in the view model should be empty
@@ -118,18 +108,8 @@ class ShowDetailsViewModelTests: XCTestCase {
     
     func testRequestEpisodes_UrlCreationError() throws {
         // Given a response with a url creation error
-        let episodes: [Episode] = [
-            Episode(id: 0, season: 1),
-            Episode(id: 1, season: 1),
-            Episode(id: 2, season: 2),
-            Episode(id: 3, season: 2),
-            Episode(id: 4, season: 3),
-            Episode(id: 5, season: 3),
-            Episode(id: 6, season: 4),
-            Episode(id: 7, season: 4)
-        ]
         let urlCreationError: NetworkError = .urlCreationError(description: "invalid url string")
-        let provider = MockProvider(episodes: episodes, urlCreationError: urlCreationError)
+        let provider = MockProvider(urlCreationError: urlCreationError)
         
         // When a request is made that gives a response with a url creation error
         viewModel.requestEpisodes(forShowId: 1, withProvider: provider)
@@ -143,18 +123,8 @@ class ShowDetailsViewModelTests: XCTestCase {
     
     func testRequestEpisodes_JSONDecodeError() throws {
         // Given a response with a JSONDecode error
-        let episodes: [Episode] = [
-            Episode(id: 0, season: 1),
-            Episode(id: 1, season: 1),
-            Episode(id: 2, season: 2),
-            Episode(id: 3, season: 2),
-            Episode(id: 4, season: 3),
-            Episode(id: 5, season: 3),
-            Episode(id: 6, season: 4),
-            Episode(id: 7, season: 4)
-        ]
         let JSONDecodeError: NetworkError = .JSONDecodeError
-        let provider = MockProvider(episodes: episodes, JSONDecodeError: JSONDecodeError)
+        let provider = MockProvider(JSONDecodeError: JSONDecodeError)
         
         // When a request is made that gives a response with a JSONDecode error
         viewModel.requestEpisodes(forShowId: 1, withProvider: provider)
