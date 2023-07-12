@@ -7,204 +7,146 @@
 
 import XCTest
 
+@testable import TVShows
+
 final class TVMazeProviderTests: XCTestCase {
+    var provider: TVMazeProvider!
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() {
+        super.setUp()
+
+        let config = URLSessionConfiguration.ephemeral
+        config.protocolClasses = [MockURLProtocol.self]
+        let urlSession = URLSession(configuration: config)
+        provider = TVMazeProvider(urlSession: urlSession)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override func tearDown() {
+        super.tearDown()
+        provider = nil
     }
+    
+    func testRequestTVShows_NonEmptyResponse() throws {
+        // Given a non empty response to the tv show search
+        MockURLProtocol.stubResponseData = tvShowMockResponse.data(using: .utf8)
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+        let expectation = self.expectation(description: "TV show service response expectation")
+
+        // When a request is made that gives a non empty response
+        provider.requestTVShows(searchString: "", completion: { response, error in
+            // Then response should contain the array of TVShowResponse with the number of elements equal to the number of elements in the response from the API
+            XCTAssertNotNil(response, "The response from the requestTVShows method should NOT be nil")
+            XCTAssertEqual(response?.count, 3, "The number of items in the response (\(String(describing: response?.count))) should be equal to the number of items in the response from the API (\(3))")
+            // And the error should be nil
+            XCTAssertNil(error, "The error should be nil, but it was \(String(describing: error))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
     }
+    
+    func testRequestTVShows_EmptyResponse() throws {
+        // Given a non empty response to the tv show search
+        MockURLProtocol.stubResponseData = tvShowMockEmptyResponse.data(using: .utf8)
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+        let expectation = self.expectation(description: "TV show empty response expectation")
+
+        // When a request is made that gives an empty response
+        provider.requestTVShows(searchString: "", completion: { response, error in
+            // Then response should contain the array of TVShowResponse with zero elements
+            XCTAssertNotNil(response, "The response from the requestTVShows method should NOT be nil")
+            XCTAssertEqual(response?.count, 0, "Testing an empty response from the API. The number of items in the response (\(String(describing: response?.count))) should be equal to zero.")
+            // And the error should be nil
+            XCTAssertNil(error, "The error should be nil, but it was \(String(describing: error))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
     }
+    
+    func testRequestTVShows_ResponseError() {
+        // Given a response with a response error to the tv show search
+        let responseError = NetworkError.responseError(description: "")
+        MockURLProtocol.error = responseError
 
+        let expectation = self.expectation(description: "TV show responseError expectation")
+
+        // When a request is made that gives response error
+        provider.requestTVShows(searchString: "", completion: { response, error in
+            // Then response should be nil
+            XCTAssertNil(response, "The response should be nil, but it was \(String(describing: response))")
+            // And the error should be of type NetworkError.responseError
+            XCTAssertTrue(error?.type == .responseError, "The error should contain a NetworkError.responseError, but it contained \(String(describing: error))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
+    }
+    
+    func testRequestTVShows_QueryAllowedStringError() {
+        // Given a string that cannot be made query allowed
+        let notQueryAllowedString = String(
+            bytes: [0xD8, 0x00] as [UInt8],
+            encoding: .utf16BigEndian)!
+
+        let expectation = self.expectation(description: "TV show queryAllowedStringError expectation")
+
+        // When a request is made with the string
+        provider.requestTVShows(searchString: notQueryAllowedString, completion: { response, error in
+            // Then response should be nil
+            XCTAssertNil(response, "The response should be nil, but it was \(String(describing: response))")
+            // And the error should be of type NetworkError.queryAllowedStringError
+            XCTAssertTrue(error?.type == .queryAllowedStringError, "The error should contain a NetworkError.queryAllowedStringError, but it contained \(String(describing: error))")
+            // And the error description should contain the unallowed string
+            XCTAssertEqual(error?.description, notQueryAllowedString, "The error should contain the unallowed string (\(notQueryAllowedString)) as a description, but it contained \(String(describing: error?.description))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
+    }
+    
+    func testRequestTVShows_UrlCreationError() {
+        // Given an invalid base URL
+        let baseURL: String = "http:// invalid base url"
+        let searchString: String = ""
+        
+        let config = URLSessionConfiguration.ephemeral
+        config.protocolClasses = [MockURLProtocol.self]
+        let urlSession = URLSession(configuration: config)
+        let provider = TVMazeProvider(urlSession: urlSession, baseURL: baseURL) // had to declare the provider here to inject the invalid baseURL
+
+        let expectation = self.expectation(description: "TV show urlCreationError expectation")
+
+        // When a request is made with the invalid base URL
+        provider.requestTVShows(searchString: searchString, completion: { response, error in
+            // Then response should be nil
+            XCTAssertNil(response, "The response should be nil, but it was \(String(describing: response))")
+            // And the error should be of type NetworkError.urlCreationError
+            XCTAssertTrue(error?.type == .urlCreationError, "The error should contain a NetworkError.urlCreationError, but it contained \(String(describing: error))")
+            // And the error description should contain the invalid url
+            let urlString = "\(baseURL)/search/shows?q=\(searchString)"
+            XCTAssertEqual(error?.description, urlString, "The error should contain the invalid url (\(urlString)) as a description, but it contained \(String(describing: error?.description))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
+    }
+    
+    func testRequestTVShows_JSONDecodeError() throws {
+        // Given an invalid JSON response
+        MockURLProtocol.stubResponseData = tvShowMockInvalidJSONResponse.data(using: .utf8)
+
+        let expectation = self.expectation(description: "TV show service JSONDecodeError expectation")
+
+        // When a request is made that gives an invalid JSON response
+        provider.requestTVShows(searchString: "", completion: { response, error in
+            // Then response should be nil
+            XCTAssertNil(response, "The response should be nil, but it was \(String(describing: response))")
+            // And the error should be of type NetworkError.JSONDecodeError
+            XCTAssertTrue(error?.type == .JSONDecodeError, "The error should contain a NetworkError.JSONDecodeError, but it contained \(String(describing: error))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
+    }
 }
-
-//
-//  ListViewModelTests.swift
-//  TVShowsUnitTests
-//
-//  Created by José Damaren on 26/06/23.
-//
-
-//import Foundation
-//import XCTest
-//
-//@testable import TVShows
-//
-//class ListViewModelTests: XCTestCase {
-//    var viewModel: ListViewModel!
-//    var provider: TVMazeProvider!
-//
-//    override func setUp() {
-//        super.setUp()
-//        viewModel = ListViewModel()
-//
-//        let config = URLSessionConfiguration.ephemeral
-//        config.protocolClasses = [MockURLProtocol.self]
-//        let urlSession = URLSession(configuration: config)
-//        provider = TVMazeProvider(urlSession: urlSession)
-//    }
-//
-//    override func tearDown() {
-//        super.tearDown()
-//        viewModel = nil
-//        provider = nil
-//    }
-//
-//    func testUpdateShows() throws {
-//        // Given a respose from the API containing a list of TVShowResponse
-//        let tvShowResponses: [TVShowResponse] = [
-//            TVShowResponse(show: TVShow(id: 0)),
-//            TVShowResponse(show: TVShow(id: 1)),
-//            TVShowResponse(show: TVShow(id: 2)),
-//            TVShowResponse(show: TVShow(id: 3)),
-//            TVShowResponse(show: TVShow(id: 4)),
-//            TVShowResponse(show: TVShow(id: 5))
-//        ]
-//
-//        // When updateShows is called with the given list
-//        viewModel.updateShows(forTVShowResponses: tvShowResponses)
-//
-//        // Then the number of items in the shows array should be equal to the number of items received from the API
-//        XCTAssertEqual(viewModel.shows.count, tvShowResponses.count, "The number of shows in the view model (\(viewModel.shows.count)) should be equal to the number of items in the response from the API (\(tvShowResponses.count))")
-//    }
-//
-//    func testRequestTVShows_NonEmptyResponse() throws {
-//        // Given a non empty response to the tv show search
-//        MockURLProtocol.stubResponseData = tvShowMockResponse.data(using: .utf8)
-//
-//        let expectation = self.expectation(description: "TV show service response expectation")
-//
-//        // When a request is made that gives a non empty response
-//        viewModel.requestTVShows(withSearchText: "", andProvider: provider, completion: {
-//
-//            // Then the number of shows in the view model should be equal to the number of items in the response from the API
-//            XCTAssertEqual(self.viewModel.shows.count, 3, "The number of shows in the view model (\(self.viewModel.shows.count)) should be equal to the number of items in the response from the API (\(3))")
-//            expectation.fulfill()
-//        })
-//
-//        self.wait(for: [expectation], timeout: 5)
-//    }
-//
-//    func testRequestTVShows_EmptyResponse() throws {
-//        // Given an empty response to the tv show search
-//        MockURLProtocol.stubResponseData = tvShowMockEmptyResponse.data(using: .utf8)
-//
-//        // And given the view model with a non empty shows array (for testing that viewModel.shows will be empty after the request)
-//        viewModel.shows = [TVShow()]
-//
-//        let expectation = self.expectation(description: "TV show service empty response expectation")
-//
-//        // When a request is made that gives an empty response
-//        viewModel.requestTVShows(withSearchText: "", andProvider: provider, completion: {
-//
-//            // Then the number of shows in the view model should be zero
-//            XCTAssertTrue(self.viewModel.shows.isEmpty, "The number of shows in the view model (\(self.viewModel.shows.count)) should be equal to the number of items in the response from the API (\(0))")
-//            expectation.fulfill()
-//        })
-//
-//        self.wait(for: [expectation], timeout: 5)
-//    }
-//
-//    func testRequestTVShows_ResponseError() {
-//        // Given a response with a response error to the tv show search
-//        let responseError = NetworkError.responseError(description: "")
-//        MockURLProtocol.error = responseError
-//
-//        let expectation = self.expectation(description: "TV show service empty response expectation")
-//
-//        // When a request is made that gives response error
-//        viewModel.requestTVShows(withSearchText: "", andProvider: provider, completion: {
-//
-//            // Then the number of shows in the view model should be zero
-//            XCTAssertTrue(self.viewModel.shows.isEmpty, "The number of shows in the view model (\(self.viewModel.shows.count)) should be equal to 0")
-//            // And the view model should contain a response error
-//            XCTAssertTrue(self.viewModel.error?.type == .responseError, "The view model should contain a NetworkError.responseError, but it contained \(String(describing: self.viewModel.error))")
-//            expectation.fulfill()
-//        })
-//
-//        self.wait(for: [expectation], timeout: 5)
-//    }
-//
-//    func testRequestTVShows_QueryAllowedStringError() throws {
-//        // Given an invalid search text
-//        let notQueryAllowedString = String(
-//            bytes: [0xD8, 0x00] as [UInt8],
-//            encoding: .utf16BigEndian)!
-//
-//        let expectation = self.expectation(description: "TV show service empty response expectation")
-//
-//        // When we try to generate a query allowed string
-//        viewModel.requestTVShows(withSearchText: notQueryAllowedString, andProvider: provider, completion: {
-//
-//            // Then the number of shows in the view model should be zero
-//            XCTAssertTrue(self.viewModel.shows.isEmpty, "The number of shows in the view model (\(self.viewModel.shows.count)) should be equal to 0")
-//            // And we get back a QueryAllowedStringError
-//            XCTAssertTrue(self.viewModel.error?.type == .queryAllowedStringError, "The view model should contain a NetworkError.queryAllowedStringError, but it contained \(String(describing: self.viewModel.error))")
-//            // And the error description should be equal to the search text
-//            XCTAssertTrue(self.viewModel.error?.description == notQueryAllowedString, "The view model's error should have the search text as description (\(notQueryAllowedString)), but it contained \(String(describing: self.viewModel.error?.description))")
-//            expectation.fulfill()
-//        })
-//
-//        self.wait(for: [expectation], timeout: 5)
-//    }
-//
-//    func testRequestTVShows_UrlCreationError() throws {
-//        // Given a response with a url creation error to the tv show search
-//        let tvShowResponses: [TVShowResponse] = [
-//            TVShowResponse(show: TVShow(id: 0)),
-//            TVShowResponse(show: TVShow(id: 1)),
-//            TVShowResponse(show: TVShow(id: 2)),
-//            TVShowResponse(show: TVShow(id: 3)),
-//            TVShowResponse(show: TVShow(id: 4)),
-//            TVShowResponse(show: TVShow(id: 5))
-//        ]
-//        let urlCreationError: NetworkError = .urlCreationError(description: "invalid url string")
-//        let provider = MockProvider(showResponses: tvShowResponses, urlCreationError: urlCreationError)
-//
-//        // When a request is made that gives a url creation error
-//        viewModel.requestTVShows(withSearchText: "", andProvider: provider)
-//
-//        // Then the number of shows in the view model should be zero
-//        XCTAssertTrue(viewModel.shows.isEmpty, "The number of shows in the view model (\(viewModel.shows.count)) should be equal to (\(0))")
-//        // And the view model should contain the error
-//        XCTAssertEqual(viewModel.error, urlCreationError, "The viewModel should contain the error '\(urlCreationError)' but it contained '\(String(describing: viewModel.error))'")
-//    }
-//
-//    func testRequestTVShows_JSONDecodeError() throws {
-//        // Given a response with a JSON decode error to the tv show search
-//        let tvShowResponses: [TVShowResponse] = [
-//            TVShowResponse(show: TVShow(id: 0)),
-//            TVShowResponse(show: TVShow(id: 1)),
-//            TVShowResponse(show: TVShow(id: 2)),
-//            TVShowResponse(show: TVShow(id: 3)),
-//            TVShowResponse(show: TVShow(id: 4)),
-//            TVShowResponse(show: TVShow(id: 5))
-//        ]
-//        let JSONDecodeError: NetworkError = .JSONDecodeError
-//        let provider = MockProvider(showResponses: tvShowResponses, JSONDecodeError: JSONDecodeError)
-//
-//        // When a request is made that gives a JSON decode error
-//        viewModel.requestTVShows(withSearchText: "", andProvider: provider)
-//
-//        // Then the number of shows in the view model should be zero
-//        XCTAssertTrue(viewModel.shows.isEmpty, "The number of shows in the view model (\(viewModel.shows.count)) should be equal to (\(0))")
-//        // And the view model should contain the error
-//        XCTAssertEqual(viewModel.error, JSONDecodeError, "The viewModel should contain the error '\(JSONDecodeError)' but it contained '\(String(describing: viewModel.error))'")
-//    }
-//}

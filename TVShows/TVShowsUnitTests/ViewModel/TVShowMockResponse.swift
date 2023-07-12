@@ -197,3 +197,10 @@ let tvShowMockEmptyResponse: String =
 """
 []
 """
+
+let tvShowMockInvalidJSONResponse: String =
+"""
+[
+{
+]
+"""

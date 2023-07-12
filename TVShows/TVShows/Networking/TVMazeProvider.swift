@@ -18,10 +18,12 @@ class TVMazeProvider: Provider {
     // MARK: - PROPERTIES
     
     private var urlSession: URLSession
+    private var baseURL: String
     
     // MARK: - INIT
-    init(urlSession: URLSession = .shared) {
+    init(urlSession: URLSession = .shared, baseURL: String = TVMazeProvider.baseURL) {
         self.urlSession = urlSession
+        self.baseURL = baseURL
     }
     
     // MARK: - FUNCTIONS
@@ -32,7 +34,7 @@ class TVMazeProvider: Provider {
             return
         }
         
-        let urlString = "\(TVMazeProvider.baseURL)/search/shows?q=\(urlQueryAllowedString)"
+        let urlString = "\(baseURL)/search/shows?q=\(urlQueryAllowedString)"
         
         guard let url = URL(string: urlString) else {
             completion(nil, .urlCreationError(description: urlString))
@@ -55,7 +57,7 @@ class TVMazeProvider: Provider {
     }
     
     func requestEpisodes(showID: Int, completion: @escaping ([Episode]?, NetworkError?) -> ()) {
-        let urlString = "\(TVMazeProvider.baseURL)/shows/\(showID)/episodes"
+        let urlString = "\(baseURL)/shows/\(showID)/episodes"
         
         guard let url = URL(string: urlString) else {
             completion(nil, .urlCreationError(description: urlString))
