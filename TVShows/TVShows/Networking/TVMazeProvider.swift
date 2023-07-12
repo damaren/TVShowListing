@@ -64,7 +64,7 @@ class TVMazeProvider: Provider {
             return
         }
 
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+        let task = urlSession.dataTask(with: url) {(data, response, error) in
             guard error == nil, let data = data else {
                 completion(nil, .responseError(description: error!.localizedDescription))
                 return
