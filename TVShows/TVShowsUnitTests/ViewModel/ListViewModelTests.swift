@@ -41,6 +41,19 @@ class ListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.shows.count, tvShowResponses.count, "The number of shows in the view model (\(viewModel.shows.count)) should be equal to the number of items in the response from the API (\(tvShowResponses.count))")
     }
     
+    func testGetShowFor() throws {
+        // Given the view model with a non empty list of shows
+        let shows = [TVShow(id: 0), TVShow(id: 1), TVShow(id: 2), TVShow(id: 3), TVShow(id: 4), TVShow(id: 5)]
+        viewModel.shows = shows
+        
+        // When getShowFor is called with row equal to i
+        let i = 2
+        let returnedShow = viewModel.getShowFor(indexPath: IndexPath(row: i, section: 0))
+        
+        // Then the view model returns the show in the index equal to i
+        XCTAssertEqual(returnedShow, shows[i], "The returned show should have been \(shows[i]) but it was \(returnedShow)")
+    }
+    
     func testRequestTVShows_NonEmptyResponse() throws {
         // Given a non empty response to the tv show search
         let tvShowResponses: [TVShowResponse] = [

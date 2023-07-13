@@ -79,7 +79,7 @@ class ListViewController: UIViewController {
 
 extension ListViewController: SearchViewDelegate {
     func searchViewSearchButtonPressed(withSearchText searchText: String) {
-        viewModel.searchButtonPressed(withSearchText: searchText)
+        viewModel.requestTVShows(withSearchText: searchText)
     }
 }
 

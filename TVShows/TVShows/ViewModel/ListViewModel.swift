@@ -28,15 +28,11 @@ class ListViewModel {
     
     // MARK: - FUNCTIONS
     
-    public func searchButtonPressed(withSearchText searchText: String) {
-        requestTVShows(withSearchText: searchText, andProvider: TVMazeProvider.shared)
-    }
-    
     public func getShowFor(indexPath: IndexPath) -> TVShow {
         return shows[indexPath.row]
     }
     
-    func requestTVShows(withSearchText searchText: String, andProvider provider: Provider, completion: (() -> ())? = nil) {
+    func requestTVShows(withSearchText searchText: String, andProvider provider: Provider = TVMazeProvider.shared, completion: (() -> ())? = nil) {
         provider.requestTVShows(searchString: searchText, completion: { tvShowResponses, error in
             guard error == nil, let tvShowResponses = tvShowResponses else {
                 self.shows = []
@@ -51,6 +47,5 @@ class ListViewModel {
     
     func updateShows(forTVShowResponses tvShowResponses: [TVShowResponse]) {
         shows = tvShowResponses.map({ response in return response.show })
-        print("debug")
     }
 }

@@ -12,7 +12,11 @@ struct TVShowResponse: Decodable {
     var show: TVShow
 }
 
-struct TVShow: Decodable {
+struct TVShow: Decodable, Equatable {
+    static func == (lhs: TVShow, rhs: TVShow) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     var id: Int?
     var url: String?
     var name: String?
