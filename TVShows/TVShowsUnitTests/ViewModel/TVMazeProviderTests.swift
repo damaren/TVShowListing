@@ -252,4 +252,74 @@ final class TVMazeProviderTests: XCTestCase {
 
         self.wait(for: [expectation], timeout: 5)
     }
+    
+    func testRequestImage_UrlCreationError() {
+        // Given an invalid URL
+        let url: String = "http:// invalid url"
+
+        let expectation = self.expectation(description: "Image urlCreationError expectation")
+
+        // When a request is made with the invalid URL
+        provider.requestImage(forUrl: url, completion: { image, error in
+            // Then image should be nil
+            XCTAssertNil(image, "The response should be nil, but it was \(String(describing: image))")
+            // And the error should be of type NetworkError.urlCreationError
+            XCTAssertTrue(error?.type == .urlCreationError, "The error should contain a NetworkError.urlCreationError, but it contained \(String(describing: error))")
+            // And the error description should contain the invalid url
+            XCTAssertEqual(error?.description, url, "The error should contain the invalid url (\(url)) as a description, but it contained \(String(describing: error?.description))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
+    }
+    
+    func testRequestImage_ResponseError() {
+        // Given a response with a response error to the image request
+        let responseError = NetworkError.responseError(description: "")
+        MockURLProtocol.error = responseError
+        // And a valid url
+        let url = "https://api.tvmaze.com"
+
+        let expectation = self.expectation(description: "Image responseError expectation")
+
+        // When a request is made that gives response error
+        provider.requestImage(forUrl: url, completion: { image, error in
+            // Then image should be nil
+            XCTAssertNil(image, "The image should be nil, but it was \(String(describing: image))")
+            // And the error should be of type NetworkError.responseError
+            XCTAssertTrue(error?.type == .responseError, "The error should contain a NetworkError.responseError, but it contained \(String(describing: error))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
+    }
+    
+    func testRequestImage_NonEmptyResponse() throws {
+        // Given a non empty response to the image request
+        let imageData = UIImage(systemName: "xmark")?.jpegData(compressionQuality: 1.0)
+        MockURLProtocol.stubResponseData = imageData
+        
+        // This is for reproducing the conversion ( UIImage -> Data -> UIImage -> Data )
+        let imageFromData = UIImage(data: imageData!)
+        let dataFromImage = imageFromData?.jpegData(compressionQuality: 1.0)
+        
+        
+        // And a valid url
+        let url = "https://api.tvmaze.com"
+
+        let expectation = self.expectation(description: "Image response expectation")
+
+        // When a request is made that gives a non empty response
+        provider.requestImage(forUrl: url, completion: { image, error in
+            // Then response should contain the image
+            XCTAssertNotNil(image, "The image from the requestImage method should NOT be nil")
+            // And the image should be the same as the one returned by the api
+            XCTAssertEqual(image?.jpegData(compressionQuality: 1.0), dataFromImage)
+            // And the error should be nil
+            XCTAssertNil(error, "The error should be nil, but it was \(String(describing: error))")
+            expectation.fulfill()
+        })
+
+        self.wait(for: [expectation], timeout: 5)
+    }
 }
