@@ -14,7 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let navigationController = UINavigationController()
     lazy var listViewController = ListViewController()
     lazy var showDetailsViewController = ShowDetailsViewController()
-    lazy var episodeInfoViewController = EpisodeInformationViewController()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -46,6 +45,7 @@ extension AppDelegate: ShowDetailsViewControllerDelegate {
     }
     
     func selectedEpisode(episode: Episode, withShowTitle showTitle: String) {
+        let episodeInfoViewController = EpisodeInformationViewController()
         episodeInfoViewController.delegate = self
         episodeInfoViewController.configure(forEpisode: episode, andShowTitle: showTitle)
         navigationController.pushViewController(episodeInfoViewController, animated: true)
