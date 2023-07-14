@@ -10,10 +10,17 @@ import UIKit
 
 class EpisodeInformationViewModel {
     
+    // MARK: - STATIC PROPERTIES
+    
+    static let noSeasonAndNumberMessage: String = "No season and episode number provided"
+    static let noEpisodeNameMessage: String = "No episode name provided"
+    static let noSummaryMessage: String = "No summary provided"
+    static let noShowTitleMessage: String = "No show title provided"
+    
     // MARK: - PROPERTIES
     
     var episode: Episode?
-    var showTitle: String = ""
+    var showTitle: String?
     
     // the view must set this variable so that it will update itself when this function is called
     var updateView: (UIImage?) -> () = {image in}
@@ -47,17 +54,17 @@ class EpisodeInformationViewModel {
         })
     }
     
-    public func configure(forEpisode episode: Episode?, andShowTitle showTitle: String) {
+    public func configure(forEpisode episode: Episode?, andShowTitle showTitle: String, withProvider provider: Provider = TVMazeProvider.shared) {
         self.episode = episode
         self.showTitle = showTitle
-        requestImage(forUrl: episode?.image?.medium, withProvider: TVMazeProvider.shared)
+        requestImage(forUrl: episode?.image?.medium, withProvider: provider)
     }
     
     public func getSeasonAndNumberText() -> String {
         if let season = episode?.season, let number = episode?.number {
             return "S\(season)E\(number):"
         } else {
-            return ""
+            return EpisodeInformationViewModel.noSeasonAndNumberMessage
         }
     }
     
@@ -65,7 +72,7 @@ class EpisodeInformationViewModel {
         if let name = episode?.name {
             return name
         } else {
-            return ""
+            return EpisodeInformationViewModel.noEpisodeNameMessage
         }
     }
     
@@ -73,7 +80,7 @@ class EpisodeInformationViewModel {
         if let summary = episode?.summary {
             return summary.htmlToString
         } else {
-            return ""
+            return EpisodeInformationViewModel.noSummaryMessage
         }
     }
 }

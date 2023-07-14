@@ -23,16 +23,97 @@ class EpisodeInformationViewModelTests: XCTestCase {
         viewModel = nil
     }
     
-    func testGetSeasonAndNumberText() throws {
-        // Given an episode
-        let episode: Episode = Episode(id: 1, season: 1, number: 5)
+    func testGetSeasonAndNumberText_InfoIsAvailable() throws {
+        // Given an episode with season and number set
+        let season: Int = 8
+        let number: Int = 27
+        let episode: Episode = Episode(id: 1, season: season, number: number)
         viewModel.episode = episode
         
         // When we call the season and number getter
         let seasonAndNumberText = viewModel.getSeasonAndNumberText()
         
-        // Then we get the correct value back
-        XCTAssertEqual(seasonAndNumberText, "S1E5:", "The season and number getter returned '\(seasonAndNumberText)' but should have returned 'S1E5:'")
+        // Then we get the correct text back
+        let expectedText: String = "S\(season)E\(number):"
+        XCTAssertEqual(seasonAndNumberText, expectedText, "The season and number getter returned '\(seasonAndNumberText)' but should have returned '\(expectedText)'")
+    }
+    
+    func testGetSeasonAndNumberText_InfoIsNotAvailable() throws {
+        // Given an episode without information about season and number
+        let episode: Episode = Episode(id: 1)
+        viewModel.episode = episode
+        
+        // When we call the season and number getter
+        let seasonAndNumberText = viewModel.getSeasonAndNumberText()
+        
+        // Then we get the message saying that the info was not available
+        XCTAssertEqual(seasonAndNumberText, EpisodeInformationViewModel.noSeasonAndNumberMessage, "The season and number getter returned '\(seasonAndNumberText)' but should have returned '\(EpisodeInformationViewModel.noSeasonAndNumberMessage)'")
+    }
+    
+    func testGetEpisodeNameText_InfoIsAvailable() throws {
+        // Given an episode with a name set
+        let episodeName: String = "Episode Name"
+        let episode: Episode = Episode(id: 1, name: episodeName)
+        viewModel.episode = episode
+        
+        // When we call getEpisodeNameText
+        let episodeNameText = viewModel.getEpisodeNameText()
+        
+        // Then we get the correct name
+        XCTAssertEqual(episodeNameText, episodeName, "getEpisodeNameText() returned '\(episodeNameText)' but should have returned '\(episodeName)'")
+    }
+    
+    func testGetEpisodeNameText_InfoIsNotAvailable() throws {
+        // Given an episode with no name set
+        let episode: Episode = Episode(id: 1)
+        viewModel.episode = episode
+        
+        // When we call getEpisodeNameText
+        let episodeNameText = viewModel.getEpisodeNameText()
+        
+        // Then we get the message saying that the name was not available
+        XCTAssertEqual(episodeNameText, EpisodeInformationViewModel.noEpisodeNameMessage, "getEpisodeNameText() returned '\(episodeNameText)' but should have returned '\(EpisodeInformationViewModel.noEpisodeNameMessage)'")
+    }
+    
+    func testGetSummaryText_InfoIsAvailable() throws {
+        // Given an episode with a summary set
+        let episodeSummary: String = "Episode summary"
+        let episode: Episode = Episode(id: 1, summary: episodeSummary)
+        viewModel.episode = episode
+        
+        // When we call getSummaryText
+        let episodeSummaryText = viewModel.getSummaryText()
+        
+        // Then we get the correct summary
+        XCTAssertEqual(episodeSummaryText, episodeSummary, "getSummaryText() returned '\(episodeSummaryText)' but should have returned '\(episodeSummary)'")
+    }
+    
+    func testGetSummaryText_InfoIsNotAvailable() throws {
+        // Given an episode with no summary set
+        let episode: Episode = Episode(id: 1)
+        viewModel.episode = episode
+        
+        // When we call getSummaryText
+        let episodeSummaryText = viewModel.getSummaryText()
+        
+        // Then we get the message saying that the summary was not available
+        XCTAssertEqual(episodeSummaryText, EpisodeInformationViewModel.noSummaryMessage, "getSummaryText() returned '\(episodeSummaryText)' but should have returned '\(EpisodeInformationViewModel.noSummaryMessage)'")
+    }
+    
+    func testConfigure() throws {
+        // Given the view model with no episode or show title set
+        viewModel.episode = nil
+        viewModel.showTitle = nil
+        // Given an episode and show title
+        let episode = Episode(id: 1)
+        let showTitle = "Show Title"
+        
+        // When we call configure with the episode and show title
+        viewModel.configure(forEpisode: episode, andShowTitle: showTitle, withProvider: MockProvider())
+        
+        // Then the view model contains the episode and the show title
+        XCTAssertEqual(viewModel.episode, episode, "The view model should contain the episode with id \(String(describing: episode.id)) but contained \(String(describing: viewModel.episode))")
+        XCTAssertEqual(viewModel.showTitle, showTitle, "The view model should contain the showTitle \(showTitle) but contained \(String(describing: viewModel.showTitle))")
     }
     
     func testRequestImage_NotNil() throws {
