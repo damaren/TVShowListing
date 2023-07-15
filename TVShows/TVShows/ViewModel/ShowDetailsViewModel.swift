@@ -9,6 +9,11 @@ import Foundation
 
 class ShowDetailsViewModel {
     
+    // MARK: - STATIC PROPERTIES
+    
+    static let noShowNameMessage: String = "No show name provided"
+    static let noShowSummaryMessage: String = "No show summary provided"
+    
     // MARK: - PROPERTIES
     
     var show: TVShow?
@@ -26,11 +31,11 @@ class ShowDetailsViewModel {
     var updateView: () -> () = {}
     
     var showName: String {
-        return show?.name ?? ""
+        return show?.name ?? ShowDetailsViewModel.noShowNameMessage
     }
     
     var showSummary: String {
-        return show?.summary ?? ""
+        return show?.summary ?? ShowDetailsViewModel.noShowSummaryMessage
     }
     
     var numberOfSections: Int {
@@ -47,10 +52,10 @@ class ShowDetailsViewModel {
         return episodes[indexPath.section][indexPath.row]
     }
     
-    public func configure(forShow show: TVShow) {
+    public func configure(forShow show: TVShow, withProvider provider: Provider = TVMazeProvider.shared) {
         self.show = show
         if let id = show.id {
-            requestEpisodes(forShowId: id, withProvider: TVMazeProvider.shared)
+            requestEpisodes(forShowId: id, withProvider: provider)
         }
     }
     

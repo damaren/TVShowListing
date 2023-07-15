@@ -135,4 +135,82 @@ class ShowDetailsViewModelTests: XCTestCase {
         // And the view model should contain the error
         XCTAssertEqual(viewModel.error, JSONDecodeError, "The viewModel should contain the error '\(JSONDecodeError)' but it contained '\(String(describing: viewModel.error))'")
     }
+    
+    func testShowName_InfoIsAvailable() throws {
+        // Given a tv show with the name set
+        let showName: String = "Show name"
+        let show: TVShow = TVShow(id: 1, name: showName)
+        viewModel.show = show
+        
+        // When we call the showName getter
+        let viewModelShowName = viewModel.showName
+        
+        // Then we get the correct name
+        XCTAssertEqual(viewModelShowName, showName, "The showName getter returned '\(viewModelShowName)' but should have returned '\(showName)'")
+    }
+    
+    func testShowName_InfoIsNotAvailable() throws {
+        // Given a tv show with no name set
+        let show: TVShow = TVShow(id: 1)
+        viewModel.show = show
+        
+        // When we call the showName getter
+        let viewModelShowName = viewModel.showName
+        
+        // Then we get the message saying that the name was not available
+        XCTAssertEqual(viewModelShowName, ShowDetailsViewModel.noShowNameMessage, "The showName getter returned '\(viewModelShowName)' but should have returned '\(ShowDetailsViewModel.noShowNameMessage)'")
+    }
+    
+    func testShowSummary_InfoIsAvailable() throws {
+        // Given a tv show with the summary set
+        let showSummary: String = "Show summary"
+        let show: TVShow = TVShow(id: 1, summary: showSummary)
+        viewModel.show = show
+        
+        // When we call the showSummary getter
+        let viewModelShowSummary = viewModel.showSummary
+        
+        // Then we get the correct summary
+        XCTAssertEqual(viewModelShowSummary, showSummary, "The showSummary getter returned '\(viewModelShowSummary)' but should have returned '\(showSummary)'")
+    }
+    
+    func testShowSummary_InfoIsNotAvailable() throws {
+        // Given a tv show with no summary set
+        let show: TVShow = TVShow(id: 1)
+        viewModel.show = show
+        
+        // When we call the showSummary getter
+        let viewModelShowSummary = viewModel.showSummary
+        
+        // Then we get the message saying that the summary was not available
+        XCTAssertEqual(viewModelShowSummary, ShowDetailsViewModel.noShowSummaryMessage, "The showSummary getter returned '\(viewModelShowSummary)' but should have returned '\(ShowDetailsViewModel.noShowSummaryMessage)'")
+    }
+    
+    func testGetEpisode() throws {
+        // Given a list of seasons, each containing a list of episode
+        let wantedEpisode: Episode = Episode(id: 5)
+        let episodes: [[Episode]] = [
+            [Episode(id: 1), Episode(id: 2), Episode(id: 3)],
+            [Episode(id: 4), wantedEpisode, Episode(id: 6)]
+        ]
+        viewModel.episodes = episodes
+        
+        // When getEpisode is called
+        let episode = viewModel.getEpisode(forIndexPath: IndexPath(row: 1, section: 1))
+        
+        // Then the correct episode is returned
+        XCTAssertEqual(episode, wantedEpisode, "getEpisode() returned \(episode) but should have returned \(wantedEpisode)")
+    }
+    
+    func testConfigure() throws {
+        // Given the viewModel with no show set
+        viewModel.show = nil
+        
+        // When configure is called
+        let show: TVShow = TVShow(id: 1)
+        viewModel.configure(forShow: show)
+        
+        // Then the show property in the view model is set to the given show
+        XCTAssertEqual(viewModel.show, show, "The 'show' property in the viewModel should contain \(show) but it contained \(String(describing: viewModel.show))")
+    }
 }
