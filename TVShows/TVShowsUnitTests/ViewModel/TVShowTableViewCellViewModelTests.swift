@@ -74,4 +74,70 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
         // And the view model contains the error
         XCTAssertEqual(viewModel.networkError, urlCreationError, "The viewModel should contain the error '\(urlCreationError)' but it contained '\(String(describing: viewModel.networkError))'")
     }
+    
+    func testGetShowName_InfoIsAvailable() throws {
+        // Given the view model with a show that has the name set
+        let showName: String = "Show name"
+        let show: TVShow = TVShow(id: 1, name: showName)
+        viewModel.show = show
+        
+        // When getShowName is called
+        let viewModelShowName = viewModel.getShowName()
+        
+        // Then we get the correct show name
+        XCTAssertEqual(viewModelShowName, showName, "The view model returned \(viewModelShowName) but should have returned \(showName)")
+    }
+    
+    func testGetShowName_InfoIsNotAvailable() throws {
+        // Given the view model with a show that has no name set
+        let show: TVShow = TVShow(id: 1)
+        viewModel.show = show
+        
+        // When getShowName is called
+        let viewModelShowName = viewModel.getShowName()
+        
+        // Then we get the message saying that no show name was provided
+        XCTAssertEqual(viewModelShowName, TVShowTableViewCellViewModel.noShowNameMessage, "The view model returned \(viewModelShowName) but should have returned \(TVShowTableViewCellViewModel.noShowNameMessage)")
+    }
+    
+    func testGetGenres_InfoIsAvailable() throws {
+        // Given the view model with a show that has the genres set
+        let genre1: String = "Genre1"
+        let genre2: String = "Genre2"
+        let genre3: String = "Genre3"
+        let genres: [String] = [genre1, genre2, genre3]
+        let show: TVShow = TVShow(id: 1, genres: genres)
+        viewModel.show = show
+        
+        // When getGenres is called
+        let viewModelGenres = viewModel.getGenres()
+        
+        // Then we get the correct genres text
+        let genresText = "Genres: \(genre1), \(genre2), \(genre3)"
+        XCTAssertEqual(viewModelGenres, genresText, "The view model returned \(viewModelGenres) but should have returned \(genresText)")
+    }
+    
+    func testGetGenres_InfoIsNotAvailable() throws {
+        // Given the view model with a show that has no genres set
+        let show: TVShow = TVShow(id: 1)
+        viewModel.show = show
+        
+        // When getGenres is called
+        let viewModelGenres = viewModel.getGenres()
+        
+        // Then we get the message saying that no genres was provided
+        XCTAssertEqual(viewModelGenres, TVShowTableViewCellViewModel.noGenresMessage, "The view model returned \(viewModelGenres) but should have returned \(TVShowTableViewCellViewModel.noGenresMessage)")
+    }
+    
+    func testConfigure() {
+        // Given the view model with no show set
+        viewModel.show = nil
+        
+        // When configure is called with a given show
+        let show: TVShow = TVShow(id: 1)
+        viewModel.configure(forShow: show, withProvider: MockProvider())
+        
+        // Then the view model contains the show
+        XCTAssertEqual(viewModel.show, show, "The view model should contain the show \(show) but contained \(String(describing: viewModel.show))")
+    }
 }

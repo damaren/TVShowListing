@@ -10,6 +10,11 @@ import UIKit
 
 class TVShowTableViewCellViewModel {
     
+    // MARK: - STATIC PROPERTIES
+    
+    static let noShowNameMessage: String = "No show title provided"
+    static let noGenresMessage: String = "No genres info provided"
+    
     // MARK: - PROPERTIES
     
     var show: TVShow?
@@ -46,25 +51,25 @@ class TVShowTableViewCellViewModel {
         })
     }
     
-    public func configure(forShow show: TVShow?) {
+    public func configure(forShow show: TVShow?, withProvider provider: Provider = TVMazeProvider.shared) {
         self.show = show
-        requestImage(forUrl: show?.image?.medium, withProvider: TVMazeProvider.shared)
+        requestImage(forUrl: show?.image?.medium, withProvider: provider)
     }
     
     public func getShowName() -> String {
-        if let text = show?.name {
-            return text
+        if let showName = show?.name {
+            return showName
         } else {
-            return ""
+            return TVShowTableViewCellViewModel.noShowNameMessage
         }
     }
     
     public func getGenres() -> String {
-        if let genres = show?.genres, !genres.isEmpty {
-            let genresString = genres[1..<genres.count].reduce(genres.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
+        if let genres = show?.genres, let firstElement = genres.first {
+            let genresString = genres[1..<genres.count].reduce(firstElement, { partialResult, nextString in return "\(partialResult), \(nextString)"})
             return "Genres: \(genresString)"
         } else {
-            return ""
+            return TVShowTableViewCellViewModel.noGenresMessage
         }
     }
 }
