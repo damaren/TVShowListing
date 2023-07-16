@@ -10,6 +10,13 @@ import UIKit
 
 class ShowDetailsSummaryViewModel {
     
+    // MARK: - STATIC PROPERTIES
+    
+    static let noGenresMessage: String = "No genres info provided"
+    static let noTimeMessage: String = "No air time info provided"
+    static let noDaysMessage: String = "No air days info provided"
+    static let noSummaryMessage: String = "No summary provided"
+    
     // MARK: - PROPERTIES
     
     var show: TVShow?
@@ -44,42 +51,42 @@ class ShowDetailsSummaryViewModel {
         })
     }
     
-    public func configure(forShow show: TVShow?) {
+    public func configure(forShow show: TVShow?, withProvider provider: Provider = TVMazeProvider.shared) {
         self.show = show
-        requestImage(forUrl: show?.image?.medium, withProvider: TVMazeProvider.shared)
+        requestImage(forUrl: show?.image?.medium, withProvider: provider)
     }
     
-    public func getGenresLabelText() -> String {
-        if let genres = show?.genres, !genres.isEmpty {
-            let genresString = genres[1..<genres.count].reduce(genres.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
+    public func getGenres() -> String {
+        if let genres = show?.genres, let firstElement = genres.first {
+            let genresString = genres[1..<genres.count].reduce(firstElement, { partialResult, nextString in return "\(partialResult), \(nextString)"})
             return "Genres: \(genresString)"
         } else {
-            return ""
+            return ShowDetailsSummaryViewModel.noGenresMessage
         }
     }
     
-    public func getTimesLabelText() -> String {
+    public func getTime() -> String {
         if let time = show?.schedule?.time, !time.isEmpty {
             return "Time: \(time)"
         } else {
-            return ""
+            return ShowDetailsSummaryViewModel.noTimeMessage
         }
     }
     
-    public func getDaysLabelText() -> String {
-        if let days = show?.schedule?.days, !days.isEmpty {
-            let daysString = days[1..<days.count].reduce(days.first ?? "", { partialResult, nextString in return "\(partialResult), \(nextString)"})
+    public func getDays() -> String {
+        if let days = show?.schedule?.days, let firstElement = days.first {
+            let daysString = days[1..<days.count].reduce(firstElement, { partialResult, nextString in return "\(partialResult), \(nextString)"})
             return "Days: \(daysString)"
         } else {
-            return ""
+            return ShowDetailsSummaryViewModel.noDaysMessage
         }
     }
     
-    public func getSummaryText() -> String {
+    public func getSummary() -> String {
         if let summary = show?.summary {
             return summary.htmlToString
         } else {
-            return ""
+            return ShowDetailsSummaryViewModel.noSummaryMessage
         }
     }
 }

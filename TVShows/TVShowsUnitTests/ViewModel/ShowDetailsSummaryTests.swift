@@ -23,34 +23,120 @@ class ShowDetailsSummaryTests: XCTestCase {
         viewModel = nil
     }
     
-    func testGettters() throws {
-        // Given a show with genres, schedule and summary
-        let show: TVShow = TVShow(
-            id: 1,
-            genres: [
-                "Drama",
-                "Crime",
-                "Thriller"
-            ],
-            schedule: Schedule(
-                time: "22:00",
-                days: ["Sunday"]
-            ),
-            summary: "Show summary"
-        )
+    func testGetGenres_InfoIsAvailable() throws {
+        // Given the view model with a show that has the genres set
+        let genre1: String = "Genre1"
+        let genre2: String = "Genre2"
+        let genre3: String = "Genre3"
+        let genres: [String] = [genre1, genre2, genre3]
+        let show: TVShow = TVShow(id: 1, genres: genres)
         viewModel.show = show
         
-        // When we call the getters
-        let genresText = viewModel.getGenresLabelText()
-        let timeText = viewModel.getTimesLabelText()
-        let daysText = viewModel.getDaysLabelText()
-        let summaryText = viewModel.getSummaryText()
+        // When getGenres is called
+        let viewModelGenres = viewModel.getGenres()
         
-        // Then we get the correct values
-        XCTAssertEqual(genresText, "Genres: Drama, Crime, Thriller", "The genres getter returned '\(genresText)' but should have returned 'Genres: Drama, Crime, Thriller'")
-        XCTAssertEqual(timeText, "Time: 22:00", "The time getter returned '\(timeText)' but should have returned 'Time: 22:00'")
-        XCTAssertEqual(daysText, "Days: Sunday", "The days getter returned '\(daysText)' but should have returned 'Days: Sunday'")
-        XCTAssertEqual(summaryText, "Show summary", "The summary getter returned '\(summaryText)' but should have returned 'Show summary'")
+        // Then we get the correct genres text
+        let genresText = "Genres: \(genre1), \(genre2), \(genre3)"
+        XCTAssertEqual(viewModelGenres, genresText, "The view model returned \(viewModelGenres) but should have returned \(genresText)")
+    }
+    
+    func testGetGenres_InfoIsNotAvailable() throws {
+        // Given the view model with a show that has no genres set
+        let show: TVShow = TVShow(id: 1)
+        viewModel.show = show
+        
+        // When getGenres is called
+        let viewModelGenres = viewModel.getGenres()
+        
+        // Then we get the message saying that no genres was provided
+        XCTAssertEqual(viewModelGenres, ShowDetailsSummaryViewModel.noGenresMessage, "The view model returned \(viewModelGenres) but should have returned \(ShowDetailsSummaryViewModel.noGenresMessage)")
+    }
+    
+    func testGetTime_InfoIsAvailable() throws {
+        // Given the view model with a show that has the schedule with a time set
+        let time = "22:00"
+        let schedule = Schedule(
+            time: time,
+            days: ["Sunday"]
+        )
+        let show: TVShow = TVShow(id: 1, schedule: schedule)
+        viewModel.show = show
+        
+        // When getTime is called
+        let viewModelTime = viewModel.getTime()
+        
+        // Then we get the correct time text
+        let timeText = "Time: \(time)"
+        XCTAssertEqual(viewModelTime, timeText, "The view model returned \(viewModelTime) but should have returned \(timeText)")
+    }
+    
+    func testGetTime_InfoIsNotAvailable() throws {
+        // Given the view model with a show that has no schedule set
+        let show: TVShow = TVShow(id: 1)
+        viewModel.show = show
+        
+        // When getTime is called
+        let viewModelTime = viewModel.getTime()
+        
+        // Then we get the message saying that no time info was provided
+        XCTAssertEqual(viewModelTime, ShowDetailsSummaryViewModel.noTimeMessage, "The view model returned \(viewModelTime) but should have returned \(ShowDetailsSummaryViewModel.noTimeMessage)")
+    }
+    
+    func testGetDays_InfoIsAvailable() throws {
+        // Given the view model with a show that has the schedule with the days set
+        let day1 = "Sunday"
+        let day2 = "Monday"
+        let days = [day1, day2]
+        let schedule = Schedule(
+            time: "22:00",
+            days: days
+        )
+        let show: TVShow = TVShow(id: 1, schedule: schedule)
+        viewModel.show = show
+        
+        // When getDays is called
+        let viewModelDays = viewModel.getDays()
+        
+        // Then we get the correct days text
+        let daysText = "Days: \(day1), \(day2)"
+        XCTAssertEqual(viewModelDays, daysText, "The view model returned \(viewModelDays) but should have returned \(daysText)")
+    }
+    
+    func testGetDays_InfoIsNotAvailable() throws {
+        // Given the view model with a show that has no schedule set
+        let show: TVShow = TVShow(id: 1)
+        viewModel.show = show
+        
+        // When getDays is called
+        let viewModelDays = viewModel.getDays()
+        
+        // Then we get the message saying that no days info was provided
+        XCTAssertEqual(viewModelDays, ShowDetailsSummaryViewModel.noDaysMessage, "The view model returned \(viewModelDays) but should have returned \(ShowDetailsSummaryViewModel.noDaysMessage)")
+    }
+    
+    func testGetSummary_InfoIsAvailable() throws {
+        // Given the view model with a show that has the summary set
+        let summary = "Show summary"
+        let show: TVShow = TVShow(id: 1, summary: summary)
+        viewModel.show = show
+        
+        // When getSummary is called
+        let viewModelSummary = viewModel.getSummary()
+        
+        // Then we get the correct summary text
+        XCTAssertEqual(viewModelSummary, summary, "The view model returned \(viewModelSummary) but should have returned \(summary)")
+    }
+    
+    func testGetSummary_InfoIsNotAvailable() throws {
+        // Given the view model with a show that has no summary set
+        let show: TVShow = TVShow(id: 1)
+        viewModel.show = show
+        
+        // When getSummary is called
+        let viewModelSummary = viewModel.getSummary()
+        
+        // Then we get the message saying that nosummary was provided
+        XCTAssertEqual(viewModelSummary, ShowDetailsSummaryViewModel.noSummaryMessage, "The view model returned \(viewModelSummary) but should have returned \(ShowDetailsSummaryViewModel.noSummaryMessage)")
     }
     
     func testRequestImage_NotNil() throws {
@@ -103,5 +189,17 @@ class ShowDetailsSummaryTests: XCTestCase {
         XCTAssertNil(viewModel.image, "The image in the view model was not nil, but it should have have been nil")
         // And the view model contains the error
         XCTAssertEqual(viewModel.networkError, urlCreationError, "The viewModel should contain the error '\(urlCreationError)' but it contained '\(String(describing: viewModel.networkError))'")
+    }
+    
+    func testConfigure() {
+        // Given the view model with no show set
+        viewModel.show = nil
+        
+        // When configure is called with a given show
+        let show: TVShow = TVShow(id: 1)
+        viewModel.configure(forShow: show, withProvider: MockProvider())
+        
+        // Then the view model contains the show
+        XCTAssertEqual(viewModel.show, show, "The view model should contain the show \(show) but contained \(String(describing: viewModel.show))")
     }
 }

@@ -55,22 +55,22 @@ extension ShowDetailsSummaryView {
         // genresLabel
         genresLabel.translatesAutoresizingMaskIntoConstraints = false
         genresLabel.numberOfLines = 0
-        genresLabel.text = viewModel.getGenresLabelText()
+        genresLabel.text = viewModel.getGenres()
         
         // timeLabel
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.numberOfLines = 0
-        timeLabel.text = viewModel.getTimesLabelText()
+        timeLabel.text = viewModel.getTime()
         
         // daysLabel
         daysLabel.translatesAutoresizingMaskIntoConstraints = false
         daysLabel.numberOfLines = 0
-        daysLabel.text =  viewModel.getDaysLabelText()
+        daysLabel.text =  viewModel.getDays()
         
         // summaryLabel
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.numberOfLines = 0
-        summaryLabel.text = viewModel.getSummaryText()
+        summaryLabel.text = viewModel.getSummary()
         
         // seeMoreButton
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
