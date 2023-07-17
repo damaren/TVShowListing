@@ -106,7 +106,7 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.selectedShow(show: viewModel.getShowFor(indexPath: indexPath))
+        delegate?.selectedShow(show: viewModel.getShowFor(indexPath: indexPath), withAnimation: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -117,6 +117,6 @@ extension ListViewController: UITableViewDelegate {
 
 // MARK: - ListViewControllerDelegate
 protocol ListViewControllerDelegate: AnyObject {
-    func selectedShow(show: TVShow)
+    func selectedShow(show: TVShow, withAnimation: Bool)
 }
 

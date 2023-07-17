@@ -84,7 +84,7 @@ class ShowDetailsViewController: UIViewController {
     // MARK: - ACTIONS
     
     @objc func backButtonPressed() {
-        delegate?.backButtonPressed(inViewcontroller: self)
+        delegate?.backButtonPressed(inViewcontroller: self, withAnimation: true)
     }
 }
 
@@ -115,7 +115,7 @@ extension ShowDetailsViewController: UITableViewDataSource {
 
 extension ShowDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.selectedEpisode(episode: viewModel.getEpisode(forIndexPath: indexPath), withShowTitle: viewModel.showName)
+        delegate?.selectedEpisode(episode: viewModel.getEpisode(forIndexPath: indexPath), withShowTitle: viewModel.showName, withAnimation: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -144,8 +144,8 @@ extension ShowDetailsViewController: UITableViewDelegate {
 
 // MARK: - ShowDetailsViewControllerDelegate
 protocol ShowDetailsViewControllerDelegate: AnyObject {
-    func selectedEpisode(episode: Episode, withShowTitle showTitle: String)
-    func backButtonPressed(inViewcontroller: ShowDetailsViewController)
+    func selectedEpisode(episode: Episode, withShowTitle showTitle: String, withAnimation: Bool)
+    func backButtonPressed(inViewcontroller: ShowDetailsViewController, withAnimation: Bool)
 }
 
 // MARK: -

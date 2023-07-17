@@ -114,11 +114,11 @@ class EpisodeInformationViewController: UIViewController {
     // MARK: - ACTIONS
     
     @objc func backButtonPressed() {
-        delegate?.backButtonPressed(inViewcontroller: self)
+        delegate?.backButtonPressed(inViewcontroller: self, withAnimation: true)
     }
 }
 
 // MARK: - ShowDetailsViewControllerDelegate
 protocol EpisodeInformationViewControllerDelegate: AnyObject {
-    func backButtonPressed(inViewcontroller: EpisodeInformationViewController)
+    func backButtonPressed(inViewcontroller: EpisodeInformationViewController, withAnimation: Bool)
 }
