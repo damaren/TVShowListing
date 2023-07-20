@@ -40,6 +40,7 @@
 		14C2CF312A48718C007FA677 /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF302A48718C007FA677 /* EpisodeModel.swift */; };
 		14C2CF332A48765D007FA677 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */; };
 		14C2CF352A48832E007FA677 /* EpisodeInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */; };
+		14CE80D62A66C45200EF9051 /* TVShowTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE80D52A66C45200EF9051 /* TVShowTableViewCellTests.swift */; };
 		14D257C12A5D7DA2007A7279 /* TVMazeProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D257C02A5D7DA2007A7279 /* TVMazeProviderTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,7 @@
 		14C2CF302A48718C007FA677 /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeInformationViewController.swift; sourceTree = "<group>"; };
+		14CE80D52A66C45200EF9051 /* TVShowTableViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowTableViewCellTests.swift; sourceTree = "<group>"; };
 		14D257C02A5D7DA2007A7279 /* TVMazeProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeProviderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,6 +138,7 @@
 		141C6EEC2A4A46CF00977986 /* TVShowsUnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				14CE80D42A66C43700EF9051 /* View */,
 				144B9CDC2A6590AC00BAB59B /* AppDelegate */,
 				144B9CDB2A65909E00BAB59B /* Provider */,
 				141C6EFC2A4A57F200977986 /* ViewModel */,
@@ -244,6 +247,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		14CE80D42A66C43700EF9051 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				14CE80D52A66C45200EF9051 /* TVShowTableViewCellTests.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -345,6 +356,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14CE80D62A66C45200EF9051 /* TVShowTableViewCellTests.swift in Sources */,
 				141C6F042A4A657D00977986 /* TVShowTableViewCellViewModelTests.swift in Sources */,
 				144B9CE02A6590D100BAB59B /* AppDelegateTests.swift in Sources */,
 				141C6EF92A4A522B00977986 /* ShowDetailsSummaryTests.swift in Sources */,

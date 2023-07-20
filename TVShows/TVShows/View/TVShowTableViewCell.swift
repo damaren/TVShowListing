@@ -14,12 +14,13 @@ class TVShowTableViewCell: UITableViewCell {
     
     static let reuseIdentifier: String = "TVShowTableViewCell"
     static let cellHeight: CGFloat = 240
+    static let verticalMargin: CGFloat = 8
+    static let horizontalMargin: CGFloat = 8
+    static let imageAspectRatio: Double = 210/295
     
     // MARK: - PROPERTIES
     
     let viewModel: TVShowTableViewCellViewModel = TVShowTableViewCellViewModel()
-    let verticalMargin: CGFloat = 8
-    let imageAspectRatio: Double = 210/295
     
     // MARK: - COMPONENTS
     
@@ -80,28 +81,28 @@ extension TVShowTableViewCell {
         contentView.addSubview(containerView)
         
         // image
-        image.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8).isActive = true
+        image.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: TVShowTableViewCell.horizontalMargin).isActive = true
         image.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        let imageHeight = TVShowTableViewCell.cellHeight - 4 * verticalMargin // 4 = containerView top and bottom + image top and bottom
-        let imageWidh = imageHeight*imageAspectRatio
+        let imageHeight = TVShowTableViewCell.cellHeight - 4 * TVShowTableViewCell.verticalMargin // 4 = containerView top and bottom + image top and bottom
+        let imageWidh = imageHeight*TVShowTableViewCell.imageAspectRatio
         image.widthAnchor.constraint(equalToConstant: imageWidh).isActive = true
         image.heightAnchor.constraint(equalToConstant: imageHeight).isActive = true
         
         // titleLabel
-        titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2 * TVShowTableViewCell.horizontalMargin).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 2 * TVShowTableViewCell.horizontalMargin).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 2 * TVShowTableViewCell.verticalMargin).isActive = true
         
         // genresLabel
-        genresLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 16).isActive = true
-        genresLabel.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 16).isActive = true
-        genresLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16).isActive = true
+        genresLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2 * TVShowTableViewCell.horizontalMargin).isActive = true
+        genresLabel.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 2 * TVShowTableViewCell.horizontalMargin).isActive = true
+        genresLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2 * TVShowTableViewCell.verticalMargin).isActive = true
         
         // containerView
-        containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
-        containerView.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin).isActive = true
-        containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive = true
-        containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -verticalMargin).isActive = true
+        containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: TVShowTableViewCell.horizontalMargin).isActive = true
+        containerView.topAnchor.constraint(equalTo: topAnchor, constant: TVShowTableViewCell.verticalMargin).isActive = true
+        containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -TVShowTableViewCell.horizontalMargin).isActive = true
+        containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -TVShowTableViewCell.verticalMargin).isActive = true
     }
     
     func configure(forShow show: TVShow) {
@@ -111,9 +112,10 @@ extension TVShowTableViewCell {
         layout()
     }
     
-    func updateView(forImage image: UIImage?) {
+    func updateView(forImage image: UIImage?, completion: (() -> ())? = nil) {
         DispatchQueue.main.async { // update UI
             self.image.image = image
+            completion?()
         }
     }
 }
