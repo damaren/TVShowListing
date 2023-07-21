@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TVShowSearchViewController.swift
 //  TVShows
 //
 //  Created by José Damaren on 23/06/23.
@@ -7,12 +7,12 @@
 
 import UIKit
 
-class ListViewController: UIViewController {
+class TVShowSearchViewController: UIViewController {
     
     // MARK: - PROPERTIES
     
-    weak var delegate: ListViewControllerDelegate?
-    var viewModel: ListViewModel = ListViewModel()
+    weak var delegate: TVShowSearchViewControllerDelegate?
+    var viewModel: TVShowSearchViewModel = TVShowSearchViewModel()
     
     // MARK: - COMPONENTS
     
@@ -77,7 +77,7 @@ class ListViewController: UIViewController {
 
 // MARK: - SearchViewDelegate
 
-extension ListViewController: SearchViewDelegate {
+extension TVShowSearchViewController: SearchViewDelegate {
     func searchViewSearchButtonPressed(withSearchText searchText: String) {
         viewModel.requestTVShows(withSearchText: searchText)
     }
@@ -85,7 +85,7 @@ extension ListViewController: SearchViewDelegate {
 
 // MARK: - UITableViewDataSource
 
-extension ListViewController: UITableViewDataSource {
+extension TVShowSearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRows
     }
@@ -104,7 +104,7 @@ extension ListViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension ListViewController: UITableViewDelegate {
+extension TVShowSearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.selectedShow(show: viewModel.getShowFor(indexPath: indexPath), withAnimation: true)
         tableView.deselectRow(at: indexPath, animated: true)
@@ -115,8 +115,8 @@ extension ListViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - ListViewControllerDelegate
-protocol ListViewControllerDelegate: AnyObject {
+// MARK: - TVShowSearchViewControllerDelegate
+protocol TVShowSearchViewControllerDelegate: AnyObject {
     func selectedShow(show: TVShow, withAnimation: Bool)
 }
 

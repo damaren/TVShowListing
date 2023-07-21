@@ -1,5 +1,5 @@
 //
-//  ListViewModel.swift
+//  TVShowSearchViewModel.swift
 //  TVShows
 //
 //  Created by José Damaren on 26/06/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ListViewModel {
+class TVShowSearchViewModel {
     
     // MARK: - PROPERTIES
     

@@ -12,23 +12,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     let navigationController = UINavigationController()
-    lazy var listViewController = ListViewController()
+    lazy var tvShowSearchViewController = TVShowSearchViewController()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.backgroundColor = .systemBackground
         window?.rootViewController = navigationController
-        navigationController.setViewControllers([listViewController], animated: false)
-        listViewController.delegate = self
+        navigationController.setViewControllers([tvShowSearchViewController], animated: false)
+        tvShowSearchViewController.delegate = self
         
         return true
     }
 }
 
-// MARK: - ListViewControllerDelegate
+// MARK: - TVShowSearchViewControllerDelegate
 
-extension AppDelegate: ListViewControllerDelegate {
+extension AppDelegate: TVShowSearchViewControllerDelegate {
     func selectedShow(show: TVShow, withAnimation: Bool) {
         let showDetailsViewController = ShowDetailsViewController()
         showDetailsViewController.delegate = self

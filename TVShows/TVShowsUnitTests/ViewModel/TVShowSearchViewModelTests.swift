@@ -1,5 +1,5 @@
 //
-//  ListViewModelTests.swift
+//  TVShowSearchViewModelTests.swift
 //  TVShowsUnitTests
 //
 //  Created by José Damaren on 26/06/23.
@@ -10,12 +10,12 @@ import XCTest
 
 @testable import TVShows
 
-class ListViewModelTests: XCTestCase {
-    var viewModel: ListViewModel!
+class TVShowSearchViewModelTests: XCTestCase {
+    var viewModel: TVShowSearchViewModel!
     
     override func setUp() {
         super.setUp()
-        viewModel = ListViewModel()
+        viewModel = TVShowSearchViewModel()
     }
     
     override func tearDown() {
