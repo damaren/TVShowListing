@@ -29,6 +29,7 @@
 		14205DA72A462D2000E8E5A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14205DA52A462D2000E8E5A7 /* LaunchScreen.storyboard */; };
 		14205DB02A46415000E8E5A7 /* TVShowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14205DAF2A46415000E8E5A7 /* TVShowModel.swift */; };
 		1430D2AA2A5F200400077F36 /* EpisodeMockResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1430D2A92A5F200400077F36 /* EpisodeMockResponse.swift */; };
+		14419A692A6AC0ED00E274A6 /* TVShowSearchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14419A682A6AC0ED00E274A6 /* TVShowSearchViewControllerTests.swift */; };
 		144B9CE02A6590D100BAB59B /* AppDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144B9CDF2A6590D100BAB59B /* AppDelegateTests.swift */; };
 		149AA3142A470A0D00BD7059 /* TVMazeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AA3132A470A0D00BD7059 /* TVMazeProvider.swift */; };
 		149AA3172A47728800BD7059 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AA3162A47728800BD7059 /* SearchView.swift */; };
@@ -80,6 +81,7 @@
 		14205DA82A462D2000E8E5A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14205DAF2A46415000E8E5A7 /* TVShowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowModel.swift; sourceTree = "<group>"; };
 		1430D2A92A5F200400077F36 /* EpisodeMockResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeMockResponse.swift; sourceTree = "<group>"; };
+		14419A682A6AC0ED00E274A6 /* TVShowSearchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowSearchViewControllerTests.swift; sourceTree = "<group>"; };
 		144B9CDF2A6590D100BAB59B /* AppDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateTests.swift; sourceTree = "<group>"; };
 		149AA3132A470A0D00BD7059 /* TVMazeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeProvider.swift; sourceTree = "<group>"; };
 		149AA3162A47728800BD7059 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				14CE80D52A66C45200EF9051 /* TVShowTableViewCellTests.swift */,
+				14419A682A6AC0ED00E274A6 /* TVShowSearchViewControllerTests.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				141C6EF72A4A4D2A00977986 /* ShowDetailsViewModelTests.swift in Sources */,
 				14D257C12A5D7DA2007A7279 /* TVMazeProviderTests.swift in Sources */,
 				141C6EF52A4A493700977986 /* TVShowSearchViewModelTests.swift in Sources */,
+				14419A692A6AC0ED00E274A6 /* TVShowSearchViewControllerTests.swift in Sources */,
 				1430D2AA2A5F200400077F36 /* EpisodeMockResponse.swift in Sources */,
 				141C6EFB2A4A53C200977986 /* EpisodeInformationViewModelTests.swift in Sources */,
 			);

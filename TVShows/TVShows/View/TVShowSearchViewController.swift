@@ -30,7 +30,7 @@ class TVShowSearchViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
-        self.title = "TV Show Listing"
+        self.title = viewModel.title
         view.backgroundColor = .systemBackground
         
         // update
@@ -68,9 +68,10 @@ class TVShowSearchViewController: UIViewController {
         showsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    func updateView() {
+    func updateView(completion: (() -> ())? = nil) {
         DispatchQueue.main.async { // update UI
             self.showsTableView.reloadData()
+            completion?()
         }
     }
 }
@@ -78,8 +79,8 @@ class TVShowSearchViewController: UIViewController {
 // MARK: - SearchViewDelegate
 
 extension TVShowSearchViewController: SearchViewDelegate {
-    func searchViewSearchButtonPressed(withSearchText searchText: String) {
-        viewModel.requestTVShows(withSearchText: searchText)
+    func searchViewSearchButtonPressed(withSearchText searchText: String, completion: (() -> ())?) {
+        viewModel.requestTVShows(withSearchText: searchText, completion: completion)
     }
 }
 

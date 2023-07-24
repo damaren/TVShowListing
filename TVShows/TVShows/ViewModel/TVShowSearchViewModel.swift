@@ -9,6 +9,10 @@ import Foundation
 
 class TVShowSearchViewModel {
     
+    // MARK: - STATIC PROPERTIES
+    
+    static var tvShowSearchTitle: String = "TV Show Search"
+    
     // MARK: - PROPERTIES
     
     var shows: [TVShow] = [] {
@@ -25,6 +29,8 @@ class TVShowSearchViewModel {
     var numberOfRows: Int {
         return shows.count
     }
+    
+    var title: String = TVShowSearchViewModel.tvShowSearchTitle
     
     // MARK: - FUNCTIONS
     

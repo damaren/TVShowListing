@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol SearchViewDelegate: AnyObject {
-    func searchViewSearchButtonPressed(withSearchText searchText: String)
+    func searchViewSearchButtonPressed(withSearchText searchText: String, completion: (() -> ())?)
 }
 
 class SearchView: UIView {
@@ -102,6 +102,6 @@ extension SearchView {
             return
         }
         
-        delegate?.searchViewSearchButtonPressed(withSearchText: text)
+        delegate?.searchViewSearchButtonPressed(withSearchText: text, completion: nil)
     }
 }
