@@ -12,6 +12,7 @@ class ShowDescriptionViewController: UIViewController {
     // MARK: - PROPERTIES
     
     var tvShowDescription: String?
+    weak var delegate: ShowDescriptionViewControllerDelegate?
     
     // MARK: - COMPONENTS
     
@@ -22,6 +23,10 @@ class ShowDescriptionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate?.showDescriptionViewControllerDismissed(viewController: self)
     }
     
     // MARK: - FUNCTIONS
@@ -55,7 +60,7 @@ class ShowDescriptionViewController: UIViewController {
         closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
     }
     
-    func configure(description: String) {
+    func configure(description: String, delegate: ShowDescriptionViewControllerDelegate) {
         self.tvShowDescription = description
         setup()
         layoutViews()
@@ -66,4 +71,9 @@ class ShowDescriptionViewController: UIViewController {
     @objc func closeButtonPressed() {
         self.dismiss(animated: true)
     }
+}
+
+// MARK: - ShowDescriptionViewControllerDelegate
+protocol ShowDescriptionViewControllerDelegate: AnyObject {
+    func showDescriptionViewControllerDismissed(viewController: ShowDescriptionViewController)
 }

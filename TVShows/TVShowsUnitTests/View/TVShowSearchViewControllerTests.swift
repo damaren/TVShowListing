@@ -24,7 +24,7 @@ final class TVShowSearchViewControllerTests: XCTestCase {
     }
     
     func testSetup() {
-        // Given
+        // Given the instantiated view controller
         
         // When setup is called
         vc.setup()
@@ -212,9 +212,7 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         vc.showsTableView.reloadData()
         vc.view.layoutSubviews() // without this, the table view is not calling the cell for row at
         
-        let expectation = self.expectation(description: "TVShowSearchViewControllerTests updateView expectation")
-        
-        // When updateView is called when the viewModel contains a list o shows
+        // The view model containing a list of shows
         let shows: [TVShow] = [
             TVShow(id: 1, name: "Show title 1", genres: ["genre1", "genre2"]),
             TVShow(id: 2, name: "Show title 2", genres: ["genre3", "genre4"]),
@@ -222,6 +220,10 @@ final class TVShowSearchViewControllerTests: XCTestCase {
             TVShow(id: 4, name: "Show title 4", genres: ["genre7", "genre8"])
         ]
         vc.viewModel.shows = shows
+        
+        let expectation = self.expectation(description: "TVShowSearchViewControllerTests updateView expectation")
+        
+        // When updateView is called
         vc.updateView(completion: {
             
             // Then

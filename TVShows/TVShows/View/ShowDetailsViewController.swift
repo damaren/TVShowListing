@@ -13,6 +13,7 @@ class ShowDetailsViewController: UIViewController {
     
     weak var delegate: ShowDetailsViewControllerDelegate?
     var viewModel: ShowDetailsViewModel = ShowDetailsViewModel()
+    var showDescriptionVC: ShowDescriptionViewController? // storing the value here for unit testing
     
     // MARK: - COMPONENTS
     
@@ -75,9 +76,10 @@ class ShowDetailsViewController: UIViewController {
         layoutViews()
     }
     
-    func updateView() {
+    func updateView(completion: (() -> ())? = nil) {
         DispatchQueue.main.async { // update UI
             self.episodesTableView.reloadData()
+            completion?()
         }
     }
     
@@ -148,11 +150,19 @@ protocol ShowDetailsViewControllerDelegate: AnyObject {
     func backButtonPressed(inViewcontroller: ShowDetailsViewController, withAnimation: Bool)
 }
 
-// MARK: -
+// MARK: - ShowDetailsSummaryViewDelegate
 extension ShowDetailsViewController: ShowDetailsSummaryViewDelegate {
     func seeMoreButtonPressed() {
-        let showDescriptionVC = ShowDescriptionViewController()
-        showDescriptionVC.configure(description: viewModel.showSummary)
+        showDescriptionVC = ShowDescriptionViewController()
+        guard let showDescriptionVC = showDescriptionVC else { return }
+        showDescriptionVC.configure(description: viewModel.showSummary, delegate: self)
         present(showDescriptionVC, animated: true)
+    }
+}
+
+// MARK: - ShowDescriptionViewControllerDelegate
+extension ShowDetailsViewController: ShowDescriptionViewControllerDelegate {
+    func showDescriptionViewControllerDismissed(viewController: ShowDescriptionViewController) {
+        showDescriptionVC = nil
     }
 }

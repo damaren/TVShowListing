@@ -46,7 +46,7 @@ extension EpisodeTableViewCell {
         
         // numberLabel
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
-        numberLabel.text = generateSeasonAndNumberLabel()
+        numberLabel.text = generateEpisodeNumberText()
         
         // title
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -93,7 +93,7 @@ extension EpisodeTableViewCell {
         layout()
     }
     
-    func generateSeasonAndNumberLabel() -> String {
+    func generateEpisodeNumberText() -> String {
         guard let number = episode?.number else { return "" }
         return "Ep. \(number):"
     }
