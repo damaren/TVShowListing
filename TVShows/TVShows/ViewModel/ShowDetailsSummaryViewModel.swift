@@ -84,7 +84,7 @@ class ShowDetailsSummaryViewModel {
     
     public func getSummary() -> String {
         if let summary = show?.summary {
-            return summary.htmlToString
+            return summary
         } else {
             return ShowDetailsSummaryViewModel.noSummaryMessage
         }

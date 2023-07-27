@@ -37,7 +37,7 @@ class ShowDescriptionViewController: UIViewController {
         // descriptionLabel
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.text = tvShowDescription?.htmlToString
+        descriptionLabel.attributedText = tvShowDescription?.htmlToAttributedString(withSize: Int(descriptionLabel.font.pointSize))
         
         // closeButton
         closeButton.translatesAutoresizingMaskIntoConstraints = false

@@ -78,7 +78,7 @@ class EpisodeInformationViewModel {
     
     public func getSummaryText() -> String {
         if let summary = episode?.summary {
-            return summary.htmlToString
+            return summary
         } else {
             return EpisodeInformationViewModel.noSummaryMessage
         }

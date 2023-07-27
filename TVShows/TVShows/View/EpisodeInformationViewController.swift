@@ -63,7 +63,7 @@ class EpisodeInformationViewController: UIViewController {
         // summaryLabel
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.numberOfLines = 0
-        summaryLabel.text = viewModel.getSummaryText()
+        summaryLabel.attributedText = viewModel.getSummaryText().htmlToAttributedString(withSize: Int(summaryLabel.font.pointSize))
     }
     
     func layoutViews() {

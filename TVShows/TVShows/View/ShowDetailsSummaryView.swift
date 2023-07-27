@@ -70,7 +70,7 @@ extension ShowDetailsSummaryView {
         // summaryLabel
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.numberOfLines = 0
-        summaryLabel.text = viewModel.getSummary()
+        summaryLabel.attributedText = viewModel.getSummary().htmlToAttributedString(withSize: Int(summaryLabel.font.pointSize))
         
         // seeMoreButton
         seeMoreButton.translatesAutoresizingMaskIntoConstraints = false
