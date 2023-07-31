@@ -60,8 +60,9 @@ class ShowDescriptionViewController: UIViewController {
         closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
     }
     
-    func configure(description: String, delegate: ShowDescriptionViewControllerDelegate) {
+    func configure(description: String, delegate: ShowDescriptionViewControllerDelegate?) {
         self.tvShowDescription = description
+        self.delegate = delegate
         setup()
         layoutViews()
     }
