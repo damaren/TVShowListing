@@ -14,11 +14,12 @@ class EpisodeTableViewCell: UITableViewCell {
     
     static let reuseIdentifier: String = "EpisodeTableViewCell"
     static let cellHeight: CGFloat = 60
+    static let horizontalMargin: CGFloat = 8
+    static let verticalMargin: CGFloat = 8
     
     // MARK: - PROPERTIES
     
     var episode: Episode?
-    let verticalMargin: CGFloat = 8
     
     // MARK: - COMPONENTS
     
@@ -69,21 +70,21 @@ extension EpisodeTableViewCell {
         contentView.addSubview(containerView)
         
         // numberLabel
-        numberLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16).isActive = true
+        numberLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 2 * EpisodeTableViewCell.horizontalMargin).isActive = true
         numberLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         numberLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         
         // titleLabel
-        titleLabel.leadingAnchor.constraint(equalTo: numberLabel.trailingAnchor, constant: 16).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: numberLabel.trailingAnchor, constant: 2 * EpisodeTableViewCell.horizontalMargin).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2 * EpisodeTableViewCell.horizontalMargin).isActive = true
         titleLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         // containerView
-        containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
-        containerView.topAnchor.constraint(equalTo: topAnchor, constant: verticalMargin).isActive = true
-        containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive = true
-        containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -verticalMargin).isActive = true
+        containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: EpisodeTableViewCell.horizontalMargin).isActive = true
+        containerView.topAnchor.constraint(equalTo: topAnchor, constant: EpisodeTableViewCell.verticalMargin).isActive = true
+        containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -EpisodeTableViewCell.horizontalMargin).isActive = true
+        containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -EpisodeTableViewCell.verticalMargin).isActive = true
     }
     
     func configure(forEpisode episode: Episode) {

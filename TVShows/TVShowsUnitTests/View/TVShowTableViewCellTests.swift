@@ -98,11 +98,11 @@ final class TVShowTableViewCellTests: XCTestCase {
         // Then
         // The contentView contains the containerView
         XCTAssertTrue(cell.contentView.subviews.contains(cell.containerView), "The cell's contentView should contain the containerView")
-        // The containerVIew contains the image
+        // The containerView contains the image
         XCTAssertTrue(cell.containerView.subviews.contains(cell.image), "The cell's containerView should contain the image")
-        // The containerVIew contains the titleLabel
+        // The containerView contains the titleLabel
         XCTAssertTrue(cell.containerView.subviews.contains(cell.titleLabel), "The cell's containerView should contain the titleLabel")
-        // The containerVIew contains the genresLabel
+        // The containerView contains the genresLabel
         XCTAssertTrue(cell.containerView.subviews.contains(cell.genresLabel), "The cell's containerView should contain the genresLabel")
         
         // The image's leadingAnchor should have a space equal to horizontalMargin from the containerView's leadingAnchor

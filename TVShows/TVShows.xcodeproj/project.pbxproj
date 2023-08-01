@@ -40,6 +40,7 @@
 		14B1D02F2A57321B00B8B01B /* TVShowMockResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B1D02E2A57321B00B8B01B /* TVShowMockResponse.swift */; };
 		14B2B9852A6EE5A6003EB8C7 /* ShowDetailsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B2B9842A6EE5A6003EB8C7 /* ShowDetailsViewControllerTests.swift */; };
 		14B59CEE2A72E00100CE5540 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B59CED2A72E00100CE5540 /* StringExtensionTests.swift */; };
+		14BCBF902A793E940011A131 /* EpisodeTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BCBF8F2A793E940011A131 /* EpisodeTableViewCellTests.swift */; };
 		14C2CF312A48718C007FA677 /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF302A48718C007FA677 /* EpisodeModel.swift */; };
 		14C2CF332A48765D007FA677 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */; };
 		14C2CF352A48832E007FA677 /* EpisodeInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */; };
@@ -96,6 +97,7 @@
 		14B2B9842A6EE5A6003EB8C7 /* ShowDetailsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailsViewControllerTests.swift; sourceTree = "<group>"; };
 		14B59CED2A72E00100CE5540 /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		14BBE2282A55EC0F0069767F /* TVShows.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TVShows.xctestplan; sourceTree = "<group>"; };
+		14BCBF8F2A793E940011A131 /* EpisodeTableViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCellTests.swift; sourceTree = "<group>"; };
 		14C2CF302A48718C007FA677 /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeInformationViewController.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				14419A682A6AC0ED00E274A6 /* TVShowSearchViewControllerTests.swift */,
 				14B2B9842A6EE5A6003EB8C7 /* ShowDetailsViewControllerTests.swift */,
 				14C851D62A76A3D000B53A2E /* ShowDescriptionViewControllerTests.swift */,
+				14BCBF8F2A793E940011A131 /* EpisodeTableViewCellTests.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -382,6 +385,7 @@
 				144B9CE02A6590D100BAB59B /* AppDelegateTests.swift in Sources */,
 				141C6EF92A4A522B00977986 /* ShowDetailsSummaryTests.swift in Sources */,
 				14B59CEE2A72E00100CE5540 /* StringExtensionTests.swift in Sources */,
+				14BCBF902A793E940011A131 /* EpisodeTableViewCellTests.swift in Sources */,
 				14B1D02F2A57321B00B8B01B /* TVShowMockResponse.swift in Sources */,
 				141C6EF72A4A4D2A00977986 /* ShowDetailsViewModelTests.swift in Sources */,
 				14D257C12A5D7DA2007A7279 /* TVMazeProviderTests.swift in Sources */,
