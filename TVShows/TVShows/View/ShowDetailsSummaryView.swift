@@ -9,6 +9,10 @@ import UIKit
 
 class ShowDetailsSummaryView: UIView {
     
+    // MARK: - STATIC PROPERTIES
+    static let horizontalMargin: CGFloat = 8
+    static let verticalMargin: CGFloat = 8
+    
     // MARK: - PROPERTIES
     
     weak var delegate: ShowDetailsSummaryViewDelegate?
@@ -45,6 +49,8 @@ extension ShowDetailsSummaryView {
             self?.updateView(forImage: image)
         }
         
+        translatesAutoresizingMaskIntoConstraints = false
+        
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.roundCorners()
@@ -80,7 +86,6 @@ extension ShowDetailsSummaryView {
     }
     
     func layout() {
-        translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(imageView)
         addSubview(timeLabel)
@@ -90,36 +95,36 @@ extension ShowDetailsSummaryView {
         addSubview(seeMoreButton)
         
         // imageView
-        imageView.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
+        imageView.topAnchor.constraint(equalTo: topAnchor, constant: 2*ShowDetailsSummaryView.verticalMargin).isActive = true
+        imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2*ShowDetailsSummaryView.horizontalMargin).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 210).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 295).isActive = true
         
         // genresLabel
-        genresLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
-        genresLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
-        genresLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16).isActive = true
+        genresLabel.topAnchor.constraint(equalTo: topAnchor, constant: 2*ShowDetailsSummaryView.verticalMargin).isActive = true
+        genresLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2*ShowDetailsSummaryView.horizontalMargin).isActive = true
+        genresLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 2*ShowDetailsSummaryView.horizontalMargin).isActive = true
         
         // timeLabel
-        timeLabel.topAnchor.constraint(equalTo: genresLabel.bottomAnchor, constant: 16).isActive = true
-        timeLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16).isActive = true
-        timeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        timeLabel.topAnchor.constraint(equalTo: genresLabel.bottomAnchor, constant: 2*ShowDetailsSummaryView.verticalMargin).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 2*ShowDetailsSummaryView.horizontalMargin).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2*ShowDetailsSummaryView.horizontalMargin).isActive = true
         
         // daysLabel
-        daysLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 16).isActive = true
-        daysLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16).isActive = true
-        daysLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        daysLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 2*ShowDetailsSummaryView.verticalMargin).isActive = true
+        daysLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 2*ShowDetailsSummaryView.horizontalMargin).isActive = true
+        daysLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2*ShowDetailsSummaryView.horizontalMargin).isActive = true
         
         // summaryLabel
-        summaryLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16).isActive = true
-        summaryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        summaryLabel.trailingAnchor.constraint(equalTo: seeMoreButton.leadingAnchor, constant: -8).isActive = true
-        summaryLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        summaryLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 2*ShowDetailsSummaryView.verticalMargin).isActive = true
+        summaryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2*ShowDetailsSummaryView.horizontalMargin).isActive = true
+        summaryLabel.trailingAnchor.constraint(equalTo: seeMoreButton.leadingAnchor, constant: -ShowDetailsSummaryView.horizontalMargin).isActive = true
+        summaryLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2*ShowDetailsSummaryView.verticalMargin).isActive = true
         summaryLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         // seeMoreButton
-        seeMoreButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
-        seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        seeMoreButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2*ShowDetailsSummaryView.horizontalMargin).isActive = true
+        seeMoreButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2*ShowDetailsSummaryView.verticalMargin).isActive = true
         seeMoreButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     
@@ -130,9 +135,10 @@ extension ShowDetailsSummaryView {
         layout()
     }
     
-    func updateView(forImage image: UIImage?) {
+    func updateView(forImage image: UIImage?, completion: (() -> ())? = nil) {
         DispatchQueue.main.async { // update UI
             self.imageView.image = image
+            completion?()
         }
     }
     

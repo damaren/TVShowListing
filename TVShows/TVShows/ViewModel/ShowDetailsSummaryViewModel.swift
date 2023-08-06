@@ -36,7 +36,7 @@ class ShowDetailsSummaryViewModel {
     var updateViewForError: () -> () = {}
     
     // the view will set this variable so that it will update itself when this function is called
-    var updateView: (UIImage?) -> () = {image in}
+    var updateView: (UIImage?) -> () = { image in }
     
     // MARK: - FUNCTIONS
     
