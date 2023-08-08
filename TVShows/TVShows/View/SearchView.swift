@@ -14,6 +14,10 @@ protocol SearchViewDelegate: AnyObject {
 
 class SearchView: UIView {
     
+    // MARK: - STATIC PROPERTIES
+    static let horizontalMargin: CGFloat = 8
+    static let verticalMargin: CGFloat = 8
+    
     // MARK: - PROPERTIES
     
     weak var delegate: SearchViewDelegate?
@@ -53,7 +57,6 @@ extension SearchView {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderText]
         )
 
-        
         // searchButton
         searchButton.translatesAutoresizingMaskIntoConstraints = false
         searchButton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
@@ -72,10 +75,10 @@ extension SearchView {
         addSubview(underlineView)
         
         // searchTextField
-        searchTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        searchTextField.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
-        searchTextField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
-        searchTextField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor, constant: -16).isActive = true
+        searchTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2*SearchView.horizontalMargin).isActive = true
+        searchTextField.topAnchor.constraint(equalTo: topAnchor, constant: 2*SearchView.verticalMargin).isActive = true
+        searchTextField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2*SearchView.verticalMargin).isActive = true
+        searchTextField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor, constant: -2*SearchView.horizontalMargin).isActive = true
         
         // searchButton
         searchButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
@@ -85,8 +88,8 @@ extension SearchView {
         
         // underlineView
         underlineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        underlineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        underlineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        underlineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2*SearchView.horizontalMargin).isActive = true
+        underlineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2*SearchView.horizontalMargin).isActive = true
         underlineView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 0).isActive = true
     }
     
