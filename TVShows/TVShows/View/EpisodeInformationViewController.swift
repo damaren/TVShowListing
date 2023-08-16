@@ -9,9 +9,12 @@ import UIKit
 
 class EpisodeInformationViewController: UIViewController {
     
+    // MARK: - STATIC PROPERTIES
+    static let verticalMargin: CGFloat = 16
+    static let horizontalMargin: CGFloat = 16
+    
     // MARK: - PROPERTIES
     
-    let horizontalMargin: CGFloat = 16
     let imageAspectRatio: Double = 250/140
     weak var delegate: EpisodeInformationViewControllerDelegate?
     var viewModel: EpisodeInformationViewModel = EpisodeInformationViewModel()
@@ -75,28 +78,28 @@ class EpisodeInformationViewController: UIViewController {
         let episodeNameTopAnchor = imageView.image == nil ? view.safeAreaLayoutGuide.topAnchor : imageView.bottomAnchor
         
         // imageView
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: EpisodeInformationViewController.verticalMargin).isActive = true
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        let imagewidth = view.frame.width - 2 * horizontalMargin
+        let imagewidth = view.frame.width - 2 * EpisodeInformationViewController.horizontalMargin
         let imageHeigh = imagewidth / imageAspectRatio
         imageView.widthAnchor.constraint(equalToConstant: imagewidth).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: imageHeigh).isActive = true
         
         // seasonAndNumberLabel
         seasonAndNumberLabel.lastBaselineAnchor.constraint(equalTo: episodeNameLabel.firstBaselineAnchor).isActive = true
-        seasonAndNumberLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: horizontalMargin).isActive = true
+        seasonAndNumberLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: EpisodeInformationViewController.horizontalMargin).isActive = true
         seasonAndNumberLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
         // episodeNameLabel
-        episodeNameLabel.topAnchor.constraint(equalTo: episodeNameTopAnchor, constant: 16).isActive = true
-        episodeNameLabel.leadingAnchor.constraint(equalTo: seasonAndNumberLabel.trailingAnchor, constant: 16).isActive = true
-        episodeNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -horizontalMargin).isActive = true
+        episodeNameLabel.topAnchor.constraint(equalTo: episodeNameTopAnchor, constant: EpisodeInformationViewController.verticalMargin).isActive = true
+        episodeNameLabel.leadingAnchor.constraint(equalTo: seasonAndNumberLabel.trailingAnchor, constant: EpisodeInformationViewController.horizontalMargin).isActive = true
+        episodeNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -EpisodeInformationViewController.horizontalMargin).isActive = true
         episodeNameLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
         // summaryLabel
-        summaryLabel.topAnchor.constraint(equalTo: episodeNameLabel.bottomAnchor, constant: 16).isActive = true
-        summaryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: horizontalMargin).isActive = true
-        summaryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -horizontalMargin).isActive = true
+        summaryLabel.topAnchor.constraint(equalTo: episodeNameLabel.bottomAnchor, constant: EpisodeInformationViewController.verticalMargin).isActive = true
+        summaryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: EpisodeInformationViewController.horizontalMargin).isActive = true
+        summaryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -EpisodeInformationViewController.horizontalMargin).isActive = true
     }
     
     func configure(forEpisode episode: Episode, andShowTitle showTitle: String) {
@@ -105,9 +108,10 @@ class EpisodeInformationViewController: UIViewController {
         layoutViews()
     }
     
-    func updateView(forImage image: UIImage?) {
+    func updateView(forImage image: UIImage?, completion: (() -> ())? = nil) {
         DispatchQueue.main.async { // update UI
             self.imageView.image = image
+            completion?()
         }
     }
     
