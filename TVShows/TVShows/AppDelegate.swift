@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navigationController
         navigationController.setViewControllers([tvShowSearchViewController], animated: false)
         tvShowSearchViewController.delegate = self
+        let tvShowSearchViewModel = TVShowSearchViewModel(showSearchView: tvShowSearchViewController, provider: TVMazeProvider.shared)
+        tvShowSearchViewController.configure(viewModel: tvShowSearchViewModel)
         
         return true
     }

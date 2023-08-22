@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol TVShowSearchViewProtocol: AnyObject {
+    func updateView(completion: (() -> ())?)
+}
+
 class TVShowSearchViewModel {
     
     // MARK: - STATIC PROPERTIES
@@ -15,14 +19,13 @@ class TVShowSearchViewModel {
     
     // MARK: - PROPERTIES
     
+    weak var showSearchView: TVShowSearchViewProtocol?
+    
     var shows: [TVShow] = [] {
         didSet {
-            updateView()
+            showSearchView?.updateView(completion: nil)
         }
     }
-    
-    // the view will set this variable so that it will update itself when this function is called
-    var updateView: () -> () = {}
     
     var error: NetworkError?
     
@@ -32,13 +35,29 @@ class TVShowSearchViewModel {
     
     var title: String = TVShowSearchViewModel.tvShowSearchTitle
     
+    var provider: Provider
+    
+    // MARK: - INIT
+    
+    init(showSearchView: TVShowSearchViewProtocol, provider: Provider) {
+        self.showSearchView = showSearchView
+        self.provider = provider
+    }
+    
     // MARK: - FUNCTIONS
     
     public func getShowFor(indexPath: IndexPath) -> TVShow {
         return shows[indexPath.row]
     }
     
-    func requestTVShows(withSearchText searchText: String, andProvider provider: Provider = TVMazeProvider.shared, completion: (() -> ())? = nil) {
+    func updateShows(forTVShowResponses tvShowResponses: [TVShowResponse]) {
+        shows = tvShowResponses.map({ response in return response.show })
+    }
+}
+
+// MARK: - TVShowSearchViewModelProtocol
+extension TVShowSearchViewModel: TVShowSearchViewModelProtocol {
+    func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {
         provider.requestTVShows(searchString: searchText, completion: { tvShowResponses, error in
             guard error == nil, let tvShowResponses = tvShowResponses else {
                 self.shows = []
@@ -49,9 +68,5 @@ class TVShowSearchViewModel {
             self.updateShows(forTVShowResponses: tvShowResponses)
             completion?()
         })
-    }
-    
-    func updateShows(forTVShowResponses tvShowResponses: [TVShowResponse]) {
-        shows = tvShowResponses.map({ response in return response.show })
     }
 }

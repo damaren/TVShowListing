@@ -26,6 +26,27 @@ final class TVShowSearchViewControllerTests: XCTestCase {
     func testSetup() {
         // Given the instantiated view controller
         
+        // The viewmodel with a given title
+        class MockViewModel: TVShowSearchViewModelProtocol {
+            var title: String
+            
+            init(title: String) {
+                self.title = title
+            }
+            
+            var numberOfRows: Int = 0
+            
+            func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {}
+            
+            func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
+                return TVShow()
+            }
+        }
+        
+        let title = "Test title"
+        let viewModel = MockViewModel(title: title)
+        vc.viewModel = viewModel
+        
         // When setup is called
         vc.setup()
         
@@ -35,7 +56,7 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         XCTAssertEqual(vc.showsTableView.translatesAutoresizingMaskIntoConstraints, false, "The showsTableView translatesAutoresizingMaskIntoConstraints should be false, but it is \(vc.showsTableView.translatesAutoresizingMaskIntoConstraints)")
         
         // The title should be equal to TVShowSearchViewModel.tvShowSearchTitle
-        XCTAssertEqual(vc.title, TVShowSearchViewModel.tvShowSearchTitle, "The title should be \(TVShowSearchViewModel.tvShowSearchTitle) but it is \(String(describing: vc.title))")
+        XCTAssertEqual(vc.title, viewModel.title, "The title should be \(title) but it is \(String(describing: vc.title))")
         
         // The view's backgroundColor should be .systemBackground
         XCTAssertEqual(vc.view.backgroundColor, .systemBackground, "The view's backgroundColor should be .systemBackground but it is \(String(describing: vc.view.backgroundColor))")
@@ -165,18 +186,26 @@ final class TVShowSearchViewControllerTests: XCTestCase {
     
     func testNumberOfRowsInSection() throws {
         // Given the viewModel with the shows set
-        vc.viewModel.shows = [
-            TVShow(id: 1),
-            TVShow(id: 2),
-            TVShow(id: 3),
-            TVShow(id: 4)
-        ]
+        class MockViewModel: TVShowSearchViewModelProtocol {
+            var title: String = ""
+            
+            var numberOfRows: Int = 3
+            
+            func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {}
+            
+            func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
+                return TVShow()
+            }
+        }
+        
+        let viewModel: MockViewModel = MockViewModel()
+        vc.viewModel = viewModel
         
         // When numberOfRowsInSection is called
         let numberOfRows = vc.tableView(vc.showsTableView, numberOfRowsInSection: 0)
         
-        // Then the number of rows should be equal to the number of shows in the viewModel
-        XCTAssertEqual(numberOfRows, vc.viewModel.shows.count, "The number of rows should be equal to the number of shows in the viewModel (\(vc.viewModel.shows.count)) but it is \(numberOfRows)")
+        // Then the number of rows should be equal to the number of rows returned by the view model
+        XCTAssertEqual(numberOfRows, viewModel.numberOfRows, "The number of rows should be equal to the number of rows returned by the view model (\(viewModel.numberOfRows)) but it is \(numberOfRows)")
     }
     
     func testHeightForRowAt() throws {
@@ -192,25 +221,37 @@ final class TVShowSearchViewControllerTests: XCTestCase {
     func testSearchButtonPressed() throws {
         // Given the instantiated vc
         
-        let expectation = self.expectation(description: "TV search button pressed expectation")
+        // With a mock viewmodel
+        
+        class MockViewModel: TVShowSearchViewModelProtocol {
+            var title: String = ""
+            
+            var numberOfRows: Int = 0
+            
+            func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {
+                wasRequestTVShowsCalled = true
+            }
+            
+            var wasRequestTVShowsCalled = false
+            
+            func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
+                return TVShow()
+            }
+        }
+        
+        let mockViewModel = MockViewModel()
+        vc.viewModel = mockViewModel
         
         // When searchViewSearchButtonPressed is called
-        vc.searchViewSearchButtonPressed(withSearchText: "", completion: {
-            // This completion will be passed on to the viewModel.requestTVShows
-            // For this expectation to be fulfilled, the completion must be called from within the viewModel.requestTVShows
-            
-            // Then the view model should request the shows
-            expectation.fulfill()
-        })
+        vc.searchViewSearchButtonPressed(withSearchText: "", completion: nil)
         
-        self.wait(for: [expectation], timeout: 5)
+        // Then the viewModel's requestTVShows should get called
+        XCTAssertTrue(mockViewModel.wasRequestTVShowsCalled, "The viewModel's requestTVShows should get called, mockViewModel.wasRequestTVShowsCalled should be true")
     }
     
     func testUpdateView() throws {
         // Given the viewController's tableView with no cells in it
-        vc.viewModel.shows = []
         vc.showsTableView.reloadData()
-        vc.view.layoutSubviews() // without this, the table view is not calling the cell for row at
         
         // The view model containing a list of shows
         let shows: [TVShow] = [
@@ -219,7 +260,30 @@ final class TVShowSearchViewControllerTests: XCTestCase {
             TVShow(id: 3, name: "Show title 3", genres: ["genre5", "genre6"]),
             TVShow(id: 4, name: "Show title 4", genres: ["genre7", "genre8"])
         ]
-        vc.viewModel.shows = shows
+        
+        class MockViewModel: TVShowSearchViewModelProtocol {
+            var title: String = ""
+            
+            var numberOfRows: Int
+            
+            func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {}
+            
+            var shows: [TVShow]
+            
+            init(shows: [TVShow]) {
+                self.shows = shows
+                self.numberOfRows = shows.count
+            }
+            
+            func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
+                return shows[indexPath.row]
+            }
+        }
+        
+        let mockViewModel = MockViewModel(shows: shows)
+        
+        vc.configure(viewModel: mockViewModel)
+        vc.view.layoutSubviews() // without this, the table view is not calling the cell for row at
         
         let expectation = self.expectation(description: "TVShowSearchViewControllerTests updateView expectation")
         
@@ -248,18 +312,41 @@ final class TVShowSearchViewControllerTests: XCTestCase {
     
     func testCellForRowAt() {
         // Given the viewController's tableView with no cells in it
-        vc.viewModel.shows = []
         vc.showsTableView.reloadData()
         vc.showsTableView.register(TVShowTableViewCell.self, forCellReuseIdentifier: TVShowTableViewCell.reuseIdentifier) // this is necessary to call cellForRowAt
         
-        // When cellForRowAt is called when the viewModel contains a list o shows
+        // The viewmodel with a list of shows
         let shows: [TVShow] = [
             TVShow(id: 1, name: "Show title 1", genres: ["genre1", "genre2"]),
             TVShow(id: 2, name: "Show title 2", genres: ["genre3", "genre4"]),
             TVShow(id: 3, name: "Show title 3", genres: ["genre5", "genre6"]),
             TVShow(id: 4, name: "Show title 4", genres: ["genre7", "genre8"])
         ]
-        vc.viewModel.shows = shows
+        
+        class MockViewModel: TVShowSearchViewModelProtocol {
+            var title: String = ""
+            
+            var numberOfRows: Int = 0
+            
+            func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {}
+            
+            var shows: [TVShow]
+            
+            init(shows: [TVShow]) {
+                self.shows = shows
+            }
+            
+            func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
+                return shows[indexPath.row]
+            }
+        }
+        
+        let mockViewModel = MockViewModel(shows: shows)
+        
+        vc.viewModel = mockViewModel
+        
+        // When cellForRowAt is called
+        
         let showIndexForTesting = 2
         let showForTesting = shows[showIndexForTesting]
         let cell = vc.tableView(vc.showsTableView, cellForRowAt: IndexPath(row: showIndexForTesting, section: 0))
@@ -282,7 +369,29 @@ final class TVShowSearchViewControllerTests: XCTestCase {
             TVShow(id: 3, name: "Show title 3", genres: ["genre5", "genre6"]),
             TVShow(id: 4, name: "Show title 4", genres: ["genre7", "genre8"])
         ]
-        vc.viewModel.shows = shows
+        
+        class MockViewModel: TVShowSearchViewModelProtocol {
+            var title: String = ""
+            
+            var numberOfRows: Int = 0
+            
+            func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {}
+            
+            var shows: [TVShow]
+            
+            init(shows: [TVShow]) {
+                self.shows = shows
+            }
+            
+            func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
+                return shows[indexPath.row]
+            }
+        }
+        
+        let mockViewModel = MockViewModel(shows: shows)
+        
+        vc.viewModel = mockViewModel
+        
         vc.showsTableView.reloadData()
         
         // When didSelectRowAt is called

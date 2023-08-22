@@ -7,36 +7,37 @@
 
 import UIKit
 
+protocol TVShowSearchViewModelProtocol: AnyObject {
+    var title: String { get set }
+    var numberOfRows: Int { get }
+    
+    func requestTVShows(withSearchText searchText: String, completion: (() -> ())?)
+    func getShowFor(indexPath: IndexPath) -> TVShow
+}
+
 class TVShowSearchViewController: UIViewController {
     
     // MARK: - PROPERTIES
     
     weak var delegate: TVShowSearchViewControllerDelegate?
-    var viewModel: TVShowSearchViewModel = TVShowSearchViewModel()
+    var viewModel: TVShowSearchViewModelProtocol?
     
     // MARK: - COMPONENTS
     
     var searchView: SearchView = SearchView()
     var showsTableView: UITableView = UITableView()
     
-    // MARK: - LIFECYCLE
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    // MARK: - FUNCTIONS
+    
+    func configure(viewModel: TVShowSearchViewModelProtocol) {
+        self.viewModel = viewModel
         setup()
         layoutViews()
     }
     
-    // MARK: - FUNCTIONS
-    
     func setup() {
-        self.title = viewModel.title
+        self.title = viewModel?.title
         view.backgroundColor = .systemBackground
-        
-        // update
-        viewModel.updateView = { [weak self] in
-            self?.updateView()
-        }
         
         // searchView
         searchView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,20 +68,13 @@ class TVShowSearchViewController: UIViewController {
         showsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         showsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
-    
-    func updateView(completion: (() -> ())? = nil) {
-        DispatchQueue.main.async { // update UI
-            self.showsTableView.reloadData()
-            completion?()
-        }
-    }
 }
 
 // MARK: - SearchViewDelegate
 
 extension TVShowSearchViewController: SearchViewDelegate {
     func searchViewSearchButtonPressed(withSearchText searchText: String, completion: (() -> ())?) {
-        viewModel.requestTVShows(withSearchText: searchText, completion: completion)
+        viewModel?.requestTVShows(withSearchText: searchText, completion: completion)
     }
 }
 
@@ -88,15 +82,14 @@ extension TVShowSearchViewController: SearchViewDelegate {
 
 extension TVShowSearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfRows
+        return viewModel?.numberOfRows ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TVShowTableViewCell.reuseIdentifier, for: indexPath) as? TVShowTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TVShowTableViewCell.reuseIdentifier, for: indexPath) as? TVShowTableViewCell, let show = viewModel?.getShowFor(indexPath: indexPath) else {
             return UITableViewCell()
         }
         
-        let show = viewModel.getShowFor(indexPath: indexPath)
         cell.configure(forShow: show)
         
         return cell
@@ -107,7 +100,9 @@ extension TVShowSearchViewController: UITableViewDataSource {
 
 extension TVShowSearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.selectedShow(show: viewModel.getShowFor(indexPath: indexPath), withAnimation: true)
+        if let show = viewModel?.getShowFor(indexPath: indexPath) {
+            delegate?.selectedShow(show: show, withAnimation: true)
+        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -116,8 +111,17 @@ extension TVShowSearchViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - TVShowSearchViewProtocol
+extension TVShowSearchViewController: TVShowSearchViewProtocol {
+    func updateView(completion: (() -> ())? = nil) {
+        DispatchQueue.main.async { // update UI
+            self.showsTableView.reloadData()
+            completion?()
+        }
+    }
+}
+
 // MARK: - TVShowSearchViewControllerDelegate
 protocol TVShowSearchViewControllerDelegate: AnyObject {
     func selectedShow(show: TVShow, withAnimation: Bool)
 }
-
