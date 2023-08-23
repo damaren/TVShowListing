@@ -22,7 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController.setViewControllers([tvShowSearchViewController], animated: false)
         tvShowSearchViewController.delegate = self
         let tvShowSearchViewModel = TVShowSearchViewModel(showSearchView: tvShowSearchViewController, provider: TVMazeProvider.shared)
-        tvShowSearchViewController.configure(viewModel: tvShowSearchViewModel)
+        let searchView = SearchView()
+        tvShowSearchViewController.configure(viewModel: tvShowSearchViewModel, searchView: searchView)
+        searchView.delegate = tvShowSearchViewController
         
         return true
     }

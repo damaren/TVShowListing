@@ -16,6 +16,7 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         super.setUp()
 
         vc = TVShowSearchViewController()
+        vc.searchView = UIView()
     }
 
     override func tearDown() {
@@ -52,7 +53,7 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         
         // Then
         // All the components should have translatesAutoresizingMaskIntoConstraints equal false
-        XCTAssertEqual(vc.searchView.translatesAutoresizingMaskIntoConstraints, false, "The searchView translatesAutoresizingMaskIntoConstraints should be false, but it is \(vc.searchView.translatesAutoresizingMaskIntoConstraints)")
+        XCTAssertEqual(vc.searchView!.translatesAutoresizingMaskIntoConstraints, false, "The searchView translatesAutoresizingMaskIntoConstraints should be false, but it is \(vc.searchView!.translatesAutoresizingMaskIntoConstraints)")
         XCTAssertEqual(vc.showsTableView.translatesAutoresizingMaskIntoConstraints, false, "The showsTableView translatesAutoresizingMaskIntoConstraints should be false, but it is \(vc.showsTableView.translatesAutoresizingMaskIntoConstraints)")
         
         // The title should be equal to TVShowSearchViewModel.tvShowSearchTitle
@@ -62,10 +63,7 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         XCTAssertEqual(vc.view.backgroundColor, .systemBackground, "The view's backgroundColor should be .systemBackground but it is \(String(describing: vc.view.backgroundColor))")
         
         // The searchView's backgroundColor should be .systemBackground
-        XCTAssertEqual(vc.searchView.backgroundColor, .systemBackground, "The searchView's backgroundColor should be .systemBackground but it is \(String(describing: vc.searchView.backgroundColor))")
-        
-        // The searchView's delegate should be the view controller (vc)
-        XCTAssertEqual(vc.searchView.delegate as? TVShowSearchViewController, vc, "The searchView's delegate should be the view controller (vc) but it is \(String(describing: vc.searchView.delegate))")
+        XCTAssertEqual(vc.searchView!.backgroundColor, .systemBackground, "The searchView's backgroundColor should be .systemBackground but it is \(String(describing: vc.searchView!.backgroundColor))")
         
         // The showsTableView's dataSource should ve the view controller (vc)
         XCTAssertEqual(vc.showsTableView.dataSource as? TVShowSearchViewController, vc, "The showsTableView's dataSource should ve the view controller (vc) but it is \(String(describing: vc.showsTableView.dataSource))")
@@ -85,14 +83,14 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         
         // Then
         // The view contains the searchView
-        XCTAssertTrue(vc.view.subviews.contains(vc.searchView), "The vc's view should contain the searchView")
+        XCTAssertTrue(vc.view.subviews.contains(vc.searchView!), "The vc's view should contain the searchView")
         // The view contains the showsTableView
         XCTAssertTrue(vc.view.subviews.contains(vc.showsTableView), "The vc's view should contain the showsTableView")
         
         // The searchView's topAnchor should be equal to the safeAreaLayoutGuide's topAnchor
         XCTAssertTrue(vc.view.constraints.contains(where: { constraint in
-            (constraint.firstItem as? SearchView) == vc.searchView &&
-            constraint.firstAnchor == vc.searchView.topAnchor &&
+            (constraint.firstItem as? UIView) == vc.searchView &&
+            constraint.firstAnchor == vc.searchView!.topAnchor &&
             (constraint.secondItem as? UILayoutGuide) == vc.view.safeAreaLayoutGuide &&
             constraint.secondAnchor == vc.view.safeAreaLayoutGuide.topAnchor &&
             (constraint.relation == .equal) &&
@@ -103,8 +101,8 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         
         // The searchView's leadingAnchor should be equal to the view's leadingAnchor
         XCTAssertTrue(vc.view.constraints.contains(where: { constraint in
-            (constraint.firstItem as? SearchView) == vc.searchView &&
-            constraint.firstAnchor == vc.searchView.leadingAnchor &&
+            (constraint.firstItem as? UIView) == vc.searchView &&
+            constraint.firstAnchor == vc.searchView!.leadingAnchor &&
             (constraint.secondItem as? UIView) == vc.view &&
             constraint.secondAnchor == vc.view.leadingAnchor &&
             (constraint.relation == .equal) &&
@@ -115,8 +113,8 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         
         // The searchView's trailingAnchor should be equal to the view's trailingAnchor
         XCTAssertTrue(vc.view.constraints.contains(where: { constraint in
-            (constraint.firstItem as? SearchView) == vc.searchView &&
-            constraint.firstAnchor == vc.searchView.trailingAnchor &&
+            (constraint.firstItem as? UIView) == vc.searchView &&
+            constraint.firstAnchor == vc.searchView!.trailingAnchor &&
             (constraint.secondItem as? UIView) == vc.view &&
             constraint.secondAnchor == vc.view.trailingAnchor &&
             (constraint.relation == .equal) &&
@@ -126,9 +124,9 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         }), "The view should have the constraint searchView.trailingAnchor == view.trailingAnchor, but it wasn't found")
         
         // The searchView's heightAnchor should be equal to 60
-        XCTAssertTrue(vc.searchView.constraints.contains(where: { constraint in
-            (constraint.firstItem as? SearchView) == vc.searchView &&
-            constraint.firstAnchor == vc.searchView.heightAnchor &&
+        XCTAssertTrue(vc.searchView!.constraints.contains(where: { constraint in
+            (constraint.firstItem as? UIView) == vc.searchView &&
+            constraint.firstAnchor == vc.searchView!.heightAnchor &&
             (constraint.relation == .equal) &&
             constraint.multiplier == 1.0 &&
             constraint.constant == 60 &&
@@ -139,8 +137,8 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         XCTAssertTrue(vc.view.constraints.contains(where: { constraint in
             (constraint.firstItem as? UITableView) == vc.showsTableView &&
             constraint.firstAnchor == vc.showsTableView.topAnchor &&
-            (constraint.secondItem as? SearchView) == vc.searchView &&
-            constraint.secondAnchor == vc.searchView.bottomAnchor &&
+            (constraint.secondItem as? UIView) == vc.searchView &&
+            constraint.secondAnchor == vc.searchView!.bottomAnchor &&
             (constraint.relation == .equal) &&
             constraint.multiplier == 1.0 &&
             constraint.constant == 0 &&
@@ -282,7 +280,7 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         
         let mockViewModel = MockViewModel(shows: shows)
         
-        vc.configure(viewModel: mockViewModel)
+        vc.configure(viewModel: mockViewModel, searchView: UIView())
         vc.view.layoutSubviews() // without this, the table view is not calling the cell for row at
         
         let expectation = self.expectation(description: "TVShowSearchViewControllerTests updateView expectation")

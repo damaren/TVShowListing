@@ -24,13 +24,14 @@ class TVShowSearchViewController: UIViewController {
     
     // MARK: - COMPONENTS
     
-    var searchView: SearchView = SearchView()
+    var searchView: UIView?
     var showsTableView: UITableView = UITableView()
     
     // MARK: - FUNCTIONS
     
-    func configure(viewModel: TVShowSearchViewModelProtocol) {
+    func configure(viewModel: TVShowSearchViewModelProtocol, searchView: UIView) {
         self.viewModel = viewModel
+        self.searchView = searchView
         setup()
         layoutViews()
     }
@@ -39,10 +40,11 @@ class TVShowSearchViewController: UIViewController {
         self.title = viewModel?.title
         view.backgroundColor = .systemBackground
         
+        guard let searchView = searchView else { return }
+        
         // searchView
         searchView.translatesAutoresizingMaskIntoConstraints = false
         searchView.backgroundColor = .systemBackground
-        searchView.delegate = self
         
         // tableview
         showsTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -53,6 +55,8 @@ class TVShowSearchViewController: UIViewController {
     }
     
     func layoutViews() {
+        guard let searchView = searchView else { return }
+        
         view.addSubview(searchView)
         view.addSubview(showsTableView)
         
