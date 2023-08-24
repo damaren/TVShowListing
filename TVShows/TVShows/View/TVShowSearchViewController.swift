@@ -94,7 +94,9 @@ extension TVShowSearchViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configure(forShow: show)
+        let cellViewModel = TVShowTableViewCellViewModel(showSearchView: cell)
+        
+        cell.configure(forShow: show, andViewModel: cellViewModel)
         
         return cell
     }

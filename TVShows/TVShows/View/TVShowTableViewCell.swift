@@ -8,6 +8,12 @@
 import Foundation
 import UIKit
 
+protocol TVShowTableViewCellViewModelProtocol: AnyObject {
+    func configure(forShow show: TVShow?, withProvider provider: Provider)
+    func getShowName() -> String
+    func getGenres() -> String
+}
+
 class TVShowTableViewCell: UITableViewCell {
     
     // MARK: - STATIC PROPERTIES
@@ -20,7 +26,7 @@ class TVShowTableViewCell: UITableViewCell {
     
     // MARK: - PROPERTIES
     
-    let viewModel: TVShowTableViewCellViewModel = TVShowTableViewCellViewModel()
+    var viewModel: TVShowTableViewCellViewModelProtocol?
     
     // MARK: - COMPONENTS
     
@@ -46,10 +52,7 @@ extension TVShowTableViewCell {
     // MARK: - FUNCTIONS
     
     func setup() {
-        // update
-        viewModel.updateView = { [weak self] image in
-            self?.updateView(forImage: image)
-        }
+        guard let viewModel = viewModel else { return }
         
         // image
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -105,17 +108,24 @@ extension TVShowTableViewCell {
         containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -TVShowTableViewCell.verticalMargin).isActive = true
     }
     
-    func configure(forShow show: TVShow) {
-        viewModel.configure(forShow: show)
+    func configure(forShow show: TVShow, andViewModel viewModel: TVShowTableViewCellViewModelProtocol) {
+        self.viewModel = viewModel
+        self.viewModel?.configure(forShow: show, withProvider: TVMazeProvider.shared)
         
         setup()
         layout()
     }
-    
-    func updateView(forImage image: UIImage?, completion: (() -> ())? = nil) {
+}
+
+// MARK: - TVShowTableViewCellViewProtocol
+extension TVShowTableViewCell: TVShowTableViewCellViewProtocol {
+    func updateView(forImage image: UIImage?, completion: (() -> ())?) {
         DispatchQueue.main.async { // update UI
             self.image.image = image
             completion?()
         }
     }
+    
+    func updateViewForError() {}
+    
 }

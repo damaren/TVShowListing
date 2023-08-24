@@ -24,25 +24,61 @@ final class TVShowTableViewCellTests: XCTestCase {
     }
     
     func testConfigure() throws {
-        // Given the cell's viewModel with no show set
-        cell.viewModel.show = nil
+        // Given a viewModel
+        class MockViewModel: TVShowTableViewCellViewModelProtocol {
+            func configure(forShow show: TVShows.TVShow?, withProvider provider: TVShows.Provider) {
+                wasConfigureCalled = true
+            }
+            
+            var wasConfigureCalled = false
+            
+            func getShowName() -> String {
+                return ""
+            }
+            
+            func getGenres() -> String {
+                return ""
+            }
+        }
+        
+        let viewModel = MockViewModel()
         
         // When configure is called with a given show
         let show = TVShow(id: 1)
-        cell.configure(forShow: show)
+        cell.configure(forShow: show, andViewModel: viewModel)
         
-        // Then the cell's viewModel contains the given show
-        XCTAssertEqual(cell.viewModel.show, show, "The cell's viewModel should contain the given show (\(show)) but it contained \(String(describing: cell.viewModel.show))")
+        // Then the viewModel's configure should get called
+        XCTAssertTrue(viewModel.wasConfigureCalled, "The the viewModel's configure should get called, viewModel.wasConfigureCalled should be true")
     }
     
     func testSetup() throws {
         // Given the viewModel with a show with name and genres set
         let showName = "Show Name"
-        let genre1 = "Genre1"
-        let genre2 = "Genre2"
-        let genres = [genre1, genre2]
-        let show = TVShow(id: 1, name: showName, genres: genres)
-        cell.viewModel.show = show
+        let genres = "Genres: Genre1, Genre2"
+        
+        class MockViewModel: TVShowTableViewCellViewModelProtocol {
+            init(showName: String, genres: String) {
+                self.showName = showName
+                self.genres = genres
+            }
+            
+            let showName: String
+            let genres: String
+            
+            func configure(forShow show: TVShows.TVShow?, withProvider provider: TVShows.Provider) {}
+            
+            func getShowName() -> String {
+                return showName
+            }
+            
+            func getGenres() -> String {
+                return genres
+            }
+        }
+        
+        let viewModel = MockViewModel(showName: showName, genres: genres)
+        
+        cell.viewModel = viewModel
         
         // When setup is called
         cell.setup()
@@ -58,8 +94,7 @@ final class TVShowTableViewCellTests: XCTestCase {
         // The title label's numberOfLines should be 0
         XCTAssertEqual(cell.titleLabel.numberOfLines, 0, "The title label's numberOfLines should be 0 but it is \(String(describing: cell.titleLabel.numberOfLines))")
         // The genres label should contain the genres text
-        let genresText = "Genres: \(genre1), \(genre2)"
-        XCTAssertEqual(cell.genresLabel.text, genresText, "The genresLabel should contain the text \(genresText) but it contains \(String(describing: cell.genresLabel.text))")
+        XCTAssertEqual(cell.genresLabel.text, genres, "The genresLabel should contain the text \(genres) but it contains \(String(describing: cell.genresLabel.text))")
         // The genres label's numberOfLines should be 0
         XCTAssertEqual(cell.genresLabel.numberOfLines, 0, "The genres label's numberOfLines should be 0 but it is \(String(describing: cell.genresLabel.numberOfLines))")
         // The image should contain the placeholder image UIImage(systemName: "photo.artframe")

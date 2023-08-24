@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+protocol TVShowTableViewCellViewProtocol: AnyObject {
+    func updateView(forImage image: UIImage?, completion: (() -> ())?) -> ()
+    func updateViewForError() -> ()
+}
+
 class TVShowTableViewCellViewModel {
     
     // MARK: - STATIC PROPERTIES
@@ -19,23 +24,23 @@ class TVShowTableViewCellViewModel {
     
     var show: TVShow?
     
-    // the view will set this variable so that it will update itself when this function is called
-    var updateView: (UIImage?) -> () = {image in}
-    
-    // the view must set this variable so that it will update itself when this function is called
-    // TODO: set this in the view
-    var updateViewForError: () -> () = {}
+    weak var showSearchView: TVShowTableViewCellViewProtocol?
     
     var networkError: NetworkError? {
         didSet {
-            updateViewForError()
+            showSearchView?.updateViewForError()
         }
     }
     
     var image: UIImage? {
         didSet {
-            updateView(image)
+            showSearchView?.updateView(forImage: image, completion: nil)
         }
+    }
+    
+    // MARK: - INIT
+    init(showSearchView: TVShowTableViewCellViewProtocol?) {
+        self.showSearchView = showSearchView
     }
     
     // MARK: - FUNCTIONS
@@ -50,8 +55,11 @@ class TVShowTableViewCellViewModel {
             self.image = image
         })
     }
-    
-    public func configure(forShow show: TVShow?, withProvider provider: Provider = TVMazeProvider.shared) {
+}
+
+// MARK: - TVShowTableViewCellViewModelProtocol
+extension TVShowTableViewCellViewModel: TVShowTableViewCellViewModelProtocol {
+    public func configure(forShow show: TVShow?, withProvider provider: Provider) {
         self.show = show
         requestImage(forUrl: show?.image?.medium, withProvider: provider)
     }

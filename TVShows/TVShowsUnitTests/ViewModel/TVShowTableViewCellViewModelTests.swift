@@ -11,17 +11,6 @@ import XCTest
 @testable import TVShows
 
 class TVShowTableViewCellViewModelTests: XCTestCase {
-    var viewModel: TVShowTableViewCellViewModel!
-    
-    override func setUp() {
-        super.setUp()
-        viewModel = TVShowTableViewCellViewModel()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-        viewModel = nil
-    }
     
     func testRequestImage_NotNil() throws {
         // Given a not nil image in a URL
@@ -29,6 +18,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
         let provider = MockProvider(image: image)
         
         // When a request is made the locates and returns the image
+        let viewModel = createSUT()
         viewModel.requestImage(forUrl: "", withProvider: provider)
         
         // Then the image in the view model is not nil
@@ -41,6 +31,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
         let provider = MockProvider(image: image)
         
         // When a request is made to that URL
+        let viewModel = createSUT()
         viewModel.requestImage(forUrl: "", withProvider: provider)
         
         // Then the image in the view model is nil
@@ -53,6 +44,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
         let provider = MockProvider(responseError: responseError)
         
         // When the request returns a response error
+        let viewModel = createSUT()
         viewModel.requestImage(forUrl: "", withProvider: provider)
         
         // Then the image in the view model is nil
@@ -67,6 +59,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
         let provider = MockProvider(urlCreationError: urlCreationError)
         
         // When the request returns a url creation error
+        let viewModel = createSUT()
         viewModel.requestImage(forUrl: "", withProvider: provider)
         
         // Then the image in the view model is nil
@@ -79,6 +72,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
         // Given the view model with a show that has the name set
         let showName: String = "Show name"
         let show: TVShow = TVShow(id: 1, name: showName)
+        let viewModel = createSUT()
         viewModel.show = show
         
         // When getShowName is called
@@ -91,6 +85,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
     func testGetShowName_InfoIsNotAvailable() throws {
         // Given the view model with a show that has no name set
         let show: TVShow = TVShow(id: 1)
+        let viewModel = createSUT()
         viewModel.show = show
         
         // When getShowName is called
@@ -107,6 +102,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
         let genre3: String = "Genre3"
         let genres: [String] = [genre1, genre2, genre3]
         let show: TVShow = TVShow(id: 1, genres: genres)
+        let viewModel = createSUT()
         viewModel.show = show
         
         // When getGenres is called
@@ -120,6 +116,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
     func testGetGenres_InfoIsNotAvailable() throws {
         // Given the view model with a show that has no genres set
         let show: TVShow = TVShow(id: 1)
+        let viewModel = createSUT()
         viewModel.show = show
         
         // When getGenres is called
@@ -131,6 +128,7 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
     
     func testConfigure() {
         // Given the view model with no show set
+        let viewModel = createSUT()
         viewModel.show = nil
         
         // When configure is called with a given show
@@ -139,5 +137,16 @@ class TVShowTableViewCellViewModelTests: XCTestCase {
         
         // Then the view model contains the show
         XCTAssertEqual(viewModel.show, show, "The view model should contain the show \(show) but contained \(String(describing: viewModel.show))")
+    }
+    
+    private func createSUT() -> TVShowTableViewCellViewModel {
+        
+        class MockView: TVShowTableViewCellViewProtocol {
+            func updateView(forImage image: UIImage?, completion: (() -> ())?) {}
+            
+            func updateViewForError() {}
+        }
+        
+        return TVShowTableViewCellViewModel(showSearchView: MockView())
     }
 }
