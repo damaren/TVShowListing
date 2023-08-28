@@ -15,7 +15,11 @@ class ShowDetailsViewModelTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        viewModel = ShowDetailsViewModel()
+        class MockView: ShowDetailsViewProtocol {
+            func updateView(completion: (() -> ())?) {}
+        }
+        
+        viewModel = ShowDetailsViewModel(view: MockView())
     }
     
     override func tearDown() {

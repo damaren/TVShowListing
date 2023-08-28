@@ -25,10 +25,22 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testSetup() throws {
         // Given the instantiated view controller
-        // The view model with a show with name set
+        // A view model with that returns "Show Name" for the showName
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int = 0
+            var showSummary: String = ""
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
+            func getNumberOfRows(inSection section: Int) -> Int { return 0 }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
+            init(showName: String) {
+                self.showName = showName
+            }
+        }
+        
         let showName = "Show Name"
-        let show = TVShow(id: 1, name: showName)
-        vc.viewModel.show = show
+        let viewModel = MockViewModel(showName: showName)
+        vc.viewModel = viewModel
         
         // When setup is called
         vc.setup()
@@ -52,9 +64,6 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         
         // The summaryView's backgroundColor should be .systemBackground
         XCTAssertEqual(vc.summaryView.backgroundColor, .systemBackground, "The summaryView's backgroundColor should be .systemBackground but it is \(String(describing: vc.summaryView.backgroundColor))")
-        
-        // The summaryView's viewModel should have the show set
-        XCTAssertEqual(vc.summaryView.viewModel.show, show, "The summaryView's viewModel should have the show set, but it has \(String(describing: vc.summaryView.viewModel.show))")
         
         // The summaryView's delegate should be view controller (vc)
         XCTAssertEqual(vc.summaryView.delegate as? ShowDetailsViewController, vc, "The summaryView's delegate should be view controller (vc) but it is \(String(describing: vc.summaryView.delegate))")
@@ -177,20 +186,50 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     }
     
     func testConfigure() throws {
-        // Given the viewModel with no show set
-        vc.viewModel.show = nil
+        // Given a mock view model that checks if configure was called with a given show
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int = 0
+            var showSummary: String = ""
+            var show: TVShow? = nil
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {
+                self.show = show
+            }
+            func getNumberOfRows(inSection section: Int) -> Int { return 0 }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
+        }
+        
+        let viewModel = MockViewModel()
         
         // When configure is called with a show
         let show = TVShow(id: 0)
-        vc.configure(show: show)
+        vc.configure(show: show, viewModel: viewModel)
         
-        // Then the view model should contain the given show
-        XCTAssertEqual(vc.viewModel.show, show, "The view model should contain the given show (\(show)) but it contains \(String(describing: vc.viewModel.show))")
+        // Then the view model's configure and the summaryView's configure should get called with the given show
+        XCTAssertEqual(viewModel.show, show, "The view model should contain the given show (\(show)) but it contains \(String(describing: viewModel.show))")
     }
     
     func testUpdateView() throws {
         // Given the viewController's tableView with no cells in it
-        vc.viewModel.episodes = []
+        
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int {
+                get {
+                    return episodes.count
+                }
+            }
+            var showSummary: String = ""
+            var episodes: [[Episode]] = []
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
+            func getNumberOfRows(inSection section: Int) -> Int { return episodes[section].count }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return episodes[indexPath.section][indexPath.row] }
+        }
+        
+        let mockViewModel = MockViewModel()
+        
+        mockViewModel.episodes = []
+        vc.viewModel = mockViewModel
         vc.episodesTableView.reloadData()
         vc.setup()
         vc.view.addSubview(vc.episodesTableView)
@@ -215,7 +254,7 @@ final class ShowDetailsViewControllerTests: XCTestCase {
                 Episode(id: 9, name: "Episode 9", season: 3, number: 3)
             ]
         ]
-        vc.viewModel.episodes = episodes
+        mockViewModel.episodes = episodes
         
         let expectation = self.expectation(description: "ShowDetailsViewControllerTests updateView expectation")
         
@@ -266,63 +305,81 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testNumberOfSections() throws {
         // Given the viewModel with the episodes set
-        let episodes: [[Episode]] = [
-            [
-                Episode(id: 1, name: "Episode 1", season: 1, number: 1),
-                Episode(id: 2, name: "Episode 2", season: 1, number: 2),
-                Episode(id: 3, name: "Episode 3", season: 1, number: 3)
-            ],
-            [
-                Episode(id: 4, name: "Episode 4", season: 2, number: 1),
-                Episode(id: 5, name: "Episode 5", season: 2, number: 2),
-                Episode(id: 6, name: "Episode 6", season: 2, number: 3)
-            ],
-            [
-                Episode(id: 7, name: "Episode 7", season: 3, number: 1),
-                Episode(id: 8, name: "Episode 8", season: 3, number: 2),
-                Episode(id: 9, name: "Episode 9", season: 3, number: 3)
-            ]
-        ]
-        vc.viewModel.episodes = episodes
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int = 0
+            var showSummary: String = ""
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
+            func getNumberOfRows(inSection section: Int) -> Int { return 0 }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
+            init(numberOfSection: Int) {
+                self.numberOfSections = numberOfSection
+            }
+        }
+        
+        let mockNumberOfSections = 1
+        let mockViewModel = MockViewModel(numberOfSection: mockNumberOfSections)
+        
+        vc.viewModel = mockViewModel
         
         // When numberOfSections is called
         let numberOfSections = vc.numberOfSections(in: vc.episodesTableView)
         
-        // Then the number of sections should be equal to the number of elements in the episodes array
-        XCTAssertEqual(numberOfSections, episodes.count, "Then the number of sections (\(numberOfSections)) should be equal to the number of elements in the episodes array (\(episodes.count))")
+        // Then the number of sections should be equal to the value returned by the viewModel
+        XCTAssertEqual(numberOfSections, mockNumberOfSections, "Then the number of sections (\(numberOfSections)) should be equal to the value returned by the viewModel (\(mockNumberOfSections))")
     }
     
     func testNumberOfRows() throws {
         // Given the viewModel with the episodes set
-        let episodes: [[Episode]] = [
-            [
-                Episode(id: 1, name: "Episode 1", season: 1, number: 1),
-                Episode(id: 2, name: "Episode 2", season: 1, number: 2),
-                Episode(id: 3, name: "Episode 3", season: 1, number: 3)
-            ],
-            [
-                Episode(id: 4, name: "Episode 4", season: 2, number: 1),
-                Episode(id: 5, name: "Episode 5", season: 2, number: 2),
-                Episode(id: 6, name: "Episode 6", season: 2, number: 3)
-            ],
-            [
-                Episode(id: 7, name: "Episode 7", season: 3, number: 1),
-                Episode(id: 8, name: "Episode 8", season: 3, number: 2),
-                Episode(id: 9, name: "Episode 9", season: 3, number: 3)
-            ]
-        ]
-        vc.viewModel.episodes = episodes
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int = 0
+            var showSummary: String = ""
+            var episodes: [[Episode]] = []
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
+            func getNumberOfRows(inSection section: Int) -> Int { return numberOfRows[section] }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
+            
+            let numberOfRows: [Int]
+            
+            init(numberOfRows: [Int]) {
+                self.numberOfRows = numberOfRows
+            }
+        }
+        
+        let numberOfRowsPerSection: [Int] = [1, 3, 7]
+        
+        let mockViewModel = MockViewModel(numberOfRows: numberOfRowsPerSection)
+        vc.viewModel = mockViewModel
         
         // When numberOfRows is called
-        for i in 0..<episodes.count {
+        for i in 0..<numberOfRowsPerSection.count {
             // Then the number of rows of section i should be equal to the number of episodes in the index i of the episodes array
-            XCTAssertEqual(vc.tableView(vc.episodesTableView, numberOfRowsInSection: i), episodes[i].count, "The number of rows of section \(i) should be equal to the number of episodes in the index \(i) of the episodes array")
+            XCTAssertEqual(vc.tableView(vc.episodesTableView, numberOfRowsInSection: i), numberOfRowsPerSection[i], "The number of rows of section \(i) should be equal to the number of episodes in the index \(i) of the numberOfRowsPerSection array")
         }
     }
     
     func testCellForRowAt() throws {
         // Given the viewController's tableView with no cells in it
-        vc.viewModel.episodes = []
+        
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int {
+                get {
+                    return episodes.count
+                }
+            }
+            var showSummary: String = ""
+            var episodes: [[Episode]] = []
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
+            func getNumberOfRows(inSection section: Int) -> Int { return episodes[section].count }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return episodes[indexPath.section][indexPath.row] }
+        }
+        
+        let mockViewModel = MockViewModel()
+        mockViewModel.episodes = []
+        
+        vc.viewModel = mockViewModel
         vc.episodesTableView.reloadData()
         vc.episodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: EpisodeTableViewCell.reuseIdentifier) // this is necessary to call cellForRowAt
         // The view model with a list of episodes
@@ -343,7 +400,7 @@ final class ShowDetailsViewControllerTests: XCTestCase {
                 Episode(id: 9, name: "Episode 9", season: 3, number: 3)
             ]
         ]
-        vc.viewModel.episodes = episodes
+        mockViewModel.episodes = episodes
         
         // When cellForRowAt is called
         let seasonIndexForTesting = 0
@@ -373,6 +430,24 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         
         // Given the instantiated viewController with the delegate set
         vc.delegate = mockDelegate
+        
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int {
+                get {
+                    return episodes.count
+                }
+            }
+            var showSummary: String = ""
+            var episodes: [[Episode]] = []
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
+            func getNumberOfRows(inSection section: Int) -> Int { return 0 }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
+        }
+        
+        let mockViewModel = MockViewModel()
+        vc.viewModel = mockViewModel
+        
         // The table view with rows in in
         let episodes: [[Episode]] = [
             [
@@ -391,7 +466,7 @@ final class ShowDetailsViewControllerTests: XCTestCase {
                 Episode(id: 9, name: "Episode 9", season: 3, number: 3)
             ]
         ]
-        vc.viewModel.episodes = episodes
+        mockViewModel.episodes = episodes
         vc.episodesTableView.reloadData()
         
         // When backButtonPressed gets called
@@ -473,10 +548,25 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testSeeMore() throws {
         // Given the instantiated vc
-        // The view model with a show with a description set
+        // The view model that returns a given showSummary
+        
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int = 0
+            var showSummary: String = ""
+            var episodes: [[Episode]] = []
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
+            func getNumberOfRows(inSection section: Int) -> Int { return 0 }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
+            
+            init(showSummary: String) {
+                self.showSummary = showSummary
+            }
+        }
+        
         let showSummary = "Show summary"
-        let show = TVShow(id: 1, summary: showSummary)
-        vc.viewModel.show = show
+        let mockViewModel = MockViewModel(showSummary: showSummary)
+        vc.viewModel = mockViewModel
         
         // When seeMoreButtonPressed is called
         vc.seeMoreButtonPressed()

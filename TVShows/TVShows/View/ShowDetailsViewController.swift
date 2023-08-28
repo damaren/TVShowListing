@@ -7,12 +7,22 @@
 
 import UIKit
 
+protocol ShowDetailsViewModelProtocol: AnyObject {
+    var showName: String { get }
+    var numberOfSections: Int { get }
+    var showSummary: String { get }
+    
+    func configure(forShow show: TVShow, withProvider provider: Provider)
+    func getNumberOfRows(inSection section: Int) -> Int
+    func getEpisode(forIndexPath indexPath: IndexPath) -> Episode
+}
+
 class ShowDetailsViewController: UIViewController {
     
     // MARK: - PROPERTIES
     
     weak var delegate: ShowDetailsViewControllerDelegate?
-    var viewModel: ShowDetailsViewModel = ShowDetailsViewModel()
+    var viewModel: ShowDetailsViewModelProtocol?
     var showDescriptionVC: ShowDescriptionViewController? // storing the value here for unit testing
     
     // MARK: - COMPONENTS
@@ -29,20 +39,16 @@ class ShowDetailsViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
+        guard let viewModel = viewModel else { return }
+        
         self.title = viewModel.showName
         view.backgroundColor = .systemBackground
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonPressed))
         navigationItem.leftBarButtonItem?.tintColor = .label
         
-        // update
-        viewModel.updateView = { [weak self] in
-            self?.updateView()
-        }
-        
         // summaryView
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.backgroundColor = .systemBackground
-        summaryView.configure(forShow: viewModel.show)
         summaryView.delegate = self
         
         // episodesTableView
@@ -70,17 +76,12 @@ class ShowDetailsViewController: UIViewController {
         episodesTableView.topAnchor.constraint(equalTo: summaryView.bottomAnchor).isActive = true
     }
     
-    func configure(show: TVShow) {
-        viewModel.configure(forShow: show)
+    func configure(show: TVShow, viewModel: ShowDetailsViewModelProtocol) {
+        self.viewModel = viewModel
+        self.viewModel?.configure(forShow: show, withProvider: TVMazeProvider.shared)
+        summaryView.configure(forShow: show)
         setup()
         layoutViews()
-    }
-    
-    func updateView(completion: (() -> ())? = nil) {
-        DispatchQueue.main.async { // update UI
-            self.episodesTableView.reloadData()
-            completion?()
-        }
     }
     
     // MARK: - ACTIONS
@@ -94,15 +95,15 @@ class ShowDetailsViewController: UIViewController {
 
 extension ShowDetailsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.numberOfSections
+        return viewModel?.numberOfSections ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.getNumberOfRows(inSection: section)
+        return viewModel?.getNumberOfRows(inSection: section) ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: EpisodeTableViewCell.reuseIdentifier, for: indexPath) as? EpisodeTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: EpisodeTableViewCell.reuseIdentifier, for: indexPath) as? EpisodeTableViewCell, let viewModel = viewModel else {
             return UITableViewCell()
         }
         
@@ -117,6 +118,10 @@ extension ShowDetailsViewController: UITableViewDataSource {
 
 extension ShowDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let viewModel = viewModel else {
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
         delegate?.selectedEpisode(episode: viewModel.getEpisode(forIndexPath: indexPath), withShowTitle: viewModel.showName, withAnimation: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -154,7 +159,7 @@ protocol ShowDetailsViewControllerDelegate: AnyObject {
 extension ShowDetailsViewController: ShowDetailsSummaryViewDelegate {
     func seeMoreButtonPressed() {
         showDescriptionVC = ShowDescriptionViewController()
-        guard let showDescriptionVC = showDescriptionVC else { return }
+        guard let showDescriptionVC = showDescriptionVC, let viewModel = viewModel else { return }
         showDescriptionVC.configure(description: viewModel.showSummary, delegate: self)
         present(showDescriptionVC, animated: true)
     }
@@ -164,5 +169,15 @@ extension ShowDetailsViewController: ShowDetailsSummaryViewDelegate {
 extension ShowDetailsViewController: ShowDescriptionViewControllerDelegate {
     func showDescriptionViewControllerDismissed(viewController: ShowDescriptionViewController) {
         showDescriptionVC = nil
+    }
+}
+
+// MARK: - ShowDetailsViewProtocol
+extension ShowDetailsViewController: ShowDetailsViewProtocol {
+    func updateView(completion: (() -> ())?) {
+        DispatchQueue.main.async { // update UI
+            self.episodesTableView.reloadData()
+            completion?()
+        }
     }
 }

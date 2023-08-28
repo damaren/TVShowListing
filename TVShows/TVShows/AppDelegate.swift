@@ -35,8 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: TVShowSearchViewControllerDelegate {
     func selectedShow(show: TVShow, withAnimation: Bool) {
         let showDetailsViewController = ShowDetailsViewController()
+        let viewModel = ShowDetailsViewModel(view: showDetailsViewController)
         showDetailsViewController.delegate = self
-        showDetailsViewController.configure(show: show)
+        showDetailsViewController.configure(show: show, viewModel: viewModel)
         navigationController.pushViewController(showDetailsViewController, animated: withAnimation)
     }
 }
