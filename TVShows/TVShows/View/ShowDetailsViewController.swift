@@ -23,7 +23,6 @@ class ShowDetailsViewController: UIViewController {
     
     weak var delegate: ShowDetailsViewControllerDelegate?
     var viewModel: ShowDetailsViewModelProtocol?
-    var showDescriptionVC: ShowDescriptionViewController? // storing the value here for unit testing
     
     // MARK: - COMPONENTS
     
@@ -153,22 +152,13 @@ extension ShowDetailsViewController: UITableViewDelegate {
 protocol ShowDetailsViewControllerDelegate: AnyObject {
     func selectedEpisode(episode: Episode, withShowTitle showTitle: String, withAnimation: Bool)
     func backButtonPressed(inViewcontroller: ShowDetailsViewController, withAnimation: Bool)
+    func seeMoreButtonPressed(inViewcontroller: ShowDetailsViewController, forShowSummary summary: String?)
 }
 
 // MARK: - ShowDetailsSummaryViewDelegate
 extension ShowDetailsViewController: ShowDetailsSummaryViewDelegate {
     func seeMoreButtonPressed() {
-        showDescriptionVC = ShowDescriptionViewController()
-        guard let showDescriptionVC = showDescriptionVC, let viewModel = viewModel else { return }
-        showDescriptionVC.configure(description: viewModel.showSummary, delegate: self)
-        present(showDescriptionVC, animated: true)
-    }
-}
-
-// MARK: - ShowDescriptionViewControllerDelegate
-extension ShowDetailsViewController: ShowDescriptionViewControllerDelegate {
-    func showDescriptionViewControllerDismissed(viewController: ShowDescriptionViewController) {
-        showDescriptionVC = nil
+        delegate?.seeMoreButtonPressed(inViewcontroller: self, forShowSummary: viewModel?.showSummary)
     }
 }
 

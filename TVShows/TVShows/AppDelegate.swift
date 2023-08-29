@@ -45,6 +45,13 @@ extension AppDelegate: TVShowSearchViewControllerDelegate {
 // MARK: - ShowDetailsViewControllerDelegate
 
 extension AppDelegate: ShowDetailsViewControllerDelegate {
+    func seeMoreButtonPressed(inViewcontroller: ShowDetailsViewController, forShowSummary summary: String?) {
+        let showDescriptionVC = ShowDescriptionViewController()
+        guard let summary = summary else { return }
+        showDescriptionVC.configure(description: summary)
+        inViewcontroller.present(showDescriptionVC, animated: true)
+    }
+    
     func backButtonPressed(inViewcontroller: ShowDetailsViewController, withAnimation: Bool) {
         navigationController.popViewController(animated: withAnimation)
     }

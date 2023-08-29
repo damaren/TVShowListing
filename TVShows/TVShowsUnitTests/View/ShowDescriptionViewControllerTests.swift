@@ -132,30 +132,10 @@ final class ShowDescriptionViewControllerTests: XCTestCase {
 
         // When configure is called with a description
         let description = "Show description"
-        vc.configure(description: description, delegate: nil)
+        vc.configure(description: description)
         
         // Then the view controller should contain the description
         XCTAssertEqual(vc.tvShowDescription, description, "The view controller should contain the description (\(description)), but it contained \(String(describing: vc.tvShowDescription))")
-    }
-    
-    func testWillDisappear() throws {
-        class MockShowDescriptionViewControllerDelegate: UIViewController, ShowDescriptionViewControllerDelegate {
-            func showDescriptionViewControllerDismissed(viewController: TVShows.ShowDescriptionViewController) {
-                wasDismissedCalled = true
-            }
-            
-            var wasDismissedCalled: Bool = false
-        }
-        let mockDelegate = MockShowDescriptionViewControllerDelegate()
-
-        // Given the instantiated viewController with the delegate set
-        vc.delegate = mockDelegate
-
-        // When the vc is dismissed
-        vc.viewWillDisappear(false)
-
-        // Then the delegate's showDescriptionViewControllerDismissed method should be called
-        XCTAssertTrue(mockDelegate.wasDismissedCalled, "The delegate's showDescriptionViewControllerDismissed method should be called, mockDelegate.wasDismissedCalled should be true")
     }
     
     func testCloseButtonPressed() {

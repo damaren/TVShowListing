@@ -284,6 +284,7 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testBackButtonPressed() throws {
         class MockShowDetailsDelegate: UIViewController, ShowDetailsViewControllerDelegate {
+            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
             var backButtonPressedWasCalled: Bool = false
             func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {}
             
@@ -419,6 +420,8 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testDidSelectRowAt() throws {
         class MockShowDetailsDelegate: UIViewController, ShowDetailsViewControllerDelegate {
+            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
+            
             var selectedEpisodeWasCalled: Bool = false
             func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {
                 selectedEpisodeWasCalled = true
@@ -548,43 +551,22 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testSeeMore() throws {
         // Given the instantiated vc
-        // The view model that returns a given showSummary
-        
-        class MockViewModel: ShowDetailsViewModelProtocol {
-            var showName: String = ""
-            var numberOfSections: Int = 0
-            var showSummary: String = ""
-            var episodes: [[Episode]] = []
-            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
-            func getNumberOfRows(inSection section: Int) -> Int { return 0 }
-            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
-            
-            init(showSummary: String) {
-                self.showSummary = showSummary
+        class MockShowDetailsDelegate: UIViewController, ShowDetailsViewControllerDelegate {
+            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {
+                seeMoreButtonPressedWasCalled = true
             }
+            var seeMoreButtonPressedWasCalled: Bool = false
+            func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {}
+            
+            func backButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
         }
-        
-        let showSummary = "Show summary"
-        let mockViewModel = MockViewModel(showSummary: showSummary)
-        vc.viewModel = mockViewModel
+        let mockDelegate = MockShowDetailsDelegate()
+        vc.delegate = mockDelegate
         
         // When seeMoreButtonPressed is called
         vc.seeMoreButtonPressed()
         
-        // Then the showDescriptionVC should not be nil
-        XCTAssertNotNil(vc.showDescriptionVC, "The showDescriptionVC should not be nil")
-        // The showDescriptionVC should have the view model's show summary as it's descriptionLabel's text
-        XCTAssertEqual(vc.showDescriptionVC?.descriptionLabel.text, showSummary, "The showDescriptionVC should have the view model's show summary (\(showSummary)) as it's descriptionLabel's text, but it has \(String(describing: vc.showDescriptionVC?.descriptionLabel.text))")
-    }
-    
-    func testShowDescriptionViewControllerDismissed() throws {
-        // Given the showDescriptionViewController not nil
-        vc.showDescriptionVC = ShowDescriptionViewController()
-        
-        // When showDescriptionViewControllerDismissed is called
-        vc.showDescriptionViewControllerDismissed(viewController: vc.showDescriptionVC!)
-        
-        // Then showDescriptionViewController should be nil
-        XCTAssertNil(vc.showDescriptionVC, "Then showDescriptionViewController should be nil")
+        // Then the delegate's seeMoreButtonPressed method should be called
+        XCTAssertTrue(mockDelegate.seeMoreButtonPressedWasCalled, "The delegate's seeMoreButtonPressed method should be called, mockDelegate.seeMoreButtonPressedWasCalled should be true")
     }
 }
