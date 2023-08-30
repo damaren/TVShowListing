@@ -128,7 +128,8 @@ extension ShowDetailsSummaryView {
         seeMoreButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     
-    func configure(forShow show: TVShow?) {
+    func configure(forShow show: TVShow?, andDelegate delegate: ShowDetailsSummaryViewDelegate) {
+        self.delegate = delegate
         viewModel.configure(forShow: show)
         
         setup()
