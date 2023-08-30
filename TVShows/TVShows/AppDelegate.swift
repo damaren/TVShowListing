@@ -36,6 +36,10 @@ extension AppDelegate: TVShowSearchViewControllerDelegate {
     func selectedShow(show: TVShow, withAnimation: Bool) {
         let showDetailsViewController = ShowDetailsViewController()
         let viewModel = ShowDetailsViewModel(view: showDetailsViewController)
+        let summaryView = ShowDetailsSummaryView()
+        summaryView.delegate = showDetailsViewController
+        summaryView.configure(forShow: show)
+        showDetailsViewController.summaryView = summaryView
         showDetailsViewController.delegate = self
         showDetailsViewController.configure(show: show, viewModel: viewModel)
         navigationController.pushViewController(showDetailsViewController, animated: withAnimation)

@@ -26,7 +26,7 @@ class ShowDetailsViewController: UIViewController {
     
     // MARK: - COMPONENTS
     
-    var summaryView: ShowDetailsSummaryView = ShowDetailsSummaryView()
+    var summaryView: UIView?
     var episodesTableView: UITableView = UITableView()
     
     // MARK: - LIFECYCLE
@@ -38,7 +38,7 @@ class ShowDetailsViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
-        guard let viewModel = viewModel else { return }
+        guard let viewModel = viewModel, let summaryView = summaryView else { return }
         
         self.title = viewModel.showName
         view.backgroundColor = .systemBackground
@@ -48,7 +48,6 @@ class ShowDetailsViewController: UIViewController {
         // summaryView
         summaryView.translatesAutoresizingMaskIntoConstraints = false
         summaryView.backgroundColor = .systemBackground
-        summaryView.delegate = self
         
         // episodesTableView
         episodesTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -59,6 +58,8 @@ class ShowDetailsViewController: UIViewController {
     }
     
     func layoutViews() {
+        guard let summaryView = summaryView else { return }
+        
         view.addSubview(summaryView)
         view.addSubview(episodesTableView)
         
@@ -78,7 +79,6 @@ class ShowDetailsViewController: UIViewController {
     func configure(show: TVShow, viewModel: ShowDetailsViewModelProtocol) {
         self.viewModel = viewModel
         self.viewModel?.configure(forShow: show, withProvider: TVMazeProvider.shared)
-        summaryView.configure(forShow: show)
         setup()
         layoutViews()
     }
