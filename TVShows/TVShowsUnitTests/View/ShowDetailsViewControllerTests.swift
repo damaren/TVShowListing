@@ -41,13 +41,14 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         let showName = "Show Name"
         let viewModel = MockViewModel(showName: showName)
         vc.viewModel = viewModel
+        vc.summaryView = UIView()
         
         // When setup is called
         vc.setup()
         
         // Then
         // All the components should have translatesAutoresizingMaskIntoConstraints equal false
-        XCTAssertEqual(vc.summaryView.translatesAutoresizingMaskIntoConstraints, false, "The summaryView translatesAutoresizingMaskIntoConstraints should be false, but it is \(vc.summaryView.translatesAutoresizingMaskIntoConstraints)")
+        XCTAssertEqual(vc.summaryView?.translatesAutoresizingMaskIntoConstraints, false, "The summaryView translatesAutoresizingMaskIntoConstraints should be false, but it is \(String(describing: vc.summaryView?.translatesAutoresizingMaskIntoConstraints))")
         XCTAssertEqual(vc.episodesTableView.translatesAutoresizingMaskIntoConstraints, false, "The episodesTableView translatesAutoresizingMaskIntoConstraints should be false, but it is \(vc.episodesTableView.translatesAutoresizingMaskIntoConstraints)")
 
         // The title should be equal to view model's show name
@@ -63,10 +64,7 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         XCTAssertEqual(vc.navigationItem.leftBarButtonItem?.tintColor, .label, "The navigation bar's left button should have the .label tint, but it is \(String(describing: vc.navigationItem.leftBarButtonItem?.tintColor))")
         
         // The summaryView's backgroundColor should be .systemBackground
-        XCTAssertEqual(vc.summaryView.backgroundColor, .systemBackground, "The summaryView's backgroundColor should be .systemBackground but it is \(String(describing: vc.summaryView.backgroundColor))")
-        
-        // The summaryView's delegate should be view controller (vc)
-        XCTAssertEqual(vc.summaryView.delegate as? ShowDetailsViewController, vc, "The summaryView's delegate should be view controller (vc) but it is \(String(describing: vc.summaryView.delegate))")
+        XCTAssertEqual(vc.summaryView?.backgroundColor, .systemBackground, "The summaryView's backgroundColor should be .systemBackground but it is \(String(describing: vc.summaryView?.backgroundColor))")
         
         // The episodesTableView's dataSource should ve the view controller (vc)
         XCTAssertEqual(vc.episodesTableView.dataSource as? ShowDetailsViewController, vc, "The episodesTableView's dataSource should ve the view controller (vc) but it is \(String(describing: vc.episodesTableView.dataSource))")
@@ -80,20 +78,34 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testLayoutViews() throws {
         // Given the view controller not yet laid out
+        class MockViewModel: ShowDetailsViewModelProtocol {
+            var showName: String = ""
+            var numberOfSections: Int = 0
+            var showSummary: String = ""
+            func configure(forShow show: TVShows.TVShow, withProvider provider: TVShows.Provider) {}
+            func getNumberOfRows(inSection section: Int) -> Int { return 0 }
+            func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
+        }
+        
+        vc.configure(show: TVShow(), viewModel: MockViewModel(), summaryView: UIView())
         
         // When layout is called
         vc.layoutViews()
         
+        guard let summaryView = vc.summaryView else {
+            fatalError("The summaryView should have been initialized with the vc.configure method")
+        }
+        
         // Then
         // The view contains the summaryView
-        XCTAssertTrue(vc.view.subviews.contains(vc.summaryView), "The vc's view should contain the summaryView")
+        XCTAssertTrue(vc.view.subviews.contains(summaryView), "The vc's view should contain the summaryView")
         // The view contains the episodesTableView
         XCTAssertTrue(vc.view.subviews.contains(vc.episodesTableView), "The vc's view should contain the episodesTableView")
         
         // The summaryView's topAnchor should be equal to the safeAreaLayoutGuide's topAnchor
         XCTAssertTrue(vc.view.constraints.contains(where: { constraint in
-            (constraint.firstItem as? ShowDetailsSummaryView) == vc.summaryView &&
-            constraint.firstAnchor == vc.summaryView.topAnchor &&
+            (constraint.firstItem as? UIView) == vc.summaryView &&
+            constraint.firstAnchor == summaryView.topAnchor &&
             (constraint.secondItem as? UILayoutGuide) == vc.view.safeAreaLayoutGuide &&
             constraint.secondAnchor == vc.view.safeAreaLayoutGuide.topAnchor &&
             (constraint.relation == .equal) &&
@@ -104,8 +116,8 @@ final class ShowDetailsViewControllerTests: XCTestCase {
 
         // The summaryView's leadingAnchor should be equal to the view's leadingAnchor
         XCTAssertTrue(vc.view.constraints.contains(where: { constraint in
-            (constraint.firstItem as? ShowDetailsSummaryView) == vc.summaryView &&
-            constraint.firstAnchor == vc.summaryView.leadingAnchor &&
+            (constraint.firstItem as? UIView) == vc.summaryView &&
+            constraint.firstAnchor == summaryView.leadingAnchor &&
             (constraint.secondItem as? UIView) == vc.view &&
             constraint.secondAnchor == vc.view.leadingAnchor &&
             (constraint.relation == .equal) &&
@@ -116,8 +128,8 @@ final class ShowDetailsViewControllerTests: XCTestCase {
 
         // The summaryView's trailingAnchor should be equal to the view's trailingAnchor
         XCTAssertTrue(vc.view.constraints.contains(where: { constraint in
-            (constraint.firstItem as? ShowDetailsSummaryView) == vc.summaryView &&
-            constraint.firstAnchor == vc.summaryView.trailingAnchor &&
+            (constraint.firstItem as? UIView) == vc.summaryView &&
+            constraint.firstAnchor == summaryView.trailingAnchor &&
             (constraint.secondItem as? UIView) == vc.view &&
             constraint.secondAnchor == vc.view.trailingAnchor &&
             (constraint.relation == .equal) &&
@@ -127,9 +139,9 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         }), "The view should have the constraint summaryView.trailingAnchor == view.trailingAnchor, but it wasn't found")
 
         // The summaryView's heightAnchor should be equal to 400
-        XCTAssertTrue(vc.summaryView.constraints.contains(where: { constraint in
-            (constraint.firstItem as? ShowDetailsSummaryView) == vc.summaryView &&
-            constraint.firstAnchor == vc.summaryView.heightAnchor &&
+        XCTAssertTrue(summaryView.constraints.contains(where: { constraint in
+            (constraint.firstItem as? UIView) == vc.summaryView &&
+            constraint.firstAnchor == summaryView.heightAnchor &&
             (constraint.relation == .equal) &&
             constraint.multiplier == 1.0 &&
             constraint.constant == 400 &&
@@ -140,8 +152,8 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         XCTAssertTrue(vc.view.constraints.contains(where: { constraint in
             (constraint.firstItem as? UITableView) == vc.episodesTableView &&
             constraint.firstAnchor == vc.episodesTableView.topAnchor &&
-            (constraint.secondItem as? ShowDetailsSummaryView) == vc.summaryView &&
-            constraint.secondAnchor == vc.summaryView.bottomAnchor &&
+            (constraint.secondItem as? UIView) == vc.summaryView &&
+            constraint.secondAnchor == summaryView.bottomAnchor &&
             (constraint.relation == .equal) &&
             constraint.multiplier == 1.0 &&
             constraint.constant == 0 &&
@@ -203,7 +215,7 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         
         // When configure is called with a show
         let show = TVShow(id: 0)
-        vc.configure(show: show, viewModel: viewModel)
+        vc.configure(show: show, viewModel: viewModel, summaryView: UIView())
         
         // Then the view model's configure and the summaryView's configure should get called with the given show
         XCTAssertEqual(viewModel.show, show, "The view model should contain the given show (\(show)) but it contains \(String(describing: viewModel.show))")
@@ -230,11 +242,14 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         
         mockViewModel.episodes = []
         vc.viewModel = mockViewModel
+        vc.summaryView = UIView()
         vc.episodesTableView.reloadData()
         vc.setup()
         vc.view.addSubview(vc.episodesTableView)
         vc.episodesTableView.frame = vc.view.bounds // give as much space as possible for the table view to layout it's visible cells
         vc.view.layoutSubviews() // without this, the table view is not calling the cell for row at
+        
+        let expectation = self.expectation(description: "ShowDetailsViewControllerTests updateView expectation")
         
         // The view model containing a list of episodes
         let episodes: [[Episode]] = [
@@ -255,8 +270,6 @@ final class ShowDetailsViewControllerTests: XCTestCase {
             ]
         ]
         mockViewModel.episodes = episodes
-        
-        let expectation = self.expectation(description: "ShowDetailsViewControllerTests updateView expectation")
         
         // When updateView is called
         vc.updateView(completion: {

@@ -364,12 +364,20 @@ final class ShowDetailsSummaryViewTests: XCTestCase {
         // Given the viewModel with no show set
         summaryView.viewModel.show = nil
         
+        class MockDelegate: ShowDetailsSummaryViewDelegate {
+            func seeMoreButtonPressed() {}
+        }
+        
+        let mockDelegate = MockDelegate()
+        
         // When configure is called
         let show = TVShow(id: 1)
-        summaryView.configure(forShow: show)
+        summaryView.configure(forShow: show, andDelegate: mockDelegate)
         
         // Then the viewModel's show should be the given show
         XCTAssertEqual(summaryView.viewModel.show, show, "The viewModel's show should be the given show (\(show)), but it is \(String(describing: summaryView.viewModel.show))")
+        // Then the delegate should be the object injected via the configure method
+        XCTAssertEqual(summaryView.delegate as? NSObject, mockDelegate as? NSObject, "the delegate should be object injected via the configure method \( mockDelegate), but it is \(String(describing: summaryView.delegate))")
     }
     
     func testUpdateView() throws {
