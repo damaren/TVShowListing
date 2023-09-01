@@ -48,6 +48,8 @@
 		14C2CF332A48765D007FA677 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */; };
 		14C2CF352A48832E007FA677 /* EpisodeInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */; };
 		14C851D72A76A3D000B53A2E /* ShowDescriptionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C851D62A76A3D000B53A2E /* ShowDescriptionViewControllerTests.swift */; };
+		14CD72042AA21A4800F8ABDD /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CD72032AA21A4800F8ABDD /* TestAppDelegate.swift */; };
+		14CD72062AA21A9900F8ABDD /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CD72052AA21A9900F8ABDD /* main.swift */; };
 		14CE80D62A66C45200EF9051 /* TVShowTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE80D52A66C45200EF9051 /* TVShowTableViewCellTests.swift */; };
 		14D257C12A5D7DA2007A7279 /* TVMazeProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D257C02A5D7DA2007A7279 /* TVMazeProviderTests.swift */; };
 /* End PBXBuildFile section */
@@ -108,6 +110,8 @@
 		14C2CF322A48765D007FA677 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		14C2CF342A48832E007FA677 /* EpisodeInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeInformationViewController.swift; sourceTree = "<group>"; };
 		14C851D62A76A3D000B53A2E /* ShowDescriptionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDescriptionViewControllerTests.swift; sourceTree = "<group>"; };
+		14CD72032AA21A4800F8ABDD /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
+		14CD72052AA21A9900F8ABDD /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		14CE80D52A66C45200EF9051 /* TVShowTableViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowTableViewCellTests.swift; sourceTree = "<group>"; };
 		14D257C02A5D7DA2007A7279 /* TVMazeProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeProviderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -208,6 +212,7 @@
 				14205DA32A462D2000E8E5A7 /* Assets.xcassets */,
 				14205DA52A462D2000E8E5A7 /* LaunchScreen.storyboard */,
 				14205DA82A462D2000E8E5A7 /* Info.plist */,
+				14CD72052AA21A9900F8ABDD /* main.swift */,
 			);
 			path = TVShows;
 			sourceTree = "<group>";
@@ -233,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				144B9CDF2A6590D100BAB59B /* AppDelegateTests.swift */,
+				14CD72032AA21A4800F8ABDD /* TestAppDelegate.swift */,
 			);
 			path = AppDelegate;
 			sourceTree = "<group>";
@@ -392,6 +398,7 @@
 				14CE80D62A66C45200EF9051 /* TVShowTableViewCellTests.swift in Sources */,
 				141C6F042A4A657D00977986 /* TVShowTableViewCellViewModelTests.swift in Sources */,
 				144B9CE02A6590D100BAB59B /* AppDelegateTests.swift in Sources */,
+				14CD72042AA21A4800F8ABDD /* TestAppDelegate.swift in Sources */,
 				14BF1D842A81290B0069047C /* SearchViewTests.swift in Sources */,
 				141C6EF92A4A522B00977986 /* ShowDetailsSummaryTests.swift in Sources */,
 				14B59CEE2A72E00100CE5540 /* StringExtensionTests.swift in Sources */,
@@ -415,6 +422,7 @@
 			files = (
 				14C2CF332A48765D007FA677 /* EpisodeTableViewCell.swift in Sources */,
 				141C6EDB2A49C30100977986 /* ShowDetailsSummaryView.swift in Sources */,
+				14CD72062AA21A9900F8ABDD /* main.swift in Sources */,
 				141C6EDD2A4A12C500977986 /* ShowDescriptionViewController.swift in Sources */,
 				14C2CF352A48832E007FA677 /* EpisodeInformationViewController.swift in Sources */,
 				149AA3172A47728800BD7059 /* SearchView.swift in Sources */,
