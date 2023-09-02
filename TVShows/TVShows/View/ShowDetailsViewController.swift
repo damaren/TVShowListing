@@ -76,7 +76,8 @@ class ShowDetailsViewController: UIViewController {
         episodesTableView.topAnchor.constraint(equalTo: summaryView.bottomAnchor).isActive = true
     }
     
-    func configure(show: TVShow, viewModel: ShowDetailsViewModelProtocol, summaryView: UIView) {
+    func configure(show: TVShow, viewModel: ShowDetailsViewModelProtocol, summaryView: UIView, delegate: ShowDetailsViewControllerDelegate) {
+        self.delegate = delegate
         self.summaryView = summaryView
         self.viewModel = viewModel
         self.viewModel?.configure(forShow: show, withProvider: TVMazeProvider.shared)

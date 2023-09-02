@@ -87,7 +87,13 @@ final class ShowDetailsViewControllerTests: XCTestCase {
             func getEpisode(forIndexPath indexPath: IndexPath) -> TVShows.Episode { return Episode() }
         }
         
-        vc.configure(show: TVShow(), viewModel: MockViewModel(), summaryView: UIView())
+        class MockDelegate: ShowDetailsViewControllerDelegate {
+            func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {}
+            func backButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
+            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
+        }
+        
+        vc.configure(show: TVShow(), viewModel: MockViewModel(), summaryView: UIView(), delegate: MockDelegate())
         
         // When layout is called
         vc.layoutViews()
@@ -213,9 +219,15 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         
         let viewModel = MockViewModel()
         
+        class MockDelegate: ShowDetailsViewControllerDelegate {
+            func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {}
+            func backButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
+            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
+        }
+        
         // When configure is called with a show
         let show = TVShow(id: 0)
-        vc.configure(show: show, viewModel: viewModel, summaryView: UIView())
+        vc.configure(show: show, viewModel: viewModel, summaryView: UIView(), delegate: MockDelegate())
         
         // Then the view model's configure and the summaryView's configure should get called with the given show
         XCTAssertEqual(viewModel.show, show, "The view model should contain the given show (\(show)) but it contains \(String(describing: viewModel.show))")
