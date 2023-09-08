@@ -27,14 +27,48 @@ final class EpisodeInformationViewControllerTests: XCTestCase {
     func testSetup() throws {
         // Given the instantiated vc not yet set up
         // The configured view model
-        vc.viewModel = EpisodeInformationViewModel()
+        
+        class MockDelegate: EpisodeInformationViewControllerDelegate {
+            func backButtonPressed(inViewcontroller: TVShows.EpisodeInformationViewController, withAnimation: Bool) {}
+        }
+        
+        class MockViewModel: EpisodeInformationViewModelProtocol {
+            var showTitle: String?
+            var seasonAndNumber: String
+            var episodeName: String
+            var summary: String
+            
+            func getSeasonAndNumberText() -> String {
+                return seasonAndNumber
+            }
+            
+            func getEpisodeNameText() -> String {
+                return episodeName
+            }
+            
+            func getSummaryText() -> String {
+                return summary
+            }
+            
+            func configure(view: EpisodeInformationViewProtocol, forEpisode episode: TVShows.Episode?, andShowTitle showTitle: String, withProvider provider: TVShows.Provider) {}
+            
+            init(showTitle: String, seasonAndNumber: String, episodeName: String, summary: String) {
+                self.showTitle = showTitle
+                self.seasonAndNumber = seasonAndNumber
+                self.episodeName = episodeName
+                self.summary = summary
+            }
+            
+        }
+        
         let season = 2
         let number = 3
         let episodeName = "Episode Name"
         let summary = "Episode summary"
         let episode = Episode(id: 1, name: episodeName, season: season, number: number, summary: summary)
         let showTitle = "Show title"
-        vc.configure(forEpisode: episode, andShowTitle: showTitle)
+        let seasonAndNumber = "S\(season)E\(number):"
+        vc.configure(delegate: MockDelegate(), viewModel: MockViewModel(showTitle: showTitle, seasonAndNumber: seasonAndNumber, episodeName: episodeName, summary: summary))
         
         // When setup is called
         vc.setup()
@@ -268,20 +302,30 @@ final class EpisodeInformationViewControllerTests: XCTestCase {
     func testConfigure() throws {
         // Given the instantiated view controller
         
-        // The viewModel with no episode nor title set
-        vc.viewModel.episode = nil
-        vc.viewModel.showTitle = nil
+        class MockDelegate: EpisodeInformationViewControllerDelegate {
+            func backButtonPressed(inViewcontroller: TVShows.EpisodeInformationViewController, withAnimation: Bool) {}
+        }
+        
+        class MockViewModel: EpisodeInformationViewModelProtocol {
+            var showTitle: String?
+            func getSeasonAndNumberText() -> String { "" }
+            func getEpisodeNameText() -> String { "" }
+            func getSummaryText() -> String { "" }
+            func configure(view: EpisodeInformationViewProtocol, forEpisode episode: TVShows.Episode?, andShowTitle showTitle: String, withProvider provider: TVShows.Provider) {}
+        }
+        
+        let mockDelegate = MockDelegate()
+        let mockViewModel = MockViewModel()
         
         // When configure is called
-        let episode = Episode(id: 1)
-        let showTitle = "Show title"
-        vc.configure(forEpisode: episode, andShowTitle: showTitle)
+        vc.configure(delegate: mockDelegate, viewModel: mockViewModel)
         
         // Then
-        // The viewModel should contain the episode
-        XCTAssertEqual(vc.viewModel.episode, episode, "The viewModel should contain the episode \(episode), but it contains \(String(describing: vc.viewModel.episode))")
-        // The viewModel should contain the showTitle
-        XCTAssertEqual(vc.viewModel.showTitle, showTitle, "The viewModel should contain the showTitle \(showTitle), but it contains \(String(describing: vc.viewModel.showTitle))")
+        // The viewModel should be equal to the mockViewModel
+        
+        XCTAssertTrue((vc.viewModel as? MockViewModel) === mockViewModel, "The viewModel should be equal to the mockViewModel, but it is \(String(describing: vc.viewModel))")
+        // The delegate should be equal to the mockDelegate
+        XCTAssertTrue((vc.delegate as? MockDelegate) === mockDelegate, "The delegate should be equal to the mockDelegate, but it is \(String(describing: vc.delegate))")
     }
     
     func testUpdateView() throws {

@@ -58,8 +58,9 @@ extension AppDelegate: ShowDetailsViewControllerDelegate {
     
     func selectedEpisode(episode: Episode, withShowTitle showTitle: String, withAnimation: Bool) {
         let episodeInfoViewController = EpisodeInformationViewController()
-        episodeInfoViewController.delegate = self
-        episodeInfoViewController.configure(forEpisode: episode, andShowTitle: showTitle)
+        let viewModel = EpisodeInformationViewModel()
+        viewModel.configure(view: episodeInfoViewController, forEpisode: episode, andShowTitle: showTitle, withProvider: TVMazeProvider.shared)
+        episodeInfoViewController.configure(delegate: self, viewModel: viewModel)
         navigationController.pushViewController(episodeInfoViewController, animated: withAnimation)
     }
 }

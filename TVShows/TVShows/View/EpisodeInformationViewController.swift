@@ -7,6 +7,15 @@
 
 import UIKit
 
+protocol EpisodeInformationViewModelProtocol: AnyObject {
+    var showTitle: String? { get }
+    
+    func getSeasonAndNumberText() -> String
+    func getEpisodeNameText() -> String
+    func getSummaryText() -> String
+    func configure(view: EpisodeInformationViewProtocol, forEpisode episode: Episode?, andShowTitle showTitle: String, withProvider provider: Provider)
+}
+
 class EpisodeInformationViewController: UIViewController {
     
     // MARK: - STATIC PROPERTIES
@@ -17,7 +26,7 @@ class EpisodeInformationViewController: UIViewController {
     
     let imageAspectRatio: Double = 250/140
     weak var delegate: EpisodeInformationViewControllerDelegate?
-    var viewModel: EpisodeInformationViewModel = EpisodeInformationViewModel()
+    var viewModel: EpisodeInformationViewModelProtocol?
     
     // MARK: - COMPONENTS
     
@@ -35,15 +44,12 @@ class EpisodeInformationViewController: UIViewController {
     // MARK: - FUNCTIONS
     
     func setup() {
+        guard let viewModel = self.viewModel else { return }
+        
         self.title = viewModel.showTitle
         view.backgroundColor = .systemBackground
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonPressed))
         navigationItem.leftBarButtonItem?.tintColor = .label
-        
-        // update
-        viewModel.updateView = { [weak self] image in
-            self?.updateView(forImage: image)
-        }
         
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -102,17 +108,11 @@ class EpisodeInformationViewController: UIViewController {
         summaryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -EpisodeInformationViewController.horizontalMargin).isActive = true
     }
     
-    func configure(forEpisode episode: Episode, andShowTitle showTitle: String) {
-        viewModel.configure(forEpisode: episode, andShowTitle: showTitle)
+    func configure(delegate: EpisodeInformationViewControllerDelegate, viewModel: EpisodeInformationViewModelProtocol) {
+        self.delegate = delegate
+        self.viewModel = viewModel
         setup()
         layoutViews()
-    }
-    
-    func updateView(forImage image: UIImage?, completion: (() -> ())? = nil) {
-        DispatchQueue.main.async { // update UI
-            self.imageView.image = image
-            completion?()
-        }
     }
     
     // MARK: - ACTIONS
@@ -125,4 +125,16 @@ class EpisodeInformationViewController: UIViewController {
 // MARK: - ShowDetailsViewControllerDelegate
 protocol EpisodeInformationViewControllerDelegate: AnyObject {
     func backButtonPressed(inViewcontroller: EpisodeInformationViewController, withAnimation: Bool)
+}
+
+// MARK: - EpisodeInformationViewProtocol
+extension EpisodeInformationViewController: EpisodeInformationViewProtocol {
+    func updateView(forImage image: UIImage?, completion: (() -> ())? = nil) {
+        DispatchQueue.main.async { // update UI
+            self.imageView.image = image
+            completion?()
+        }
+    }
+    
+    func updateViewForError() {}
 }

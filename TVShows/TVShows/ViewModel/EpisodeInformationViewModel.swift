@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+protocol EpisodeInformationViewProtocol: AnyObject {
+    func updateView(forImage image: UIImage?, completion: (() -> ())?) -> ()
+    func updateViewForError() -> ()
+}
+
 class EpisodeInformationViewModel {
     
     // MARK: - STATIC PROPERTIES
@@ -19,25 +24,21 @@ class EpisodeInformationViewModel {
     
     // MARK: - PROPERTIES
     
+    weak var view: EpisodeInformationViewProtocol?
+    
+    var _showTitle: String?
+    
     var episode: Episode?
-    var showTitle: String?
-    
-    // the view must set this variable so that it will update itself when this function is called
-    var updateView: (UIImage?) -> () = {image in}
-    
-    // the view must set this variable so that it will update itself when this function is called
-    // TODO: set this in the view
-    var updateViewForError: () -> () = {}
     
     var image: UIImage? {
         didSet {
-            updateView(image)
+            view?.updateView(forImage: image, completion: nil)
         }
     }
     
     var networkError: NetworkError? {
         didSet {
-            updateViewForError()
+            view?.updateViewForError()
         }
     }
     
@@ -53,10 +54,14 @@ class EpisodeInformationViewModel {
             self.image = image
         })
     }
-    
-    public func configure(forEpisode episode: Episode?, andShowTitle showTitle: String, withProvider provider: Provider = TVMazeProvider.shared) {
+}
+
+// MARK: - EpisodeInformationViewModelProtocol
+extension EpisodeInformationViewModel: EpisodeInformationViewModelProtocol {
+    public func configure(view: EpisodeInformationViewProtocol, forEpisode episode: Episode?, andShowTitle showTitle: String, withProvider provider: Provider) {
+        self.view = view
         self.episode = episode
-        self.showTitle = showTitle
+        self._showTitle = showTitle
         requestImage(forUrl: episode?.image?.medium, withProvider: provider)
     }
     
@@ -82,5 +87,9 @@ class EpisodeInformationViewModel {
         } else {
             return EpisodeInformationViewModel.noSummaryMessage
         }
+    }
+    
+    var showTitle: String? {
+        return _showTitle
     }
 }

@@ -103,13 +103,18 @@ class EpisodeInformationViewModelTests: XCTestCase {
     func testConfigure() throws {
         // Given the view model with no episode or show title set
         viewModel.episode = nil
-        viewModel.showTitle = nil
+        viewModel._showTitle = nil
         // Given an episode and show title
         let episode = Episode(id: 1)
         let showTitle = "Show Title"
         
+        class MockView: EpisodeInformationViewProtocol {
+            func updateView(forImage image: UIImage?, completion: (() -> ())?) {}
+            func updateViewForError() {}
+        }
+        
         // When we call configure with the episode and show title
-        viewModel.configure(forEpisode: episode, andShowTitle: showTitle, withProvider: MockProvider())
+        viewModel.configure(view: MockView(), forEpisode: episode, andShowTitle: showTitle, withProvider: MockProvider())
         
         // Then the view model contains the episode and the show title
         XCTAssertEqual(viewModel.episode, episode, "The view model should contain the episode with id \(String(describing: episode.id)) but contained \(String(describing: viewModel.episode))")
