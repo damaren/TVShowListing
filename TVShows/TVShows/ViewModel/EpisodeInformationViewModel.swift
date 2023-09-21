@@ -42,6 +42,15 @@ class EpisodeInformationViewModel {
         }
     }
     
+    // MARK: - INIT
+    
+    init(view: EpisodeInformationViewProtocol, forEpisode episode: Episode?, andShowTitle showTitle: String, withProvider provider: Provider) {
+        self.view = view
+        self.episode = episode
+        self._showTitle = showTitle
+        requestImage(forUrl: episode?.image?.medium, withProvider: provider)
+    }
+    
     // MARK: - FUNCTIONS
     
     func requestImage(forUrl url: String?, withProvider provider: Provider) {
@@ -58,12 +67,6 @@ class EpisodeInformationViewModel {
 
 // MARK: - EpisodeInformationViewModelProtocol
 extension EpisodeInformationViewModel: EpisodeInformationViewModelProtocol {
-    public func configure(view: EpisodeInformationViewProtocol, forEpisode episode: Episode?, andShowTitle showTitle: String, withProvider provider: Provider) {
-        self.view = view
-        self.episode = episode
-        self._showTitle = showTitle
-        requestImage(forUrl: episode?.image?.medium, withProvider: provider)
-    }
     
     public func getSeasonAndNumberText() -> String {
         if let season = episode?.season, let number = episode?.number {

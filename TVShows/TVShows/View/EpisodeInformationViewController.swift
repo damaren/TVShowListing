@@ -13,7 +13,6 @@ protocol EpisodeInformationViewModelProtocol: AnyObject {
     func getSeasonAndNumberText() -> String
     func getEpisodeNameText() -> String
     func getSummaryText() -> String
-    func configure(view: EpisodeInformationViewProtocol, forEpisode episode: Episode?, andShowTitle showTitle: String, withProvider provider: Provider)
 }
 
 class EpisodeInformationViewController: UIViewController {

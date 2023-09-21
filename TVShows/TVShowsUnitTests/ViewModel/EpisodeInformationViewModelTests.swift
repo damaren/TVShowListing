@@ -15,7 +15,12 @@ class EpisodeInformationViewModelTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        viewModel = EpisodeInformationViewModel()
+        
+        class MockView: EpisodeInformationViewProtocol {
+            func updateView(forImage image: UIImage?, completion: (() -> ())?) {}
+            func updateViewForError() {}}
+        
+        viewModel = EpisodeInformationViewModel(view: MockView(), forEpisode: nil, andShowTitle: "", withProvider: MockProvider())
     }
     
     override func tearDown() {
@@ -98,27 +103,6 @@ class EpisodeInformationViewModelTests: XCTestCase {
         
         // Then we get the message saying that the summary was not available
         XCTAssertEqual(episodeSummaryText, EpisodeInformationViewModel.noSummaryMessage, "getSummaryText() returned '\(episodeSummaryText)' but should have returned '\(EpisodeInformationViewModel.noSummaryMessage)'")
-    }
-    
-    func testConfigure() throws {
-        // Given the view model with no episode or show title set
-        viewModel.episode = nil
-        viewModel._showTitle = nil
-        // Given an episode and show title
-        let episode = Episode(id: 1)
-        let showTitle = "Show Title"
-        
-        class MockView: EpisodeInformationViewProtocol {
-            func updateView(forImage image: UIImage?, completion: (() -> ())?) {}
-            func updateViewForError() {}
-        }
-        
-        // When we call configure with the episode and show title
-        viewModel.configure(view: MockView(), forEpisode: episode, andShowTitle: showTitle, withProvider: MockProvider())
-        
-        // Then the view model contains the episode and the show title
-        XCTAssertEqual(viewModel.episode, episode, "The view model should contain the episode with id \(String(describing: episode.id)) but contained \(String(describing: viewModel.episode))")
-        XCTAssertEqual(viewModel.showTitle, showTitle, "The view model should contain the showTitle \(showTitle) but contained \(String(describing: viewModel.showTitle))")
     }
     
     func testRequestImage_NotNil() throws {
