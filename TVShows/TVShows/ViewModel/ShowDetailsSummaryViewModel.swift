@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+protocol ShowDetailsSummaryViewProtocol: AnyObject {
+    func updateView(forImage image: UIImage?, completion: (() -> ())?) -> ()
+}
+
 class ShowDetailsSummaryViewModel {
     
     // MARK: - STATIC PROPERTIES
@@ -19,24 +23,16 @@ class ShowDetailsSummaryViewModel {
     
     // MARK: - PROPERTIES
     
+    weak var view: ShowDetailsSummaryViewProtocol?
+    
     var show: TVShow?
     var image: UIImage? {
         didSet {
-            updateView(image)
-        }
-    }
-    var networkError: NetworkError? {
-        didSet {
-            updateViewForError()
+            view?.updateView(forImage: image, completion: nil)
         }
     }
     
-    // the view must set this variable so that it will update itself when this function is called
-    // TODO: set this in the view
-    var updateViewForError: () -> () = {}
-    
-    // the view will set this variable so that it will update itself when this function is called
-    var updateView: (UIImage?) -> () = { image in }
+    var networkError: NetworkError?
     
     // MARK: - FUNCTIONS
     
@@ -50,7 +46,9 @@ class ShowDetailsSummaryViewModel {
             self.image = image
         })
     }
-    
+}
+
+extension ShowDetailsSummaryViewModel: ShowDetailsSummaryViewModelProtocol {
     public func configure(forShow show: TVShow?, withProvider provider: Provider = TVMazeProvider.shared) {
         self.show = show
         requestImage(forUrl: show?.image?.medium, withProvider: provider)

@@ -30,10 +30,39 @@ final class ShowDetailsSummaryViewTests: XCTestCase {
         let genres: [String] = ["genre1", "genre2", "genre3"]
         let time = "22:00"
         let days = ["Monday", "Wednesday"]
-        let schedule: Schedule = Schedule(time: time, days: days)
+//        let schedule: Schedule = Schedule(time: time, days: days)
         let summary = "Show summary"
-        let show = TVShow(id: 1, genres: genres, schedule: schedule, summary: summary)
-        summaryView.viewModel.configure(forShow: show, withProvider: MockProvider())
+//        let show = TVShow(id: 1, genres: genres, schedule: schedule, summary: summary)
+        
+        class MockViewModel: ShowDetailsSummaryViewModelProtocol {
+            func getGenres() -> String {
+                let genresString = genres[1..<genres.count].reduce(genres.first!, { partialResult, nextString in return "\(partialResult), \(nextString)"})
+                return "Genres: \(genresString)"
+            }
+            func getTime() -> String {
+                return "Time: \(self.time)"
+            }
+            func getDays() -> String {
+                let daysString = days[1..<days.count].reduce(days.first!, { partialResult, nextString in return "\(partialResult), \(nextString)"})
+                return "Days: \(daysString)"
+            }
+            func getSummary() -> String {
+                return self.summary
+            }
+            func configure(forShow show: TVShows.TVShow?, withProvider provider: TVShows.Provider) {}
+            var genres: [String]
+            var time: String
+            var days: [String]
+            var summary: String
+            init(genres: [String], time: String, days: [String], summary: String) {
+                self.genres = genres
+                self.time = time
+                self.days = days
+                self.summary = summary
+            }
+        }
+        
+        summaryView.viewModel = MockViewModel(genres: genres, time: time, days: days, summary: summary)
         
         // When setup is called
         summaryView.setup()
@@ -361,8 +390,6 @@ final class ShowDetailsSummaryViewTests: XCTestCase {
     }
     
     func testConfigure() throws {
-        // Given the viewModel with no show set
-        summaryView.viewModel.show = nil
         
         class MockDelegate: ShowDetailsSummaryViewDelegate {
             func seeMoreButtonPressed() {}
@@ -374,8 +401,6 @@ final class ShowDetailsSummaryViewTests: XCTestCase {
         let show = TVShow(id: 1)
         summaryView.configure(forShow: show, andDelegate: mockDelegate)
         
-        // Then the viewModel's show should be the given show
-        XCTAssertEqual(summaryView.viewModel.show, show, "The viewModel's show should be the given show (\(show)), but it is \(String(describing: summaryView.viewModel.show))")
         // Then the delegate should be the object injected via the configure method
         XCTAssertEqual(summaryView.delegate as? NSObject, mockDelegate as? NSObject, "the delegate should be object injected via the configure method \( mockDelegate), but it is \(String(describing: summaryView.delegate))")
     }

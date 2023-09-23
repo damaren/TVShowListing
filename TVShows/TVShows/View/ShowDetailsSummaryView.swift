@@ -7,6 +7,14 @@
 import Foundation
 import UIKit
 
+protocol ShowDetailsSummaryViewModelProtocol {
+    func getGenres() -> String
+    func getTime() -> String
+    func getDays() -> String
+    func getSummary() -> String
+    func configure(forShow show: TVShow?, withProvider provider: Provider)
+}
+
 class ShowDetailsSummaryView: UIView {
     
     // MARK: - STATIC PROPERTIES
@@ -16,7 +24,7 @@ class ShowDetailsSummaryView: UIView {
     // MARK: - PROPERTIES
     
     weak var delegate: ShowDetailsSummaryViewDelegate?
-    var viewModel: ShowDetailsSummaryViewModel = ShowDetailsSummaryViewModel()
+    var viewModel: ShowDetailsSummaryViewModelProtocol?
     
     // MARK: - COMPONENTS
     
@@ -44,10 +52,7 @@ extension ShowDetailsSummaryView {
     // MARK: - FUNCTIONS
     
     func setup() {
-        // update
-        viewModel.updateView = { [weak self] image in
-            self?.updateView(forImage: image)
-        }
+        guard let viewModel = viewModel else { return }
         
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -71,7 +76,7 @@ extension ShowDetailsSummaryView {
         // daysLabel
         daysLabel.translatesAutoresizingMaskIntoConstraints = false
         daysLabel.numberOfLines = 0
-        daysLabel.text =  viewModel.getDays()
+        daysLabel.text = viewModel.getDays()
         
         // summaryLabel
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -130,17 +135,10 @@ extension ShowDetailsSummaryView {
     
     func configure(forShow show: TVShow?, andDelegate delegate: ShowDetailsSummaryViewDelegate) {
         self.delegate = delegate
-        viewModel.configure(forShow: show)
+        viewModel?.configure(forShow: show, withProvider: TVMazeProvider.shared)
         
         setup()
         layout()
-    }
-    
-    func updateView(forImage image: UIImage?, completion: (() -> ())? = nil) {
-        DispatchQueue.main.async { // update UI
-            self.imageView.image = image
-            completion?()
-        }
     }
     
     // MARK: - ACTIONS
@@ -154,4 +152,13 @@ extension ShowDetailsSummaryView {
 
 protocol ShowDetailsSummaryViewDelegate: AnyObject {
     func seeMoreButtonPressed()
+}
+
+extension ShowDetailsSummaryView: ShowDetailsSummaryViewProtocol {
+    func updateView(forImage image: UIImage?, completion: (() -> ())? = nil) {
+        DispatchQueue.main.async { // update UI
+            self.imageView.image = image
+            completion?()
+        }
+    }
 }
