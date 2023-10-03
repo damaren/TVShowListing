@@ -261,26 +261,27 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         
         class MockViewModel: TVShowSearchViewModelProtocol {
             var title: String = ""
-            
             var numberOfRows: Int
-            
             func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {}
-            
             var shows: [TVShow]
-            
             init(shows: [TVShow]) {
                 self.shows = shows
                 self.numberOfRows = shows.count
             }
-            
             func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
                 return shows[indexPath.row]
             }
         }
-        
         let mockViewModel = MockViewModel(shows: shows)
-        
         vc.configure(viewModel: mockViewModel, searchView: UIView())
+        
+        class MockProvider: Provider {
+            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
+            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
+            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
+        }
+        vc.provider = MockProvider()
+        
         vc.view.layoutSubviews() // without this, the table view is not calling the cell for row at
         
         let expectation = self.expectation(description: "TVShowSearchViewControllerTests updateView expectation")
@@ -370,17 +371,12 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         
         class MockViewModel: TVShowSearchViewModelProtocol {
             var title: String = ""
-            
             var numberOfRows: Int = 0
-            
             func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {}
-            
             var shows: [TVShow]
-            
             init(shows: [TVShow]) {
                 self.shows = shows
             }
-            
             func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
                 return shows[indexPath.row]
             }
