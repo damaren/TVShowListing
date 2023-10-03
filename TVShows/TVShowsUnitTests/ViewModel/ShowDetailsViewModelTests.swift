@@ -210,9 +210,17 @@ class ShowDetailsViewModelTests: XCTestCase {
         // Given the viewModel with no show set
         viewModel.show = nil
         
+        class MockProvider: Provider {
+            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
+            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
+            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
+        }
+        
+        let mockProvider = MockProvider()
+        
         // When configure is called
         let show: TVShow = TVShow(id: 1)
-        viewModel.configure(forShow: show)
+        viewModel.configure(forShow: show, withProvider: mockProvider)
         
         // Then the show property in the view model is set to the given show
         XCTAssertEqual(viewModel.show, show, "The 'show' property in the viewModel should contain \(show) but it contained \(String(describing: viewModel.show))")
