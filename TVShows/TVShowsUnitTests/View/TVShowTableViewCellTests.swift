@@ -29,23 +29,25 @@ final class TVShowTableViewCellTests: XCTestCase {
             func configure(forShow show: TVShows.TVShow?, withProvider provider: TVShows.Provider) {
                 wasConfigureCalled = true
             }
-            
             var wasConfigureCalled = false
-            
             func getShowName() -> String {
                 return ""
             }
-            
             func getGenres() -> String {
                 return ""
             }
         }
-        
         let viewModel = MockViewModel()
+        
+        class MockProvider: Provider {
+            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
+            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
+            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
+        }
         
         // When configure is called with a given show
         let show = TVShow(id: 1)
-        cell.configure(forShow: show, andViewModel: viewModel)
+        cell.configure(forShow: show, andViewModel: viewModel, withProvider: MockProvider())
         
         // Then the viewModel's configure should get called
         XCTAssertTrue(viewModel.wasConfigureCalled, "The the viewModel's configure should get called, viewModel.wasConfigureCalled should be true")

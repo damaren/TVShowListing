@@ -323,25 +323,25 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         
         class MockViewModel: TVShowSearchViewModelProtocol {
             var title: String = ""
-            
             var numberOfRows: Int = 0
-            
             func requestTVShows(withSearchText searchText: String, completion: (() -> ())?) {}
-            
             var shows: [TVShow]
-            
             init(shows: [TVShow]) {
                 self.shows = shows
             }
-            
             func getShowFor(indexPath: IndexPath) -> TVShows.TVShow {
                 return shows[indexPath.row]
             }
         }
-        
         let mockViewModel = MockViewModel(shows: shows)
-        
         vc.viewModel = mockViewModel
+        
+        class MockProvider: Provider {
+            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
+            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
+            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
+        }
+        vc.provider = MockProvider()
         
         // When cellForRowAt is called
         

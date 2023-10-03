@@ -21,6 +21,7 @@ class TVShowSearchViewController: UIViewController {
     
     weak var delegate: TVShowSearchViewControllerDelegate?
     var viewModel: TVShowSearchViewModelProtocol?
+    var provider: Provider = TVMazeProvider.shared
     
     // MARK: - COMPONENTS
     
@@ -96,7 +97,7 @@ extension TVShowSearchViewController: UITableViewDataSource {
         
         let cellViewModel = TVShowTableViewCellViewModel(showSearchView: cell)
         
-        cell.configure(forShow: show, andViewModel: cellViewModel)
+        cell.configure(forShow: show, andViewModel: cellViewModel, withProvider: provider)
         
         return cell
     }

@@ -108,9 +108,9 @@ extension TVShowTableViewCell {
         containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -TVShowTableViewCell.verticalMargin).isActive = true
     }
     
-    func configure(forShow show: TVShow, andViewModel viewModel: TVShowTableViewCellViewModelProtocol) {
+    func configure(forShow show: TVShow, andViewModel viewModel: TVShowTableViewCellViewModelProtocol, withProvider provider: Provider) {
         self.viewModel = viewModel
-        self.viewModel?.configure(forShow: show, withProvider: TVMazeProvider.shared)
+        self.viewModel?.configure(forShow: show, withProvider: provider)
         
         setup()
         layout()
