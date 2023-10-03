@@ -52,7 +52,6 @@ final class AppDelegateTests: XCTestCase {
         appDelegate.selectedEpisode(episode: Episode(), withShowTitle: "", withAnimation: false)
         
         // Then the navigation controller should have an EpisodeInformationViewController on top of a ShowDetailsViewController on top of the TVShowSearchViewController
-        print(appDelegate.navigationController.viewControllers)
         XCTAssertTrue(appDelegate.navigationController.viewControllers[0] is TVShowSearchViewController, "The navigation controller's first view controller should be a TVShowSearchViewController, but it was \(appDelegate.navigationController.viewControllers[0])")
         XCTAssertTrue(appDelegate.navigationController.viewControllers[1] is ShowDetailsViewController, "The navigation controller's second view controller should be a ShowDetailsViewController, but it was \(appDelegate.navigationController.viewControllers[1])")
         XCTAssertTrue(appDelegate.navigationController.viewControllers[2] is EpisodeInformationViewController, "The navigation controller's second view controller should be a EpisodeInformationViewController, but it was \(appDelegate.navigationController.viewControllers[2])")
