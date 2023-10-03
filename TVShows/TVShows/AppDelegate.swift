@@ -12,6 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     let navigationController = UINavigationController()
     lazy var tvShowSearchViewController = TVShowSearchViewController()
+    var provider: Provider = TVMazeProvider.shared
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -20,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navigationController
         navigationController.setViewControllers([tvShowSearchViewController], animated: false)
         tvShowSearchViewController.delegate = self
-        let tvShowSearchViewModel = TVShowSearchViewModel(showSearchView: tvShowSearchViewController, provider: TVMazeProvider.shared)
+        let tvShowSearchViewModel = TVShowSearchViewModel(showSearchView: tvShowSearchViewController, provider: provider)
         let searchView = SearchView()
         tvShowSearchViewController.configure(viewModel: tvShowSearchViewModel, searchView: searchView)
         searchView.delegate = tvShowSearchViewController
@@ -61,7 +62,7 @@ extension AppDelegate: ShowDetailsViewControllerDelegate {
     
     func selectedEpisode(episode: Episode, withShowTitle showTitle: String, withAnimation: Bool) {
         let episodeInfoViewController = EpisodeInformationViewController()
-        let viewModel = EpisodeInformationViewModel(view: episodeInfoViewController, forEpisode: episode, andShowTitle: showTitle, withProvider: TVMazeProvider.shared)
+        let viewModel = EpisodeInformationViewModel(view: episodeInfoViewController, forEpisode: episode, andShowTitle: showTitle, withProvider: provider)
         episodeInfoViewController.configure(delegate: self, viewModel: viewModel)
         navigationController.pushViewController(episodeInfoViewController, animated: withAnimation)
     }
