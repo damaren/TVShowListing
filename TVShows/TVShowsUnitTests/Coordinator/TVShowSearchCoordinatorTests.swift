@@ -31,7 +31,6 @@ final class TVShowSearchCoordinatorTests: XCTestCase {
         coordinator.selectedShow(show: TVShow(), withAnimation: false)
         
         // Then the navigation controller should have a ShowDetailsViewController on top of the TVShowSearchViewController
-        print(coordinator.navigationController.viewControllers)
         XCTAssertTrue(coordinator.navigationController.viewControllers[0] is TVShowSearchViewController, "The navigation controller's first view controller should be a TVShowSearchViewController, but it was \(coordinator.navigationController.viewControllers[0])")
         XCTAssertTrue(coordinator.navigationController.viewControllers[1] is ShowDetailsViewController, "The navigation controller's second view controller should be a ShowDetailsViewController, but it was \(coordinator.navigationController.viewControllers[1])")
     }
@@ -66,7 +65,6 @@ final class TVShowSearchCoordinatorTests: XCTestCase {
         coordinator.backButtonPressed(inViewcontroller: showDetailsViewController, withAnimation: false)
         
         // Then the navigation controller should only have a TVShowSearchViewController
-        print(coordinator.navigationController.viewControllers)
         XCTAssertTrue(coordinator.navigationController.viewControllers[0] is TVShowSearchViewController, "The navigation controller's first view controller should be a TVShowSearchViewController, but it was \(coordinator.navigationController.viewControllers[0])")
         XCTAssertEqual(coordinator.navigationController.viewControllers.count, 1, "The navigation controller's stack should have one element (a TVShowSearchViewController), but it had \(coordinator.navigationController.viewControllers)")
     }
@@ -80,10 +78,25 @@ final class TVShowSearchCoordinatorTests: XCTestCase {
         coordinator.backButtonPressed(inViewcontroller: episodeInformationViewController, withAnimation: false)
         
         // Then the navigation controller should only have a TVShowSearchViewController and a ShowDetailsViewController
-        print(coordinator.navigationController.viewControllers)
         XCTAssertTrue(coordinator.navigationController.viewControllers[0] is TVShowSearchViewController, "The navigation controller's first view controller should be a TVShowSearchViewController, but it was \(coordinator.navigationController.viewControllers[0])")
         XCTAssertTrue(coordinator.navigationController.viewControllers[1] is ShowDetailsViewController, "The navigation controller's second view controller should be a ShowDetailsViewController, but it was \(coordinator.navigationController.viewControllers[1])")
         XCTAssertEqual(coordinator.navigationController.viewControllers.count, 2, "The navigation controller's stack should have two element (a TVShowSearchViewController and a ShowDetailsViewController), but it had \(coordinator.navigationController.viewControllers)")
+    }
+    
+    func testShowDetailsViewControllerSeeMoreButtonPressed() throws {
+        // Given the navigation controller with a TVShowSearchViewController and a ShowDetailsViewController
+        let showDetailsViewController = ShowDetailsViewController()
+        coordinator.navigationController.setViewControllers([TVShowSearchViewController(), showDetailsViewController], animated: false)
+        
+        let showSummary = "test show summary"
+        
+        // When seeMoreButtonPressed is called
+        coordinator.seeMoreButtonPressed(inViewcontroller: showDetailsViewController, forShowSummary: showSummary)
+        
+        // Then the navigation controller should contain a TVShowSearchViewController and a ShowDetailsViewController
+        XCTAssertTrue(coordinator.navigationController.viewControllers[0] is TVShowSearchViewController, "The navigation controller's first view controller should be a TVShowSearchViewController, but it was \(coordinator.navigationController.viewControllers[0])")
+        XCTAssertTrue(coordinator.navigationController.viewControllers[1] is ShowDetailsViewController, "The navigation controller's second view controller should be a ShowDetailsViewController, but it was \(coordinator.navigationController.viewControllers[1])")
+        XCTAssertEqual(coordinator.navigationController.viewControllers.count, 2, "The navigation controller's stack should have two elements (a TVShowSearchViewController and a ShowDetailsViewController), but it had \(coordinator.navigationController.viewControllers)")
     }
 
 }
