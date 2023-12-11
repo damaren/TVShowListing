@@ -39,12 +39,6 @@ final class TVShowSearchCoordinatorTests: XCTestCase {
         // Given the navigation controller with a TVShowSearchViewController and a ShowDetailsViewController
         coordinator.navigationController.setViewControllers([TVShowSearchViewController(), ShowDetailsViewController()], animated: false)
         
-        class MockProvider: Provider {
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
-        
         coordinator.provider = MockProvider()
         
         // When selectedShow is called

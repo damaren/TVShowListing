@@ -22,12 +22,6 @@ class TVShowSearchViewModelTests: XCTestCase {
             TVShowResponse(show: TVShow(id: 4)),
             TVShowResponse(show: TVShow(id: 5))
         ]
-        
-        class MockProvider: Provider {
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
         let viewModel = createSUT(forProvider: MockProvider())
         
         // When updateShows is called with the given list
@@ -40,11 +34,6 @@ class TVShowSearchViewModelTests: XCTestCase {
     func testGetShowFor() throws {
         // Given the view model with a non empty list of shows
         let shows = [TVShow(id: 0), TVShow(id: 1), TVShow(id: 2), TVShow(id: 3), TVShow(id: 4), TVShow(id: 5)]
-        class MockProvider: Provider {
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
         let viewModel = createSUT(forProvider: MockProvider())
         viewModel.shows = shows
         
@@ -67,19 +56,7 @@ class TVShowSearchViewModelTests: XCTestCase {
             TVShowResponse(show: TVShow(id: 5))
         ]
         
-        class MockProvider: Provider {
-            var responses: [TVShowResponse]
-            init(responses: [TVShowResponse]) {
-                self.responses = responses
-            }
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {
-                completion(responses, nil)
-            }
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
-        
-        let viewModel = createSUT(forProvider: MockProvider(responses: tvShowResponses))
+        let viewModel = createSUT(forProvider: MockProvider(showResponses: tvShowResponses))
         
         // When a request is made that gives a non empty response
         viewModel.requestTVShows(withSearchText: "", completion: nil)
@@ -92,19 +69,7 @@ class TVShowSearchViewModelTests: XCTestCase {
         // Given an empty response to the tv show search
         let tvShowResponses: [TVShowResponse] = []
         
-        class MockProvider: Provider {
-            var responses: [TVShowResponse]
-            init(responses: [TVShowResponse]) {
-                self.responses = responses
-            }
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {
-                completion(responses, nil)
-            }
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
-        
-        let provider = MockProvider(responses: tvShowResponses)
+        let provider = MockProvider(showResponses: tvShowResponses)
         
         let viewModel = createSUT(forProvider: provider)
         
@@ -118,18 +83,6 @@ class TVShowSearchViewModelTests: XCTestCase {
     func testRequestTVShows_ResponseError() throws {
         // Given a response with a response error to the tv show search
         let responseError: NetworkError = .responseError(description: "Mock response error")
-        
-        class MockProvider: Provider {
-            var responseError: NetworkError
-            init(responseError: NetworkError) {
-                self.responseError = responseError
-            }
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {
-                completion(nil, responseError)
-            }
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
         
         let viewModel = createSUT(forProvider: MockProvider(responseError: responseError))
         
@@ -146,19 +99,7 @@ class TVShowSearchViewModelTests: XCTestCase {
         // Given a response with a query allowed string error to the tv show search
         let queryAllowedError: NetworkError = .queryAllowedStringError(description: "Mock query allowed error")
         
-        class MockProvider: Provider {
-            var queryAllowedError: NetworkError
-            init(queryAllowedError: NetworkError) {
-                self.queryAllowedError = queryAllowedError
-            }
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {
-                completion(nil, queryAllowedError)
-            }
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
-        
-        let provider = MockProvider(queryAllowedError: queryAllowedError)
+        let provider = MockProvider(queryAllowedStringError: queryAllowedError)
         let viewModel = createSUT(forProvider: provider)
         
         // When the request gives a query allowed string error
@@ -173,18 +114,6 @@ class TVShowSearchViewModelTests: XCTestCase {
     func testRequestTVShows_UrlCreationError() throws {
         // Given a response with a url creation error to the tv show search
         let urlCreationError: NetworkError = .urlCreationError(description: "invalid url string")
-        
-        class MockProvider: Provider {
-            var urlCreationError: NetworkError
-            init(urlCreationError: NetworkError) {
-                self.urlCreationError = urlCreationError
-            }
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {
-                completion(nil, urlCreationError)
-            }
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
         
         let provider = MockProvider(urlCreationError: urlCreationError)
         let viewModel = createSUT(forProvider: provider)
@@ -201,18 +130,6 @@ class TVShowSearchViewModelTests: XCTestCase {
     func testRequestTVShows_JSONDecodeError() throws {
         // Given a response with a JSON decode error to the tv show search
         let JSONDecodeError: NetworkError = .JSONDecodeError
-        
-        class MockProvider: Provider {
-            var JSONDecodeError: NetworkError
-            init(JSONDecodeError: NetworkError) {
-                self.JSONDecodeError = JSONDecodeError
-            }
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {
-                completion(nil, JSONDecodeError)
-            }
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
         let viewModel = createSUT(forProvider: MockProvider(JSONDecodeError: JSONDecodeError))
         
         // When the request gives a JSON decode error

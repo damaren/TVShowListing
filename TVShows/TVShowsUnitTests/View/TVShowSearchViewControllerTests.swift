@@ -274,12 +274,6 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         }
         let mockViewModel = MockViewModel(shows: shows)
         vc.configure(viewModel: mockViewModel, searchView: UIView())
-        
-        class MockProvider: Provider {
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
         vc.provider = MockProvider()
         
         vc.view.layoutSubviews() // without this, the table view is not calling the cell for row at
@@ -336,12 +330,6 @@ final class TVShowSearchViewControllerTests: XCTestCase {
         }
         let mockViewModel = MockViewModel(shows: shows)
         vc.viewModel = mockViewModel
-        
-        class MockProvider: Provider {
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
         vc.provider = MockProvider()
         
         // When cellForRowAt is called

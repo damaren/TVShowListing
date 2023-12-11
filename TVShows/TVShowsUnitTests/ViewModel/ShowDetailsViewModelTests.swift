@@ -69,18 +69,6 @@ class ShowDetailsViewModelTests: XCTestCase {
             episodesSeparatedBySeasons.append(seasonEpisodes)
         }
         
-        class MockProvider: Provider {
-            var episodes: [Episode]
-            init(episodes: [Episode]) {
-                self.episodes = episodes
-            }
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {
-                completion(episodes, nil)
-            }
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
-        
         let provider = MockProvider(episodes: episodes)
         
         // When a request is made that gives a non empty response
@@ -222,12 +210,6 @@ class ShowDetailsViewModelTests: XCTestCase {
     func testConfigure() throws {
         // Given the viewModel with no show set
         viewModel.show = nil
-        
-        class MockProvider: Provider {
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
         
         let mockProvider = MockProvider()
         

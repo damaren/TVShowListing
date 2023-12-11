@@ -20,12 +20,6 @@ class EpisodeInformationViewModelTests: XCTestCase {
             func updateView(forImage image: UIImage?, completion: (() -> ())?) {}
             func updateViewForError() {}}
         
-        class MockProvider: Provider {
-            func requestTVShows(searchString: String, completion: @escaping ([TVShows.TVShowResponse]?, TVShows.NetworkError?) -> ()) {}
-            func requestEpisodes(showID: Int, completion: @escaping ([TVShows.Episode]?, TVShows.NetworkError?) -> ()) {}
-            func requestImage(forUrl urlString: String?, completion: @escaping (UIImage?, TVShows.NetworkError?) -> ()) {}
-        }
-        
         viewModel = EpisodeInformationViewModel(view: MockView(), forEpisode: nil, andShowTitle: "", withProvider: MockProvider())
     }
     
