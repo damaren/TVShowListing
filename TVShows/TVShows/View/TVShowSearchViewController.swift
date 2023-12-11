@@ -21,7 +21,7 @@ class TVShowSearchViewController: UIViewController {
     
     weak var delegate: TVShowSearchViewControllerDelegate?
     var viewModel: TVShowSearchViewModelProtocol?
-    var provider: Provider = TVMazeProvider.shared
+    var provider: Provider = TVMazeProvider()
     
     // MARK: - COMPONENTS
     

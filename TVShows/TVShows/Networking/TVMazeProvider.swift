@@ -12,7 +12,6 @@ class TVMazeProvider: Provider {
     
     // MARK: - SINGLETON
     
-    static let shared: TVMazeProvider = TVMazeProvider()
     static let baseURL: String = "https://api.tvmaze.com"
     
     // MARK: - PROPERTIES

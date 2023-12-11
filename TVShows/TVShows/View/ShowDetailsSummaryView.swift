@@ -135,7 +135,7 @@ extension ShowDetailsSummaryView {
     
     func configure(forShow show: TVShow?, andDelegate delegate: ShowDetailsSummaryViewDelegate) {
         self.delegate = delegate
-        viewModel?.configure(forShow: show, withProvider: TVMazeProvider.shared)
+        viewModel?.configure(forShow: show, withProvider: TVMazeProvider())
         
         setup()
         layout()

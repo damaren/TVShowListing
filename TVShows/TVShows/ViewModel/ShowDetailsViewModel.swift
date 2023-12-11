@@ -85,7 +85,7 @@ extension ShowDetailsViewModel: ShowDetailsViewModelProtocol {
         return show?.summary ?? ShowDetailsViewModel.noShowSummaryMessage
     }
 
-    public func configure(forShow show: TVShow, withProvider provider: Provider = TVMazeProvider.shared) {
+    public func configure(forShow show: TVShow, withProvider provider: Provider = TVMazeProvider()) {
         self.show = show
         if let id = show.id {
             requestEpisodes(forShowId: id, withProvider: provider)

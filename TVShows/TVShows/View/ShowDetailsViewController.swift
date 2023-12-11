@@ -80,7 +80,7 @@ class ShowDetailsViewController: UIViewController {
         self.delegate = delegate
         self.summaryView = summaryView
         self.viewModel = viewModel
-        self.viewModel?.configure(forShow: show, withProvider: TVMazeProvider.shared)
+        self.viewModel?.configure(forShow: show, withProvider: TVMazeProvider())
         setup()
         layoutViews()
     }

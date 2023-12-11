@@ -49,7 +49,7 @@ class ShowDetailsSummaryViewModel {
 }
 
 extension ShowDetailsSummaryViewModel: ShowDetailsSummaryViewModelProtocol {
-    public func configure(forShow show: TVShow?, withProvider provider: Provider = TVMazeProvider.shared) {
+    public func configure(forShow show: TVShow?, withProvider provider: Provider = TVMazeProvider()) {
         self.show = show
         requestImage(forUrl: show?.image?.medium, withProvider: provider)
     }

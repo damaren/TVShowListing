@@ -11,9 +11,9 @@ import UIKit
 class TVShowSearchCoordinator {
     let navigationController = UINavigationController()
     lazy var tvShowSearchViewController = TVShowSearchViewController()
-    var provider: Provider = TVMazeProvider.shared
+    var provider: Provider = TVMazeProvider()
     
-    init(provider: Provider = TVMazeProvider.shared) {
+    init(provider: Provider = TVMazeProvider()) {
         self.provider = provider
         navigationController.setViewControllers([tvShowSearchViewController], animated: false)
         tvShowSearchViewController.delegate = self
