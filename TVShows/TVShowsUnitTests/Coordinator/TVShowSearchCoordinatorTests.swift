@@ -62,7 +62,7 @@ final class TVShowSearchCoordinatorTests: XCTestCase {
         coordinator.navigationController.setViewControllers([TVShowSearchViewController(), showDetailsViewController], animated: false)
         
         // When backButtonPressed is called
-        coordinator.backButtonPressed(inViewcontroller: showDetailsViewController, withAnimation: false)
+        coordinator.backButtonPressed(in: showDetailsViewController, withAnimation: false)
         
         // Then the navigation controller should only have a TVShowSearchViewController
         XCTAssertTrue(coordinator.navigationController.viewControllers[0] is TVShowSearchViewController, "The navigation controller's first view controller should be a TVShowSearchViewController, but it was \(coordinator.navigationController.viewControllers[0])")
@@ -91,7 +91,7 @@ final class TVShowSearchCoordinatorTests: XCTestCase {
         let showSummary = "test show summary"
         
         // When seeMoreButtonPressed is called
-        coordinator.seeMoreButtonPressed(inViewcontroller: showDetailsViewController, forShowSummary: showSummary)
+        coordinator.seeMoreButtonPressed(in: showDetailsViewController, forShowSummary: showSummary)
         
         // Then the navigation controller should contain a TVShowSearchViewController and a ShowDetailsViewController
         XCTAssertTrue(coordinator.navigationController.viewControllers[0] is TVShowSearchViewController, "The navigation controller's first view controller should be a TVShowSearchViewController, but it was \(coordinator.navigationController.viewControllers[0])")

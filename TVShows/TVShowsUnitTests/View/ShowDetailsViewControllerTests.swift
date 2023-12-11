@@ -89,8 +89,8 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         
         class MockDelegate: ShowDetailsViewControllerDelegate {
             func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {}
-            func backButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
-            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
+            func backButtonPressed(in viewController: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
+            func seeMoreButtonPressed(in viewController: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
         }
         
         vc.configure(show: TVShow(), viewModel: MockViewModel(), summaryView: UIView(), delegate: MockDelegate())
@@ -221,8 +221,8 @@ final class ShowDetailsViewControllerTests: XCTestCase {
         
         class MockDelegate: ShowDetailsViewControllerDelegate {
             func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {}
-            func backButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
-            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
+            func backButtonPressed(in viewController: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
+            func seeMoreButtonPressed(in viewController: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
         }
         
         // When configure is called with a show
@@ -309,11 +309,11 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testBackButtonPressed() throws {
         class MockShowDetailsDelegate: UIViewController, ShowDetailsViewControllerDelegate {
-            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
+            func seeMoreButtonPressed(in viewController: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
             var backButtonPressedWasCalled: Bool = false
             func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {}
             
-            func backButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, withAnimation: Bool) {
+            func backButtonPressed(in viewController: TVShows.ShowDetailsViewController, withAnimation: Bool) {
                 backButtonPressedWasCalled = true
             }
         }
@@ -445,14 +445,14 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     
     func testDidSelectRowAt() throws {
         class MockShowDetailsDelegate: UIViewController, ShowDetailsViewControllerDelegate {
-            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
+            func seeMoreButtonPressed(in viewController: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {}
             
             var selectedEpisodeWasCalled: Bool = false
             func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {
                 selectedEpisodeWasCalled = true
             }
             
-            func backButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
+            func backButtonPressed(in viewController: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
         }
         let mockDelegate = MockShowDetailsDelegate()
         
@@ -577,13 +577,13 @@ final class ShowDetailsViewControllerTests: XCTestCase {
     func testSeeMore() throws {
         // Given the instantiated vc
         class MockShowDetailsDelegate: UIViewController, ShowDetailsViewControllerDelegate {
-            func seeMoreButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {
+            func seeMoreButtonPressed(in viewController: TVShows.ShowDetailsViewController, forShowSummary summary: String?) {
                 seeMoreButtonPressedWasCalled = true
             }
             var seeMoreButtonPressedWasCalled: Bool = false
             func selectedEpisode(episode: TVShows.Episode, withShowTitle showTitle: String, withAnimation: Bool) {}
             
-            func backButtonPressed(inViewcontroller: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
+            func backButtonPressed(in viewController: TVShows.ShowDetailsViewController, withAnimation: Bool) {}
         }
         let mockDelegate = MockShowDetailsDelegate()
         vc.delegate = mockDelegate

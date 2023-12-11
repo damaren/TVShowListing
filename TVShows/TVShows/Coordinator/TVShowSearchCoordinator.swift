@@ -43,14 +43,14 @@ extension TVShowSearchCoordinator: TVShowSearchViewControllerDelegate {
 // MARK: - ShowDetailsViewControllerDelegate
 
 extension TVShowSearchCoordinator: ShowDetailsViewControllerDelegate {
-    func seeMoreButtonPressed(inViewcontroller: ShowDetailsViewController, forShowSummary summary: String?) {
+    func seeMoreButtonPressed(in viewController: ShowDetailsViewController, forShowSummary summary: String?) {
         let showDescriptionVC = ShowDescriptionViewController()
         guard let summary = summary else { return }
         showDescriptionVC.configure(description: summary)
-        inViewcontroller.present(showDescriptionVC, animated: true)
+        viewController.present(showDescriptionVC, animated: true)
     }
     
-    func backButtonPressed(inViewcontroller: ShowDetailsViewController, withAnimation: Bool) {
+    func backButtonPressed(in viewController: ShowDetailsViewController, withAnimation: Bool) {
         navigationController.popViewController(animated: withAnimation)
     }
     
