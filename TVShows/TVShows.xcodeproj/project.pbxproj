@@ -160,6 +160,7 @@
 		141C6EEC2A4A46CF00977986 /* TVShowsUnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				14C5D77A2B2731E800BC5F1C /* Helpers */,
 				14BB44572ACD942100A5AF6E /* Coordinator */,
 				14B59CEC2A72DFED00CE5540 /* Util */,
 				14CE80D42A66C43700EF9051 /* View */,
@@ -251,9 +252,7 @@
 			children = (
 				149AA3132A470A0D00BD7059 /* TVMazeProvider.swift */,
 				141C6EFD2A4A581900977986 /* Provider.swift */,
-				141C6F012A4A5BEA00977986 /* MockProvider.swift */,
 				14A2FFEC2A5482C300F47475 /* NetworkErrorModel.swift */,
-				14B1D02C2A572F7100B8B01B /* MockURLProtocol.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -295,6 +294,15 @@
 				14BB44582ACD943500A5AF6E /* TVShowSearchCoordinatorTests.swift */,
 			);
 			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		14C5D77A2B2731E800BC5F1C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				141C6F012A4A5BEA00977986 /* MockProvider.swift */,
+				14B1D02C2A572F7100B8B01B /* MockURLProtocol.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		14CE80D42A66C43700EF9051 /* View */ = {
